@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jeramtough.jtandroid.controller.dialog.JtIocDialog;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.bean.word.Word;
 

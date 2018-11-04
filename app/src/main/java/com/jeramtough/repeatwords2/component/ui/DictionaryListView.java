@@ -11,12 +11,9 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.adapter.DictionaryWordsAdapter;
-
-import java.util.List;
 
 public class DictionaryListView extends ListView implements View.OnClickListener, AdapterView.OnItemLongClickListener {
 

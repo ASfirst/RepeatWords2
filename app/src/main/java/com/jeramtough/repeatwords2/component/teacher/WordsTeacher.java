@@ -2,7 +2,6 @@ package com.jeramtough.repeatwords2.component.teacher;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.repeatwords2.bean.word.Word;
 
 import org.apache.commons.lang3.RandomUtils;

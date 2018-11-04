@@ -10,17 +10,21 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
-import com.jeramtough.jtlog3.P;
+import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.business.LearningService;
+import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
 import com.jeramtough.repeatwords2.component.blackboard.BlackboardOfLearningTeacher;
 import com.jeramtough.repeatwords2.component.blackboard.BlackboardOfSpeakingTeacher;
@@ -29,7 +33,6 @@ import com.jeramtough.repeatwords2.component.blackboard.BlackboardOfWritingTeach
 import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
-import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.controller.dialog.WriteFromMemoryDialog;
 
 import java.util.Objects;
@@ -272,6 +275,7 @@ public class LearningFragment extends BaseFragment implements WordCardView.WordA
                 timedCloseTextView.visible();
                 timedCloseTextView.closeDelayed(3000);
                 break;
+            default:
         }
     }
 
@@ -335,7 +339,6 @@ public class LearningFragment extends BaseFragment implements WordCardView.WordA
         if (wordCardView != null) {
             blackboardOfTeacher
                     .whileLearning(wordCardView.getWord(), wordCardView.getTextViewContent());
-
         } else {
             reader.stop();
         }

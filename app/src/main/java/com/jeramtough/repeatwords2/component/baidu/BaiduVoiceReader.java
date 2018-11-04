@@ -10,7 +10,8 @@ import com.baidu.tts.client.TtsMode;
 import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtlog3.WithLogger;
+import com.jeramtough.jtlog.facade.L;
+import com.jeramtough.jtlog.with.WithJtLogger;
 import com.jeramtough.jtutil.WordUtil;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @author 11718
  */
 @JtComponent
-public class BaiduVoiceReader implements Reader, WithLogger {
+public class BaiduVoiceReader implements Reader, WithJtLogger {
     private SpeechSynthesizer speechSynthesizer;
     private VoiceResources voiceResources;
     private Context context;
@@ -79,15 +80,15 @@ public class BaiduVoiceReader implements Reader, WithLogger {
         if (!authInfo.isSuccess()) {
             // 离线授权需要网站上的应用填写包名。本demo的包名是com.baidu.tts.sample，定义在build.gradle中
             String errorMsg = authInfo.getTtsError().getDetailMessage();
-            getP().error("鉴权失败 =" + errorMsg);
+            getJtLogger().error("鉴权失败 =" + errorMsg);
         } else {
-            getP().info("验证通过，离线正式授权文件存在。");
+            getJtLogger().info("验证通过，离线正式授权文件存在。");
             int result = speechSynthesizer.initTts(TtsMode.MIX);
             if (result != 0) {
-                getP().error("初始化失败 + errorCode：" + result);
+                getJtLogger().error("初始化失败 + errorCode：" + result);
             } else {
                 // 此时可以调用 speak和synthesize方法
-                getP().info("合成引擎初始化成功");
+                getJtLogger().info("合成引擎初始化成功");
             }
         }
 
@@ -117,7 +118,8 @@ public class BaiduVoiceReader implements Reader, WithLogger {
 
         @Override
         public void onSpeechFinish(String s) {
-            if (baiduVoiceSetting.isRepeated()) {
+            if (baiduVoiceSetting.isRepeated()&&isReading) {
+                L.arrive();
                 if (baiduVoiceSetting.getRepeatIntervalTime() > 0) {
                     executorService.schedule(currentReadThread,
                             baiduVoiceSetting.getRepeatIntervalTime(), TimeUnit.MILLISECONDS);
@@ -137,6 +139,7 @@ public class BaiduVoiceReader implements Reader, WithLogger {
     @Override
     public void speech(String text) {
         this.currentReadText = text;
+
         //stop the last state
         stop();
 
@@ -159,10 +162,12 @@ public class BaiduVoiceReader implements Reader, WithLogger {
     @Override
     public void stop() {
         isReading = false;
-        if (currentReadThread != null && !currentReadThread.isStopped) {
+        speechSynthesizer.stop();
+
+        if (currentReadThread != null) {
             currentReadThread.setStopped(true);
         }
-        speechSynthesizer.stop();
+
     }
 
 

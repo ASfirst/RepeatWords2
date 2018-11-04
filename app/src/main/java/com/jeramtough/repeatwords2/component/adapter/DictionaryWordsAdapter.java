@@ -6,15 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.jeramtough.jtlog3.P;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.bean.word.Word;
-
-import java.security.acl.Group;
-import java.util.List;
 
 /**
  * @author 11718

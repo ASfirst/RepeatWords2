@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtlog3.WithLogger;
+import com.jeramtough.jtlog.with.WithJtLogger;
 import com.jeramtough.repeatwords2.util.SqlUtil;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.io.IOException;
  * on 2018  May 03 Thursday 14:39.
  */
 @JtComponent
-public class MyDatabaseHelper extends SQLiteOpenHelper implements WithLogger {
+public class MyDatabaseHelper extends SQLiteOpenHelper implements WithJtLogger {
     private Context context;
 
     @IocAutowire
