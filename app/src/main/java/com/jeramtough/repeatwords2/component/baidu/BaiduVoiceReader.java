@@ -118,8 +118,7 @@ public class BaiduVoiceReader implements Reader, WithJtLogger {
 
         @Override
         public void onSpeechFinish(String s) {
-            if (baiduVoiceSetting.isRepeated()&&isReading) {
-                L.arrive();
+            if (baiduVoiceSetting.isRepeated() && isReading) {
                 if (baiduVoiceSetting.getRepeatIntervalTime() > 0) {
                     executorService.schedule(currentReadThread,
                             baiduVoiceSetting.getRepeatIntervalTime(), TimeUnit.MILLISECONDS);

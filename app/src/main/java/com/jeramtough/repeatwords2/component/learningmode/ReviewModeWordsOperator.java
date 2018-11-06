@@ -35,7 +35,7 @@ public class ReviewModeWordsOperator implements WordsOperator {
     }
 
     @Override
-    public List<Integer> getWordIdsOfNeeding(int size) {
+    public List<Integer> getWordIdsOfNeeding(int size, List<Integer> noNeededIdsOfLearning) {
         return operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                 .getHaveGraspedMapper().getIdsForRandom(size);
     }

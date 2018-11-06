@@ -22,7 +22,7 @@ public abstract class MarkedMapper extends OperateWordsMapper
 	/*@Override
 	public void insertIdOfWord(int wordId)
 	{
-		String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_3 + " WHERE id=" + wordId;
+		String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_A_2 + " WHERE id=" + wordId;
 		Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
 		if (cursor.getCount() == 0)
 		{

@@ -2,6 +2,7 @@ package com.jeramtough.repeatwords2.dao.mapper;
 
 import android.database.Cursor;
 
+import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.repeatwords2.bean.word.WordRecord;
 import com.jeramtough.repeatwords2.bean.word.WordWithRecordTime;
 import com.jeramtough.repeatwords2.dao.DatabaseConstants;
@@ -54,7 +55,7 @@ public abstract class OperateWordsMapper extends DaoMapper {
 
     public List<WordRecord> getWordRecordsOrderById() {
         List<WordRecord> wordRecords = new ArrayList<>();
-        String sql = "SELECT * FROM " + tableName+" ORDER BY id";
+        String sql = "SELECT * FROM " + tableName + " ORDER BY id";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -82,10 +83,42 @@ public abstract class OperateWordsMapper extends DaoMapper {
 
         return list;
     }
-    
-    public List<Integer> getIdsOrderByTime(int limit) {
+
+    public List<Integer> getIdsOrderById(int limit, List<Integer> noNeededIds) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+        String sql = "SELECT id FROM " + getTableName();
+        sql = sql + " WHERE ";
+        for (int id : noNeededIds) {
+            sql = sql + "(id!=" + id + ") AND ";
+        }
+        sql = sql.substring(0, sql.length() - 4);
+        sql = sql + "ORDER BY id LIMIT " + limit + ";";
+        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex("id"));
+                list.add(id);
+            }
+            while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return list;
+    }
+
+    public List<Integer> getIdsOrderByTime(int limit, List<Integer> noNeededIds) {
         List<Integer> ids = new ArrayList<>();
-        String sql = "SELECT id FROM " + tableName + " ORDER BY time DESC LIMIT "+limit;
+        String sql = "SELECT id FROM " + getTableName();
+        sql = sql + " WHERE ";
+        for (int id : noNeededIds) {
+            sql = sql + "(id!=" + id + ") AND ";
+        }
+        sql = sql.substring(0, sql.length() - 4);
+        sql = sql + "ORDER BY time DESC LIMIT " + limit + ";";
+//        L.debug(sql);
+//        String sql = "SELECT id FROM " + tableName + " ORDER BY time DESC LIMIT " + limit;
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -94,7 +127,19 @@ public abstract class OperateWordsMapper extends DaoMapper {
         cursor.close();
         return ids;
     }
-    
+
+    public List<Integer> getIdsOrderByTime(int limit) {
+        List<Integer> ids = new ArrayList<>();
+        String sql = "SELECT id FROM " + tableName + " ORDER BY time DESC LIMIT " + limit;
+        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            ids.add(id);
+        }
+        cursor.close();
+        return ids;
+    }
+
     public List<Integer> getIdsOrderByTime() {
         List<Integer> ids = new ArrayList<>();
         String sql = "SELECT id FROM " + tableName + " ORDER BY time DESC";
@@ -155,7 +200,7 @@ public abstract class OperateWordsMapper extends DaoMapper {
 
         List<WordWithRecordTime> wordWithRecordTimeList = new ArrayList<>();
 
-        String sql = "SELECT * FROM " + tableName + " LEFT JOIN " + DatabaseConstants.TABLE_NAME_1 + " ON " + DatabaseConstants.TABLE_NAME_1 + ".id = " + tableName + ".id ORDER BY time DESC";
+        String sql = "SELECT * FROM " + tableName + " LEFT JOIN " + DatabaseConstants.TABLE_NAME_Z + " ON " + DatabaseConstants.TABLE_NAME_Z + ".id = " + tableName + ".id ORDER BY time DESC";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndex("id"));

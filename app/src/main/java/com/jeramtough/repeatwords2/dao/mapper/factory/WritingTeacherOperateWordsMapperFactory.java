@@ -4,10 +4,12 @@ import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.repeatwords2.dao.mapper.DesertedLearningMapper;
 import com.jeramtough.repeatwords2.dao.mapper.HaveGraspedMapper;
+import com.jeramtough.repeatwords2.dao.mapper.HaveLearnedTodayMapper;
 import com.jeramtough.repeatwords2.dao.mapper.MarkedMapper;
 import com.jeramtough.repeatwords2.dao.mapper.ShallLearningMapper;
 import com.jeramtough.repeatwords2.dao.mapper.WriteDesertedLearningMapper;
 import com.jeramtough.repeatwords2.dao.mapper.WriteHaveGraspedMapper;
+import com.jeramtough.repeatwords2.dao.mapper.WriteHaveLearnedTodayMapper;
 import com.jeramtough.repeatwords2.dao.mapper.WriteMarkedMapper;
 import com.jeramtough.repeatwords2.dao.mapper.WriteShallLearningMapper;
 
@@ -21,6 +23,7 @@ public class WritingTeacherOperateWordsMapperFactory implements OperateWordsMapp
     private WriteDesertedLearningMapper writeDesertedLearningMapper;
     private WriteMarkedMapper writeMarkedMapper;
     private WriteShallLearningMapper writeShallLearningMapper;
+    private WriteHaveLearnedTodayMapper writeHaveLearnedTodayMapper;
 
     @IocAutowire
     public WritingTeacherOperateWordsMapperFactory(WriteHaveGraspedMapper writeHaveGraspedMapper, WriteDesertedLearningMapper writeDesertedLearningMapper, WriteMarkedMapper writeMarkedMapper, WriteShallLearningMapper writeShallLearningMapper) {
@@ -49,5 +52,10 @@ public class WritingTeacherOperateWordsMapperFactory implements OperateWordsMapp
     @Override
     public DesertedLearningMapper getDesertedLearningMapper() {
         return writeDesertedLearningMapper;
+    }
+
+    @Override
+    public HaveLearnedTodayMapper getHaveLearnedTodayMapper() {
+        return writeHaveLearnedTodayMapper;
     }
 }

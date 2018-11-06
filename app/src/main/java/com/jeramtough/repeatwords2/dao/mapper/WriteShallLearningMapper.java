@@ -21,7 +21,7 @@ public class WriteShallLearningMapper extends ShallLearningMapper
 	@Override
 	protected String loadOperateWordTableName()
 	{
-		return DatabaseConstants.TABLE_NAME_12;
+		return DatabaseConstants.TABLE_NAME_C_3;
 	}
 
 

@@ -42,7 +42,6 @@ import java.util.Objects;
  */
 public class LearningFragment extends BaseFragment implements WordCardView.WordActionsListener {
     private static final int BUSINESS_CODE_INIT_TEACHER = 0;
-    private static final int BUSINESS_CODE_PROCESSING_NEXT_WORD = 1;
     private static final int BUSINESS_CODE_GRASP_WORD = 2;
     private static final int BUSINESS_CODE_DESERT_WORD = 3;
     private static final int BUSINESS_CODE_MARK_WORD = 4;

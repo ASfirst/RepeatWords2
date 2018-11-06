@@ -33,17 +33,17 @@ public class DictionaryMapper extends DaoMapper {
 
     public void addWord(int wordId, String en, String ch, String phonetic) {
         deleteWordById(wordId);
-        String sql = "INSERT INTO " + DatabaseConstants.TABLE_NAME_1 + " VALUES(?,?,?,?);";
+        String sql = "INSERT INTO " + DatabaseConstants.TABLE_NAME_Z + " VALUES(?,?,?,?);";
         getSqLiteDatabase().execSQL(sql, new Object[]{wordId, en, ch, phonetic});
     }
 
     public void addNewWord(String ch, String en, String phonetic) {
-        String sql = "INSERT INTO " + DatabaseConstants.TABLE_NAME_1 + " VALUES(null,?,?,?);";
+        String sql = "INSERT INTO " + DatabaseConstants.TABLE_NAME_Z + " VALUES(null,?,?,?);";
         getSqLiteDatabase().execSQL(sql, new Object[]{en, ch, phonetic});
     }
 
     public Word getWord(int wordId) {
-        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_1 + " WHERE id=" + wordId;
+        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_Z + " WHERE id=" + wordId;
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         List<Word> words = processWordsForCursor(cursor);
         cursor.close();
@@ -51,7 +51,7 @@ public class DictionaryMapper extends DaoMapper {
     }
 
     public Word getWordByEn(String en) {
-        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_1 + " WHERE en=?";
+        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_Z + " WHERE en=?";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, new String[]{en});
         List<Word> words = processWordsForCursor(cursor);
         cursor.close();
@@ -59,7 +59,7 @@ public class DictionaryMapper extends DaoMapper {
     }
 
     public Word getWordByEn(String en, int exceptId) {
-        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_1 + " WHERE en=? AND id != ?";
+        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_Z + " WHERE en=? AND id != ?";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, new String[]{en, exceptId + ""});
         List<Word> words = processWordsForCursor(cursor);
         cursor.close();
@@ -73,7 +73,7 @@ public class DictionaryMapper extends DaoMapper {
 
     public List<Word> getAllWordsOrderByEn() {
         List<Word> words = new ArrayList<>();
-        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_1 + " ORDER BY en";
+        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_Z + " ORDER BY en";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
 
         words = processWordsForCursor(cursor);
@@ -84,7 +84,7 @@ public class DictionaryMapper extends DaoMapper {
 
     public List<Word> getAllWordsOrderById() {
         List<Word> words;
-        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_1 + " ORDER BY id";
+        String sql = "SELECT * FROM " + DatabaseConstants.TABLE_NAME_Z + " ORDER BY id";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
 
         words = processWordsForCursor(cursor);
@@ -94,7 +94,7 @@ public class DictionaryMapper extends DaoMapper {
     }
 
     public int getWordCountByEn(String en) {
-        String sql = "SELECT COUNT(*) FROM " + DatabaseConstants.TABLE_NAME_1 + " WHERE en = ?";
+        String sql = "SELECT COUNT(*) FROM " + DatabaseConstants.TABLE_NAME_Z + " WHERE en = ?";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, new String[]{en});
 
         cursor.moveToNext();
@@ -104,23 +104,23 @@ public class DictionaryMapper extends DaoMapper {
     }
 
     public void deleteWordById(int wordId) {
-        String sql = "DELETE FROM " + DatabaseConstants.TABLE_NAME_1 + " WHERE id=" + wordId;
+        String sql = "DELETE FROM " + DatabaseConstants.TABLE_NAME_Z + " WHERE id=" + wordId;
         getSqLiteDatabase().execSQL(sql);
     }
 
     public void deleteWordByEn(String en) {
-        String sql = "DELETE FROM " + DatabaseConstants.TABLE_NAME_1 + " WHERE en='" + en + "'";
+        String sql = "DELETE FROM " + DatabaseConstants.TABLE_NAME_Z + " WHERE en='" + en + "'";
         getSqLiteDatabase().execSQL(sql);
     }
 
     public void deleteAllWord() {
-        String sql = "DELETE FROM " + DatabaseConstants.TABLE_NAME_1;
+        String sql = "DELETE FROM " + DatabaseConstants.TABLE_NAME_Z;
         getSqLiteDatabase().execSQL(sql);
     }
 
     public void addWords(List<Word> words) {
         for (Word word : words) {
-            String sql = "INSERT INTO " + DatabaseConstants.TABLE_NAME_1 + " VALUES(?,?,?,?);";
+            String sql = "INSERT INTO " + DatabaseConstants.TABLE_NAME_Z + " VALUES(?,?,?,?);";
             getSqLiteDatabase()
                     .execSQL(sql, new Object[]{word.getId(), word.getEn(), word.getCh(), word.getPhonetic()});
         }

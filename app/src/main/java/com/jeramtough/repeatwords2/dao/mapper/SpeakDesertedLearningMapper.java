@@ -21,6 +21,6 @@ public class SpeakDesertedLearningMapper extends DesertedLearningMapper
 	@Override
 	protected String loadOperateWordTableName()
 	{
-		return DatabaseConstants.TABLE_NAME_9;
+		return DatabaseConstants.TABLE_NAME_B_4;
 	}
 }

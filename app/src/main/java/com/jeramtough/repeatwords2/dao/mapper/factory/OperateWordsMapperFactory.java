@@ -2,6 +2,7 @@ package com.jeramtough.repeatwords2.dao.mapper.factory;
 
 import com.jeramtough.repeatwords2.dao.mapper.DesertedLearningMapper;
 import com.jeramtough.repeatwords2.dao.mapper.HaveGraspedMapper;
+import com.jeramtough.repeatwords2.dao.mapper.HaveLearnedTodayMapper;
 import com.jeramtough.repeatwords2.dao.mapper.MarkedMapper;
 import com.jeramtough.repeatwords2.dao.mapper.ShallLearningMapper;
 
@@ -17,4 +18,6 @@ public interface OperateWordsMapperFactory {
     MarkedMapper getMarkedMapper();
 
     DesertedLearningMapper getDesertedLearningMapper();
+
+    HaveLearnedTodayMapper getHaveLearnedTodayMapper();
 }

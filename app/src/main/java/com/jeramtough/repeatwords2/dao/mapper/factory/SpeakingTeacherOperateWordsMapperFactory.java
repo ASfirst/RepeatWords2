@@ -15,6 +15,7 @@ public class SpeakingTeacherOperateWordsMapperFactory implements OperateWordsMap
     private SpeakDesertedLearningMapper speakDesertedLearningMapper;
     private SpeakHaveGraspedMapper speakHaveGraspedMapper;
     private SpeakShallLearningMapper speakShallLearningMapper;
+    private SpeakHaveLearnedTodayMapper speakHaveLearnedTodayMapper;
     
     @IocAutowire
     public SpeakingTeacherOperateWordsMapperFactory(SpeakMarkedMapper speakMarkedMapper,
@@ -50,5 +51,10 @@ public class SpeakingTeacherOperateWordsMapperFactory implements OperateWordsMap
     public DesertedLearningMapper getDesertedLearningMapper()
     {
         return speakDesertedLearningMapper;
+    }
+
+    @Override
+    public HaveLearnedTodayMapper getHaveLearnedTodayMapper() {
+        return speakHaveLearnedTodayMapper;
     }
 }

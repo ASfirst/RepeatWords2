@@ -14,6 +14,6 @@ public interface WordsOperator
 	 * get ids of word of needing to learn
 	 * @return ids
 	 */
-	List<Integer> getWordIdsOfNeeding(int size);
+	List<Integer> getWordIdsOfNeeding(int size, List<Integer> noNeededIdsOfLearning);
 	
 }

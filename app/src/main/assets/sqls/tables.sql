@@ -12,6 +12,11 @@ CREATE TABLE `listen_have_grasped_tb` (
 	`time` DATETIME
 ) ;
 
+DROP TABLE IF EXISTS `listen_have_learned_today_tb`;
+CREATE TABLE `listen_have_learned_today_tb` (
+  `id` int
+) ;
+
 DROP TABLE IF EXISTS `listen_marked_tb`;
 CREATE TABLE `listen_marked_tb` (
   `id` int DEFAULT NULL,
@@ -36,6 +41,11 @@ CREATE TABLE `speak_have_grasped_tb` (
 	`time` DATETIME
 ) ;
 
+DROP TABLE IF EXISTS `speak_have_learned_today_tb`;
+CREATE TABLE `speak_have_learned_today_tb` (
+  `id` int
+) ;
+
 DROP TABLE IF EXISTS `speak_marked_tb`;
 CREATE TABLE `speak_marked_tb` (
   `id` int DEFAULT NULL,
@@ -58,6 +68,11 @@ DROP TABLE IF EXISTS `write_have_grasped_tb`;
 CREATE TABLE `write_have_grasped_tb` (
   `id` int DEFAULT NULL,
 	`time` DATETIME
+) ;
+
+DROP TABLE IF EXISTS `write_have_learned_today_tb`;
+CREATE TABLE `write_have_learned_today_tb` (
+  `id` int
 ) ;
 
 DROP TABLE IF EXISTS `write_marked_tb`;

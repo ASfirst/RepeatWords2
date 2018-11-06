@@ -21,6 +21,6 @@ public class ListenMarkedMapper extends MarkedMapper
 	@Override
 	protected String loadOperateWordTableName()
 	{
-		return DatabaseConstants.TABLE_NAME_3;
+		return DatabaseConstants.TABLE_NAME_A_2;
 	}
 }

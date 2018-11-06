@@ -21,6 +21,6 @@ public class ListenHaveGraspedMapper extends HaveGraspedMapper
 	@Override
 	protected String loadOperateWordTableName()
 	{
-		return DatabaseConstants.TABLE_NAME_2;
+		return DatabaseConstants.TABLE_NAME_A_1;
 	}
 }

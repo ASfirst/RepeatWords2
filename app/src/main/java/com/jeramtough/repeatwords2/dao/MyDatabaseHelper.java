@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
+import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.jtlog.with.WithJtLogger;
 import com.jeramtough.repeatwords2.util.SqlUtil;
 
@@ -38,7 +39,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper implements WithJtLogger {
 
     public int getDictionaryWordsCount() {
         Cursor cursor = this.getReadableDatabase()
-                .rawQuery("SELECT count(*) FROM " + DatabaseConstants.TABLE_NAME_1, null);
+                .rawQuery("SELECT count(*) FROM " + DatabaseConstants.TABLE_NAME_Z, null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();

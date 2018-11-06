@@ -11,28 +11,24 @@ import java.util.List;
  * on 2018  May 08 Tuesday 00:24.
  */
 @JtComponent
-public class MarkModeWordsOperator implements WordsOperator
-{
-	private OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider;
-	
-	@IocAutowire
-	public MarkModeWordsOperator(
-			OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider)
-	{
-		this.operateWordsMapperFactoryProvider = operateWordsMapperFactoryProvider;
-	}
-	
-	@Override
-	public void removeWordFromList(int wordId)
-	{
-		operateWordsMapperFactoryProvider.getOperateWordsMapperFactory().getMarkedMapper()
-				.removeWordRecordById(wordId);
-	}
-	
-	@Override
-	public List<Integer> getWordIdsOfNeeding(int size)
-	{
-		return operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-				.getMarkedMapper().getIdsOrderById(size);
-	}
+public class MarkModeWordsOperator implements WordsOperator {
+    private OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider;
+
+    @IocAutowire
+    public MarkModeWordsOperator(
+            OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider) {
+        this.operateWordsMapperFactoryProvider = operateWordsMapperFactoryProvider;
+    }
+
+    @Override
+    public void removeWordFromList(int wordId) {
+        operateWordsMapperFactoryProvider.getOperateWordsMapperFactory().getMarkedMapper()
+                .removeWordRecordById(wordId);
+    }
+
+    @Override
+    public List<Integer> getWordIdsOfNeeding(int size, List<Integer> noNeededIdsOfLearning) {
+        return operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
+                .getMarkedMapper().getIdsOrderById(size, noNeededIdsOfLearning);
+    }
 }

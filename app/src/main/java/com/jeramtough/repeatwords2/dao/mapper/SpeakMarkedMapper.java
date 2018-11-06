@@ -21,6 +21,6 @@ public class SpeakMarkedMapper extends MarkedMapper
 	@Override
 	protected String loadOperateWordTableName()
 	{
-		return DatabaseConstants.TABLE_NAME_7;
+		return DatabaseConstants.TABLE_NAME_B_2;
 	}
 }

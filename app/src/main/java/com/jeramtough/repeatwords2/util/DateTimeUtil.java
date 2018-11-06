@@ -14,4 +14,10 @@ public class DateTimeUtil {
         return dateTime;
     }
 
+    public static String getDate() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        String dateTime = simpleDateFormat.format(new Date()).toString();
+        return dateTime;
+    }
+
 }
