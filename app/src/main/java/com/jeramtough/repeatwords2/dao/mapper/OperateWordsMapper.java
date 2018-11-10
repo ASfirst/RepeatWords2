@@ -88,12 +88,16 @@ public abstract class OperateWordsMapper extends DaoMapper {
 
         ArrayList<Integer> list = new ArrayList<>();
         String sql = "SELECT id FROM " + getTableName();
-        sql = sql + " WHERE ";
-        for (int id : noNeededIds) {
-            sql = sql + "(id!=" + id + ") AND ";
+
+        if (noNeededIds.size() > 0) {
+            sql = sql + " WHERE ";
+            for (int id : noNeededIds) {
+                sql = sql + "(id!=" + id + ") AND ";
+            }
+            sql = sql.substring(0, sql.length() - 5);
         }
-        sql = sql.substring(0, sql.length() - 4);
-        sql = sql + "ORDER BY id LIMIT " + limit + ";";
+
+        sql = sql + " ORDER BY id LIMIT " + limit + ";";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
@@ -111,12 +115,16 @@ public abstract class OperateWordsMapper extends DaoMapper {
     public List<Integer> getIdsOrderByTime(int limit, List<Integer> noNeededIds) {
         List<Integer> ids = new ArrayList<>();
         String sql = "SELECT id FROM " + getTableName();
-        sql = sql + " WHERE ";
-        for (int id : noNeededIds) {
-            sql = sql + "(id!=" + id + ") AND ";
+
+        if (noNeededIds.size() > 0) {
+            sql = sql + " WHERE ";
+            for (int id : noNeededIds) {
+                sql = sql + "(id!=" + id + ") AND ";
+            }
+            sql = sql.substring(0, sql.length() - 5);
         }
-        sql = sql.substring(0, sql.length() - 4);
-        sql = sql + "ORDER BY time DESC LIMIT " + limit + ";";
+
+        sql = sql + " ORDER BY time DESC LIMIT " + limit + ";";
 //        L.debug(sql);
 //        String sql = "SELECT id FROM " + tableName + " ORDER BY time DESC LIMIT " + limit;
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);

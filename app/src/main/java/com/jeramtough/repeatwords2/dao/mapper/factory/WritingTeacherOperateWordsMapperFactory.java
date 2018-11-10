@@ -26,11 +26,12 @@ public class WritingTeacherOperateWordsMapperFactory implements OperateWordsMapp
     private WriteHaveLearnedTodayMapper writeHaveLearnedTodayMapper;
 
     @IocAutowire
-    public WritingTeacherOperateWordsMapperFactory(WriteHaveGraspedMapper writeHaveGraspedMapper, WriteDesertedLearningMapper writeDesertedLearningMapper, WriteMarkedMapper writeMarkedMapper, WriteShallLearningMapper writeShallLearningMapper) {
+    public WritingTeacherOperateWordsMapperFactory(WriteHaveGraspedMapper writeHaveGraspedMapper, WriteDesertedLearningMapper writeDesertedLearningMapper, WriteMarkedMapper writeMarkedMapper, WriteShallLearningMapper writeShallLearningMapper, WriteHaveLearnedTodayMapper writeHaveLearnedTodayMapper) {
         this.writeHaveGraspedMapper = writeHaveGraspedMapper;
         this.writeDesertedLearningMapper = writeDesertedLearningMapper;
         this.writeMarkedMapper = writeMarkedMapper;
         this.writeShallLearningMapper = writeShallLearningMapper;
+        this.writeHaveLearnedTodayMapper = writeHaveLearnedTodayMapper;
     }
 
 

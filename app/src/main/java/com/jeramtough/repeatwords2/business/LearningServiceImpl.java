@@ -4,6 +4,7 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
+import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.bean.word.WordRecord;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
@@ -52,6 +53,7 @@ class LearningServiceImpl implements LearningService {
 
     @Override
     public void initTeacher(final BusinessCaller businessCaller) {
+        L.arrive();
         executorService.submit(() -> {
 
             wordsTeacher.clear();
@@ -59,7 +61,6 @@ class LearningServiceImpl implements LearningService {
             List<Integer> haveLearnedWordIds = operateWordMapperFactoryProvider
                     .getOperateWordsMapperFactory().getHaveLearnedTodayMapper()
                     .getHaveLearnedWordIdsToday();
-
 
             List<Integer> noNeededIdsOfLearning = wordsTeacher.processNoNeededIdsOfLearning(haveLearnedWordIds);
 

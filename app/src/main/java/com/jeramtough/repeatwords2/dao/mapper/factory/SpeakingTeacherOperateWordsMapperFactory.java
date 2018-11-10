@@ -19,14 +19,15 @@ public class SpeakingTeacherOperateWordsMapperFactory implements OperateWordsMap
     
     @IocAutowire
     public SpeakingTeacherOperateWordsMapperFactory(SpeakMarkedMapper speakMarkedMapper,
-            SpeakDesertedLearningMapper speakDesertedLearningMapper,
-            SpeakHaveGraspedMapper speakHaveGraspedMapper,
-            SpeakShallLearningMapper speakShallLearningMapper)
+                                                    SpeakDesertedLearningMapper speakDesertedLearningMapper,
+                                                    SpeakHaveGraspedMapper speakHaveGraspedMapper,
+                                                    SpeakShallLearningMapper speakShallLearningMapper, SpeakHaveLearnedTodayMapper speakHaveLearnedTodayMapper)
     {
         this.speakMarkedMapper = speakMarkedMapper;
         this.speakDesertedLearningMapper = speakDesertedLearningMapper;
         this.speakHaveGraspedMapper = speakHaveGraspedMapper;
         this.speakShallLearningMapper = speakShallLearningMapper;
+        this.speakHaveLearnedTodayMapper = speakHaveLearnedTodayMapper;
     }
     
     @Override
