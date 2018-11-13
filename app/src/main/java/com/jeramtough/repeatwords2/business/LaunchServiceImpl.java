@@ -9,6 +9,7 @@ import com.jeramtough.jtandroid.function.PermissionManager;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtBeanPattern;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
+import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.repeatwords2.bean.word.Dictionary;
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
@@ -82,6 +83,9 @@ class LaunchServiceImpl implements LaunchService {
                 }
 
                 //clear learning recodes if the now is new day
+                boolean a = DateTimeUtil.getDate().equals(myAppSetting.getLastDateOpenedApp());
+                L.debug(DateTimeUtil.getDate(), myAppSetting.getLastDateOpenedApp());
+
                 if (!DateTimeUtil.getDate().equals(myAppSetting.getLastDateOpenedApp())) {
                     operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory()
                             .getHaveLearnedTodayMapper().clearAll();

@@ -53,7 +53,6 @@ class LearningServiceImpl implements LearningService {
 
     @Override
     public void initTeacher(final BusinessCaller businessCaller) {
-        L.arrive();
         executorService.submit(() -> {
 
             wordsTeacher.clear();

@@ -50,7 +50,7 @@ public class MyAppSetting extends AppSetting {
     }
 
     public String getLastDateOpenedApp() {
-        return getSharedPreferences().getString("lastDateOpenedApp", DateTimeUtil.getDate());
+        return getSharedPreferences().getString("lastDateOpenedApp", null);
     }
 
     public void setLastDateOpenedApp(String date) {
