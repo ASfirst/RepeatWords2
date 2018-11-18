@@ -83,9 +83,6 @@ class LaunchServiceImpl implements LaunchService {
                 }
 
                 //clear learning recodes if the now is new day
-                boolean a = DateTimeUtil.getDate().equals(myAppSetting.getLastDateOpenedApp());
-                L.debug(DateTimeUtil.getDate(), myAppSetting.getLastDateOpenedApp());
-
                 if (!DateTimeUtil.getDate().equals(myAppSetting.getLastDateOpenedApp())) {
                     operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory()
                             .getHaveLearnedTodayMapper().clearAll();

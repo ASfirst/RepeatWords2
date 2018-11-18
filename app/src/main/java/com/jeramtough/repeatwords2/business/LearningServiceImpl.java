@@ -4,7 +4,6 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
-import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.bean.word.WordRecord;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
@@ -25,7 +24,7 @@ import java.util.concurrent.ExecutorService;
  * on 2018  May 03 Thursday 19:04.
  */
 @JtServiceImpl
-class LearningServiceImpl implements LearningService {
+public class LearningServiceImpl implements LearningService {
     private DictionaryMapper dictionaryMapper;
     private WordsTeacher wordsTeacher;
     private WordsPool wordsPool;
@@ -55,8 +54,6 @@ class LearningServiceImpl implements LearningService {
     public void initTeacher(final BusinessCaller businessCaller) {
         executorService.submit(() -> {
 
-            wordsTeacher.clear();
-
             List<Integer> haveLearnedWordIds = operateWordMapperFactoryProvider
                     .getOperateWordsMapperFactory().getHaveLearnedTodayMapper()
                     .getHaveLearnedWordIdsToday();
@@ -64,8 +61,11 @@ class LearningServiceImpl implements LearningService {
             List<Integer> noNeededIdsOfLearning = wordsTeacher.processNoNeededIdsOfLearning(haveLearnedWordIds);
 
 
+            //根据时间排序翻倍取出，然后取随机的一半
+            int perLearningCount = myAppSetting.getPerLearningCount() * 2;
+
             List<Integer> shallLearningIds = wordsOperateProvider.getWordsOperator()
-                    .getWordIdsOfNeeding(myAppSetting.getPerLearningCount(), noNeededIdsOfLearning);
+                    .getWordIdsOfNeeding(perLearningCount, noNeededIdsOfLearning);
 
             for (Integer id : shallLearningIds) {
                 Word word = wordsPool.getWord(id);
@@ -75,9 +75,13 @@ class LearningServiceImpl implements LearningService {
                 }
                 wordsTeacher.addWordToList(word);
             }
+
+            Word[] shallLearningWords = wordsTeacher.getRandomNeedLearningWords(myAppSetting.getPerLearningCount());
+
+            wordsTeacher.clear();
+
             businessCaller.getData()
                     .putInt("shallLearningSize", wordsTeacher.getShallLearningSize());
-            Word[] shallLearningWords = wordsTeacher.getAllRandomNeedLearningWords();
             businessCaller.getData().putSerializable("shallLearningWords", shallLearningWords);
             businessCaller.callBusiness();
         });

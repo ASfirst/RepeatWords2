@@ -62,7 +62,8 @@ public class WordsTeacher implements Teacher {
             currentWord = word;
 
             return currentWord;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -72,6 +73,20 @@ public class WordsTeacher implements Teacher {
         Collections.shuffle(shallLearningWords);
         return shallLearningWords.toArray(new Word[shallLearningWords.size()]);
     }
+
+    @Override
+    public Word[] getRandomNeedLearningWords(int size) {
+        if (shallLearningWords.size() > size) {
+            Word[] words = new Word[size];
+            System.arraycopy(getAllRandomNeedLearningWords(), 0, words, 0, size);
+            return words;
+        }
+        else {
+            return getAllRandomNeedLearningWords();
+        }
+
+    }
+
 
     public Word getPreviousWord() {
         return previousWord;
@@ -94,7 +109,8 @@ public class WordsTeacher implements Teacher {
             count++;
             if (count >= 2) {
                 noNeededIdsOfLearning.add(integer);
-            } else {
+            }
+            else {
                 countMap.put(integer, count);
             }
         }
