@@ -24,6 +24,7 @@
                 android:src="@drawable/background1" />
 
             <TextView
+                android:id="@+id/textView_grasped"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -71,6 +72,7 @@
                 android:src="@drawable/background1" />
 
             <TextView
+                android:id="@+id/textView_learning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -99,6 +101,7 @@
             android:src="@drawable/background1" />
 
         <TextView
+            android:id="@+id/textView_exposing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

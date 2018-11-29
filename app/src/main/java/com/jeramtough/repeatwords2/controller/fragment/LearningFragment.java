@@ -20,10 +20,12 @@ import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
-import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.business.LearningService;
+import com.jeramtough.repeatwords2.component.adapter.MarkedWordCardsPagerAdapter;
+import com.jeramtough.repeatwords2.component.adapter.NewWordCardsPagerAdapter;
+import com.jeramtough.repeatwords2.component.adapter.ReviewWordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
 import com.jeramtough.repeatwords2.component.blackboard.BlackboardOfLearningTeacher;
@@ -40,7 +42,8 @@ import java.util.Objects;
 /**
  * @author 11718
  */
-public class LearningFragment extends BaseFragment implements WordCardView.WordActionsListener {
+public class LearningFragment extends BaseFragment
+        implements WordCardView.WordActionsListener {
     private static final int BUSINESS_CODE_INIT_TEACHER = 0;
     private static final int BUSINESS_CODE_GRASP_WORD = 2;
     private static final int BUSINESS_CODE_DESERT_WORD = 3;
@@ -208,7 +211,8 @@ public class LearningFragment extends BaseFragment implements WordCardView.WordA
     public void onSingleClickWord(Word word, TextView textView) {
         if (!reader.isReading()) {
             blackboardOfTeacher.whileLearning(word, textView);
-        } else {
+        }
+        else {
             blackboardOfTeacher.whileDismiss(textView);
         }
     }
@@ -243,9 +247,30 @@ public class LearningFragment extends BaseFragment implements WordCardView.WordA
                         (Word[]) message.getData().getSerializable("shallLearningWords");
                 surplusLearningCount = Objects.requireNonNull(words).length;
 
-                WordCardsPagerAdapter wordCardsPagerAdapter =
-                        new WordCardsPagerAdapter(getContext(), words, LearningFragment
-                                .this);
+                WordCardsPagerAdapter wordCardsPagerAdapter = null;
+
+                LearningMode learningMode = learningService.getLearningMode();
+                switch (learningMode) {
+                    case NEW:
+                        wordCardsPagerAdapter =
+                                new NewWordCardsPagerAdapter(getContext(), words,
+                                        LearningFragment
+                                                .this);
+                        break;
+                    case MARKED:
+                        wordCardsPagerAdapter =
+                                new MarkedWordCardsPagerAdapter(getContext(), words,
+                                        LearningFragment
+                                                .this);
+                        break;
+                    case REVIME:
+                        wordCardsPagerAdapter =
+                                new ReviewWordCardsPagerAdapter(getContext(), words,
+                                        LearningFragment
+                                                .this);
+                        break;
+                }
+
                 jtViewPager.setAdapter(wordCardsPagerAdapter);
                 jtViewPager.setInitFinishedCaller(() -> {
                     layoutGate.setVisibility(View.GONE);
@@ -265,7 +290,13 @@ public class LearningFragment extends BaseFragment implements WordCardView.WordA
                 timedCloseTextView.closeDelayed(3000);
                 break;
             case BUSINESS_CODE_MARK_WORD:
-                timedCloseTextView.setPrimaryMessage("OK");
+                if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL)) {
+                    timedCloseTextView.setPrimaryMessage("OK");
+                }
+                else {
+                    timedCloseTextView.setErrorMessage("have marked");
+                }
+
                 timedCloseTextView.visible();
                 timedCloseTextView.closeDelayed(3000);
                 break;
@@ -291,7 +322,8 @@ public class LearningFragment extends BaseFragment implements WordCardView.WordA
         String currentPosition;
         if (jtViewPager.getChildCount() > 0) {
             currentPosition = jtViewPager.getCurrentItem() + 1 + "";
-        } else {
+        }
+        else {
             currentPosition = "*";
         }
         textViewCondition.setText(
@@ -338,7 +370,8 @@ public class LearningFragment extends BaseFragment implements WordCardView.WordA
         if (wordCardView != null) {
             blackboardOfTeacher
                     .whileLearning(wordCardView.getWord(), wordCardView.getTextViewContent());
-        } else {
+        }
+        else {
             reader.stop();
         }
     }

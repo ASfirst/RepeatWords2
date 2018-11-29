@@ -2,7 +2,6 @@ package com.jeramtough.repeatwords2.dao.mapper;
 
 import android.database.Cursor;
 
-import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.repeatwords2.bean.word.WordRecord;
 import com.jeramtough.repeatwords2.bean.word.WordWithRecordTime;
 import com.jeramtough.repeatwords2.dao.DatabaseConstants;
@@ -38,7 +37,8 @@ public abstract class OperateWordsMapper extends DaoMapper {
 
     public void addWordRecord(WordRecord wordRecord) {
         String sql = "INSERT INTO " + tableName + " VALUES(?,?)";
-        this.getSqLiteDatabase().execSQL(sql, new Object[]{wordRecord.getWordId(), wordRecord.getTime()});
+        this.getSqLiteDatabase().execSQL(sql,
+                new Object[]{wordRecord.getWordId(), wordRecord.getTime()});
     }
 
     public List<Integer> getIdsOrderById() {
@@ -228,5 +228,13 @@ public abstract class OperateWordsMapper extends DaoMapper {
         }
         cursor.close();
         return wordWithRecordTimeList;
+    }
+
+    public boolean hasWordId(int wordId) {
+        String sql = "SELECT * FROM " + tableName + " WHERE id =" + wordId;
+        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
+        boolean has = cursor.getCount() > 0 ? true : false;
+        cursor.close();
+        return has;
     }
 }

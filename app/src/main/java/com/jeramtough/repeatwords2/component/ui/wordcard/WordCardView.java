@@ -40,7 +40,9 @@ public class WordCardView extends FrameLayout
     private TextView textViewContent;
     private AppCompatImageView imageViewVernier;
     private WordActionsListener wordActionsListener;
-
+    private TextView textViewGrasped;
+    private TextView textViewLearning;
+    private TextView textViewExposing;
 
     private boolean isInExposingArea = false;
     private boolean isInGraspingArea = false;
@@ -57,7 +59,8 @@ public class WordCardView extends FrameLayout
 
     protected void initViews() {
         ViewGroup viewGroup = (ViewGroup) LayoutInflater.from(getContext())
-                .inflate(R.layout.view_word_card, null);
+                                                        .inflate(R.layout.view_word_card,
+                                                                null);
         this.addView(viewGroup);
 
         layout = findViewById(R.id.layout);
@@ -69,6 +72,9 @@ public class WordCardView extends FrameLayout
         layoutContent = findViewById(R.id.layout_content);
         textViewContent = findViewById(R.id.textView_content);
         imageViewVernier = findViewById(R.id.imageView_vernier);
+        textViewGrasped = findViewById(R.id.textView_grasped);
+        textViewLearning = findViewById(R.id.textView_learning);
+        textViewExposing = findViewById(R.id.textView_exposing);
 
         textViewContent.setText(word.getEn());
 
@@ -149,7 +155,8 @@ public class WordCardView extends FrameLayout
                     isInExposingArea = true;
                     wordActionsListener.inExposingArea(word, textViewContent);
 
-                } else if (x < exposingAreaLimitX && y < exposingAreaLimitY && isInExposingArea) {
+                }
+                else if (x < exposingAreaLimitX && y < exposingAreaLimitY && isInExposingArea) {
                     isInExposingArea = false;
                     wordActionsListener.outExposingArea(word, textViewContent);
                 }
@@ -188,6 +195,27 @@ public class WordCardView extends FrameLayout
 
     public void setWordActionsListener(WordActionsListener wordActionsListener) {
         this.wordActionsListener = wordActionsListener;
+    }
+
+
+    public Button getButtonDesert() {
+        return buttonDesert;
+    }
+
+    public Button getButtonMark() {
+        return buttonMark;
+    }
+
+    public TextView getTextViewGrasped() {
+        return textViewGrasped;
+    }
+
+    public TextView getTextViewLearning() {
+        return textViewLearning;
+    }
+
+    public TextView getTextViewExposing() {
+        return textViewExposing;
     }
 
     //{{{{}}}}}}}}}

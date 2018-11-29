@@ -10,7 +10,6 @@ import com.baidu.tts.client.TtsMode;
 import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.jtlog.with.WithJtLogger;
 import com.jeramtough.jtutil.WordUtil;
 
@@ -40,6 +39,8 @@ public class BaiduVoiceReader implements Reader, WithJtLogger {
 
     private boolean isReading = false;
 
+    private int readerGenderIndex = 1;
+
     @IocAutowire
     public BaiduVoiceReader(Context context, VoiceResources voiceResources,
                             BaiduVoiceSetting baiduVoiceSetting) {
@@ -54,7 +55,8 @@ public class BaiduVoiceReader implements Reader, WithJtLogger {
         //复制离线发音包到指定目录下
         try {
             voiceResources.initResources();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -81,12 +83,14 @@ public class BaiduVoiceReader implements Reader, WithJtLogger {
             // 离线授权需要网站上的应用填写包名。本demo的包名是com.baidu.tts.sample，定义在build.gradle中
             String errorMsg = authInfo.getTtsError().getDetailMessage();
             getJtLogger().error("鉴权失败 =" + errorMsg);
-        } else {
+        }
+        else {
             getJtLogger().info("验证通过，离线正式授权文件存在。");
             int result = speechSynthesizer.initTts(TtsMode.MIX);
             if (result != 0) {
                 getJtLogger().error("初始化失败 + errorCode：" + result);
-            } else {
+            }
+            else {
                 // 此时可以调用 speak和synthesize方法
                 getJtLogger().info("合成引擎初始化成功");
             }
@@ -122,7 +126,8 @@ public class BaiduVoiceReader implements Reader, WithJtLogger {
                 if (baiduVoiceSetting.getRepeatIntervalTime() > 0) {
                     executorService.schedule(currentReadThread,
                             baiduVoiceSetting.getRepeatIntervalTime(), TimeUnit.MILLISECONDS);
-                } else {
+                }
+                else {
                     currentReadThread = new ReadThread(currentReadText);
                     executorService.schedule(currentReadThread, 10, TimeUnit.MILLISECONDS);
                 }
@@ -234,13 +239,27 @@ public class BaiduVoiceReader implements Reader, WithJtLogger {
             if (!isStopped) {
                 isReading = true;
                 boolean isChinese = WordUtil.isContainsChinese(readText);
-                String gender = (int) (Math.random() * 2) == 0 ? "female" : "male";
+
+                String gender;
+                if (readerGenderIndex >= 1) {
+                    gender = "female";
+                }
+                else {
+                    gender = "male";
+                }
+                readerGenderIndex++;
+                if (readerGenderIndex == 3) {
+                    readerGenderIndex = 0;
+                }
+
 
                 if (isChinese) {
                     changeToChineseModel(gender);
-                } else {
+                }
+                else {
                     changeToEnglishModel(gender);
                 }
+
 
                 speechSynthesizer.speak(readText);
             }

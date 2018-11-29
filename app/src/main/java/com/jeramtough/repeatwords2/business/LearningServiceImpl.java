@@ -58,14 +58,17 @@ public class LearningServiceImpl implements LearningService {
                     .getOperateWordsMapperFactory().getHaveLearnedTodayMapper()
                     .getHaveLearnedWordIdsToday();
 
-            List<Integer> noNeededIdsOfLearning = wordsTeacher.processNoNeededIdsOfLearning(haveLearnedWordIds);
+            List<Integer> noNeededIdsOfLearning = wordsTeacher.processNoNeededIdsOfLearning(
+                    haveLearnedWordIds);
 
 
             //根据时间排序翻倍取出，然后取随机的一半
             int perLearningCount = myAppSetting.getPerLearningCount() * 2;
 
             List<Integer> shallLearningIds = wordsOperateProvider.getWordsOperator()
-                    .getWordIdsOfNeeding(perLearningCount, noNeededIdsOfLearning);
+                                                                 .getWordIdsOfNeeding(
+                                                                         perLearningCount,
+                                                                         noNeededIdsOfLearning);
 
             for (Integer id : shallLearningIds) {
                 Word word = wordsPool.getWord(id);
@@ -76,12 +79,13 @@ public class LearningServiceImpl implements LearningService {
                 wordsTeacher.addWordToList(word);
             }
 
-            Word[] shallLearningWords = wordsTeacher.getRandomNeedLearningWords(myAppSetting.getPerLearningCount());
+            Word[] shallLearningWords = wordsTeacher.getRandomNeedLearningWords(
+                    myAppSetting.getPerLearningCount());
 
             wordsTeacher.clear();
 
             businessCaller.getData()
-                    .putInt("shallLearningSize", wordsTeacher.getShallLearningSize());
+                          .putInt("shallLearningSize", wordsTeacher.getShallLearningSize());
             businessCaller.getData().putSerializable("shallLearningWords", shallLearningWords);
             businessCaller.callBusiness();
         });
@@ -112,12 +116,15 @@ public class LearningServiceImpl implements LearningService {
             if (word != null) {
                 int id = word.getId();
                 operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                        .getHaveGraspedMapper().removeWordRecordById(id);
+                                                .getHaveGraspedMapper().removeWordRecordById(
+                        id);
                 operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                        .getShallLearningMapper().removeWordRecordById(id);
+                                                .getShallLearningMapper().removeWordRecordById(
+                        id);
                 WordRecord wordRecord = new WordRecord(id, DateTimeUtil.getDateTime());
                 operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                        .getDesertedLearningMapper().addWordRecord(wordRecord);
+                                                .getDesertedLearningMapper().addWordRecord(
+                        wordRecord);
 
                 learnedWord(word);
 
@@ -135,9 +142,11 @@ public class LearningServiceImpl implements LearningService {
                 int id = word.getId();
                 WordRecord wordRecord = new WordRecord(id, DateTimeUtil.getDateTime());
                 operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                        .getHaveGraspedMapper().addWordRecord(wordRecord);
+                                                .getHaveGraspedMapper().addWordRecord(
+                        wordRecord);
                 operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                        .getShallLearningMapper().removeWordRecordById(id);
+                                                .getShallLearningMapper().removeWordRecordById(
+                        id);
 
                 learnedWord(word);
 
@@ -153,9 +162,20 @@ public class LearningServiceImpl implements LearningService {
                 businessCaller.getData().putSerializable("word", word);
 
                 int id = word.getId();
-                WordRecord wordRecord = new WordRecord(id, DateTimeUtil.getDateTime());
-                operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                        .getMarkedMapper().addWordRecord(wordRecord);
+                boolean has = operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
+                                                              .getMarkedMapper().hasWordId(id);
+                if (!has) {
+                    WordRecord wordRecord = new WordRecord(id, DateTimeUtil.getDateTime());
+                    operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
+                                                    .getMarkedMapper().addWordRecord(
+                            wordRecord);
+
+                    businessCaller.setSuccessful(true);
+                }
+                else{
+                    businessCaller.setSuccessful(false);
+                }
+
 
                 businessCaller.callBusiness();
             }
@@ -180,7 +200,8 @@ public class LearningServiceImpl implements LearningService {
         wordsTeacher.removeWordFromList(word);
         executorService.submit(() -> {
             operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                    .getHaveLearnedTodayMapper().addWordIdInToday(word.getId());
+                                            .getHaveLearnedTodayMapper().addWordIdInToday(
+                    word.getId());
         });
     }
 
