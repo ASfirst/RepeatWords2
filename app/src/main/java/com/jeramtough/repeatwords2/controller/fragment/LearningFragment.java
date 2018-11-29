@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
@@ -136,6 +137,7 @@ public class LearningFragment extends BaseFragment
         switch (viewId) {
             case R.id.button_start_learning:
             case R.id.button_again_learn:
+                buttonStartLearning.setClickable(false);
                 progressBar.setVisibility(View.VISIBLE);
                 learningService.initTeacher(
                         new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_INIT_TEACHER));
@@ -243,43 +245,28 @@ public class LearningFragment extends BaseFragment
             case BUSINESS_CODE_INIT_TEACHER:
                 shallLearningCount = message.getData().getInt("shallLearningSize");
 
-                Word[] words =
-                        (Word[]) message.getData().getSerializable("shallLearningWords");
-                surplusLearningCount = Objects.requireNonNull(words).length;
+                if (shallLearningCount > 0) {
+                    Word[] words =
+                            (Word[]) message.getData().getSerializable("shallLearningWords");
+                    surplusLearningCount = Objects.requireNonNull(words).length;
 
-                WordCardsPagerAdapter wordCardsPagerAdapter = null;
+                    WordCardsPagerAdapter wordCardsPagerAdapter =
+                            this.processingWordCardsPagerAdapter(words);
 
-                LearningMode learningMode = learningService.getLearningMode();
-                switch (learningMode) {
-                    case NEW:
-                        wordCardsPagerAdapter =
-                                new NewWordCardsPagerAdapter(getContext(), words,
-                                        LearningFragment
-                                                .this);
-                        break;
-                    case MARKED:
-                        wordCardsPagerAdapter =
-                                new MarkedWordCardsPagerAdapter(getContext(), words,
-                                        LearningFragment
-                                                .this);
-                        break;
-                    case REVIME:
-                        wordCardsPagerAdapter =
-                                new ReviewWordCardsPagerAdapter(getContext(), words,
-                                        LearningFragment
-                                                .this);
-                        break;
+                    jtViewPager.setAdapter(wordCardsPagerAdapter);
+                    jtViewPager.setInitFinishedCaller(() -> {
+                        layoutGate.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        buttonStartLearning.setClickable(true);
+                        learnCurrentWord();
+                        updateWordsCondition();
+                    });
                 }
-
-                jtViewPager.setAdapter(wordCardsPagerAdapter);
-                jtViewPager.setInitFinishedCaller(() -> {
-                    layoutGate.setVisibility(View.GONE);
+                else {
+                    Toast.makeText(getContext(), "empty", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.INVISIBLE);
-                    learnCurrentWord();
-                    updateWordsCondition();
-                });
-
-
+                    buttonStartLearning.setClickable(true);
+                }
                 break;
             case BUSINESS_CODE_GRASP_WORD:
             case BUSINESS_CODE_REMOVE_WORD:
@@ -374,5 +361,31 @@ public class LearningFragment extends BaseFragment
         else {
             reader.stop();
         }
+    }
+
+    private WordCardsPagerAdapter processingWordCardsPagerAdapter(Word[] words) {
+        WordCardsPagerAdapter wordCardsPagerAdapter = null;
+        LearningMode learningMode = learningService.getLearningMode();
+        switch (learningMode) {
+            case NEW:
+                wordCardsPagerAdapter =
+                        new NewWordCardsPagerAdapter(getContext(), words,
+                                LearningFragment
+                                        .this);
+                break;
+            case MARKED:
+                wordCardsPagerAdapter =
+                        new MarkedWordCardsPagerAdapter(getContext(), words,
+                                LearningFragment
+                                        .this);
+                break;
+            case REVIME:
+                wordCardsPagerAdapter =
+                        new ReviewWordCardsPagerAdapter(getContext(), words,
+                                LearningFragment
+                                        .this);
+                break;
+        }
+        return wordCardsPagerAdapter;
     }
 }
