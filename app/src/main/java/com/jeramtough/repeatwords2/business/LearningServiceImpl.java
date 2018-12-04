@@ -88,11 +88,11 @@ public class LearningServiceImpl implements LearningService {
                     myAppSetting.getPerLearningCount());
 
             businessCaller.getData()
-                          .putInt("shallLearningSize", wordsTeacher.getShallLearningSize());
+                          .putInt("shallLearningSize", shallLearningWords.length);
             businessCaller.getData().putSerializable("shallLearningWords", shallLearningWords);
 
             wordsTeacher.clear();
-            
+
             businessCaller.callBusiness();
         });
     }
