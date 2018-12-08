@@ -86,6 +86,22 @@ public class MainNavigationHandler extends JtIocHandler {
         }
     }
 
+    public void updateStudyFragment() {
+
+        FragmentTransaction fragmentTransaction =
+                getActivity().getSupportFragmentManager().beginTransaction();
+        Fragment beRemovedFragment = getActivity().getSupportFragmentManager().findFragmentByTag(
+                0 + "");
+        fragmentTransaction.remove(beRemovedFragment);
+        fragmentTransaction.commitNow();
+
+        FragmentTransaction fragmentTransaction1 =
+                getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction1.add(layoutFragmentsContainer.getId(), fragments.get(0), 0 + "");
+        fragmentTransaction1.commitNow();
+
+    }
+
     //*************************
     private void initFragments() {
         fragments = new SparseArray<>();
@@ -135,18 +151,5 @@ public class MainNavigationHandler extends JtIocHandler {
 
     }
 
-    private void updateStudyFragment() {
 
-        FragmentTransaction fragmentTransaction =
-                getActivity().getSupportFragmentManager().beginTransaction();
-        Fragment beRemovedFragment = getActivity().getSupportFragmentManager().findFragmentByTag(0 + "");
-        fragmentTransaction.remove(beRemovedFragment);
-        fragmentTransaction.commitNow();
-
-        FragmentTransaction fragmentTransaction1 =
-                getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction1.add(layoutFragmentsContainer.getId(), fragments.get(0), 0 + "");
-        fragmentTransaction1.commitNow();
-
-    }
 }

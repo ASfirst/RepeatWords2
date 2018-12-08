@@ -60,6 +60,16 @@
                     android:text="？"/>
 
             <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/button_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_reset"
+                android:background="@color/transparent"
+                android:padding="3dp"
+                android:layout_marginLeft="10dp"
+                android:scaleType="fitCenter"/>
+
+            <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/button_refresh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

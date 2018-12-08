@@ -16,7 +16,6 @@ import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
 import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -55,25 +54,11 @@ public class LearningServiceImpl implements LearningService {
     public void initTeacher(final BusinessCaller businessCaller) {
         executorService.submit(() -> {
 
-            List<Integer> haveLearnedWordIds = operateWordMapperFactoryProvider
-                    .getOperateWordsMapperFactory().getHaveLearnedTodayMapper()
-                    .getHaveLearnedWordIdsToday();
-
-            List<Integer> noNeededIdsOfLearning = new ArrayList<>();
-            if (LearningMode.getLearningMode(myAppSetting.getLearningMode()) == LearningMode
-                    .NEW) {
-                noNeededIdsOfLearning = wordsTeacher.processNoNeededIdsOfLearning(
-                        haveLearnedWordIds);
-            }
-
-
-            //根据时间排序翻倍取出，然后取随机的一半
-            int perLearningCount = myAppSetting.getPerLearningCount() * 2;
+            int perLearningCount = myAppSetting.getPerLearningCount();
 
             List<Integer> shallLearningIds = wordsOperateProvider.getWordsOperator()
                                                                  .getWordIdsOfNeeding(
-                                                                         perLearningCount,
-                                                                         noNeededIdsOfLearning);
+                                                                         perLearningCount);
 
             for (Integer id : shallLearningIds) {
                 Word word = wordsPool.getWord(id);
@@ -84,8 +69,7 @@ public class LearningServiceImpl implements LearningService {
                 wordsTeacher.addWordToList(word);
             }
 
-            Word[] shallLearningWords = wordsTeacher.getRandomNeedLearningWords(
-                    myAppSetting.getPerLearningCount());
+            Word[] shallLearningWords = wordsTeacher.getAllRandomNeedLearningWords();
 
             businessCaller.getData()
                           .putInt("shallLearningSize", shallLearningWords.length);

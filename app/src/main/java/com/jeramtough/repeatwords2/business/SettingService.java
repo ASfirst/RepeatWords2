@@ -31,4 +31,6 @@ public interface SettingService
 	void setTeacherType(int teacherTypeId);
 	
 	void setLearningMode(int learningMode);
+
+	void clearHavedLearnedWordToday(BusinessCaller businessCaller);
 }

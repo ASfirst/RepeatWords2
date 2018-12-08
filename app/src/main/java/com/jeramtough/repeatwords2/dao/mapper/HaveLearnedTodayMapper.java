@@ -2,7 +2,6 @@ package com.jeramtough.repeatwords2.dao.mapper;
 
 import android.database.Cursor;
 
-import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.repeatwords2.dao.MyDatabaseHelper;
 
 import java.util.ArrayList;
@@ -26,6 +25,18 @@ public abstract class HaveLearnedTodayMapper extends DaoMapper {
     public List<Integer> getHaveLearnedWordIdsToday() {
         List<Integer> ids = new ArrayList<>();
         String sql = "SELECT id FROM " + tableName;
+        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            ids.add(id);
+        }
+        cursor.close();
+        return ids;
+    }
+
+    public List<Integer> getHaveLearnedWordIdsToday(int limit) {
+        List<Integer> ids = new ArrayList<>();
+        String sql = "SELECT id FROM " + tableName + " ORDER BY RANDOM() LIMIT " + limit;
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndex("id"));

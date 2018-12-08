@@ -1,18 +1,13 @@
 package com.jeramtough.repeatwords2.component.teacher;
 
-import android.util.SparseIntArray;
-
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.repeatwords2.bean.word.Word;
 
 import org.apache.commons.lang3.RandomUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -100,20 +95,4 @@ public class WordsTeacher implements Teacher {
         return shallLearningWords.size();
     }
 
-    public List<Integer> processNoNeededIdsOfLearning(List<Integer> haveLearnedWordIds) {
-        SparseIntArray countMap = new SparseIntArray();
-//        SparseIntArray<Integer, Integer> countMap = new SparseIntArray();
-        List<Integer> noNeededIdsOfLearning = new ArrayList<>();
-        for (Integer integer : haveLearnedWordIds) {
-            int count = countMap.get(integer);
-            count++;
-            if (count >= 2) {
-                noNeededIdsOfLearning.add(integer);
-            }
-            else {
-                countMap.put(integer, count);
-            }
-        }
-        return noNeededIdsOfLearning;
-    }
 }

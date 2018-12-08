@@ -6,6 +6,7 @@ import com.jeramtough.repeatwords2.bean.word.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
 import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,17 +27,29 @@ public class ReviewModeWordsOperator implements WordsOperator {
     @Override
     public void removeWordFromList(int wordId) {
         operateWordsMapperFactoryProvider.getOperateWordsMapperFactory().getHaveGraspedMapper()
-                .removeWordRecordById(wordId);
+                                         .removeWordRecordById(wordId);
 
         WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
 
         operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                .getShallLearningMapper().addWordRecord(wordRecord);
+                                         .getShallLearningMapper().addWordRecord(wordRecord);
     }
 
     @Override
-    public List<Integer> getWordIdsOfNeeding(int size, List<Integer> noNeededIdsOfLearning) {
-        return operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                .getHaveGraspedMapper().getIdsForRandom(size);
+    public List<Integer> getWordIdsOfNeeding(int size) {
+
+        //拿出今日已学三分之一单词
+        int sizeFromHavedLearnedToday = size / 3 * 1;
+        List<Integer> haveLearnedWordIdsToday = operateWordsMapperFactoryProvider
+                .getOperateWordsMapperFactory().getHaveLearnedTodayMapper()
+                .getHaveLearnedWordIdsToday(sizeFromHavedLearnedToday);
+
+        List<Integer> shallLearningIds = operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
+                                                                          .getShallLearningMapper().getIdsForRandom(
+                        size - sizeFromHavedLearnedToday);
+
+        shallLearningIds.addAll(haveLearnedWordIdsToday);
+        Collections.shuffle(shallLearningIds);
+        return shallLearningIds;
     }
 }

@@ -34,4 +34,8 @@ public class MainActivity extends BasicActivity {
     public void onBackPressed() {
         dblclickExit.clickExit();
     }
+
+    public MainNavigationHandler getMainNavigationHandler() {
+        return mainNavigationHandler;
+    }
 }

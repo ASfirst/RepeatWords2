@@ -23,9 +23,11 @@ import com.jeramtough.repeatwords2.component.teacher.TeacherType;
  * @author 11718
  * on 2018  May 02 Wednesday 23:51.
  */
-public class SettingFragment extends BaseFragment implements RadioGroup.OnCheckedChangeListener {
+public class SettingFragment extends BaseFragment
+        implements RadioGroup.OnCheckedChangeListener {
     private static final int BUSINESS_CODE_BACKUP_LEARNING_RECORD = 0;
     private static final int BUSINESS_CODE_RECOVER_LEARNING_RECORD = 1;
+    private static final int BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY = 2;
 
     private EditText editTextPerLearnCount;
     private EditText editTextReadEnglishSpeed;
@@ -40,6 +42,7 @@ public class SettingFragment extends BaseFragment implements RadioGroup.OnChecke
     private RadioButton radioButtonMarkedMode;
     private Button buttonBackup;
     private Button buttonRecover;
+    private Button buttonClearToday;
 
     private ProgressDialog progressDialog;
 
@@ -67,10 +70,12 @@ public class SettingFragment extends BaseFragment implements RadioGroup.OnChecke
         radioButtonMarkedMode = findViewById(R.id.radioButton_marked_mode);
         buttonBackup = findViewById(R.id.button_backup);
         buttonRecover = findViewById(R.id.button_recover);
+        buttonClearToday = findViewById(R.id.button_clear_today);
         radioButtonWritingTeacher = findViewById(R.id.radioButton_writing_teacher);
 
         buttonBackup.setOnClickListener(this);
         buttonRecover.setOnClickListener(this);
+        buttonClearToday.setOnClickListener(this);
 
         radioGroupSelectLearningMode.setOnCheckedChangeListener(this);
         radioGroupSelectTeacher.setOnCheckedChangeListener(this);
@@ -128,7 +133,8 @@ public class SettingFragment extends BaseFragment implements RadioGroup.OnChecke
                     settingService.setLearningMode(LearningMode.MARKED.getLearningModeId());
                     break;
             }
-        } else if (group == radioGroupSelectTeacher) {
+        }
+        else if (group == radioGroupSelectTeacher) {
             switch (checkedId) {
                 case R.id.radioButton_listening_teacher:
                     settingService
@@ -164,6 +170,11 @@ public class SettingFragment extends BaseFragment implements RadioGroup.OnChecke
                         new BusinessCaller(getFragmentHandler(),
                                 BUSINESS_CODE_RECOVER_LEARNING_RECORD));
                 break;
+
+            case R.id.button_clear_today:
+                settingService.clearHavedLearnedWordToday(new BusinessCaller
+                        (getFragmentHandler(), BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY));
+                break;
         }
     }
 
@@ -173,7 +184,8 @@ public class SettingFragment extends BaseFragment implements RadioGroup.OnChecke
             case BUSINESS_CODE_BACKUP_LEARNING_RECORD:
                 if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL)) {
                     Toast.makeText(getContext(), "backup ok", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                else {
                     Toast.makeText(getContext(), "backup fail", Toast.LENGTH_SHORT).show();
                 }
 
@@ -184,13 +196,17 @@ public class SettingFragment extends BaseFragment implements RadioGroup.OnChecke
             case BUSINESS_CODE_RECOVER_LEARNING_RECORD:
                 if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL)) {
                     Toast.makeText(getContext(), "recover ok", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                else {
                     Toast.makeText(getContext(), "recover fail", Toast.LENGTH_SHORT).show();
                 }
 
                 if (progressDialog.isShowing()) {
                     progressDialog.cancel();
                 }
+                break;
+            case BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY:
+                Toast.makeText(getContext(), "clear finishly", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

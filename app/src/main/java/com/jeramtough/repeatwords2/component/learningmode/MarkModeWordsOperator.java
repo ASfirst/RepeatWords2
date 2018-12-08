@@ -27,8 +27,9 @@ public class MarkModeWordsOperator implements WordsOperator {
     }
 
     @Override
-    public List<Integer> getWordIdsOfNeeding(int size, List<Integer> noNeededIdsOfLearning) {
+    public List<Integer> getWordIdsOfNeeding(int size) {
+
         return operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                .getMarkedMapper().getIdsOrderById(size, noNeededIdsOfLearning);
+                .getMarkedMapper().getIdsOrderById(size);
     }
 }

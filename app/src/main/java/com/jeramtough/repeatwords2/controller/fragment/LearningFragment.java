@@ -36,6 +36,7 @@ import com.jeramtough.repeatwords2.component.blackboard.BlackboardOfWritingTeach
 import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
+import com.jeramtough.repeatwords2.controller.activity.MainActivity;
 import com.jeramtough.repeatwords2.controller.dialog.WriteFromMemoryDialog;
 
 import java.util.Objects;
@@ -56,6 +57,7 @@ public class LearningFragment extends BaseFragment
     private TimedCloseTextView timedCloseTextView;
     private TextView textViewCondition;
     private AppCompatImageButton buttonRefresh;
+    private AppCompatImageButton buttonReset;
     private JtViewPager jtViewPager;
     private LinearLayout layoutGate;
     private ProgressBar progressBar;
@@ -86,6 +88,7 @@ public class LearningFragment extends BaseFragment
         textViewPreviousContent = findViewById(R.id.textView_previous_content);
         timedCloseTextView = findViewById(R.id.timedCloseTextView);
         textViewCondition = findViewById(R.id.textView_condition);
+        buttonReset = findViewById(R.id.button_reset);
         buttonRefresh = findViewById(R.id.button_refresh);
         jtViewPager = findViewById(R.id.jtViewPager);
         layoutGate = findViewById(R.id.layout_gate);
@@ -97,6 +100,8 @@ public class LearningFragment extends BaseFragment
         buttonStartLearning.setOnClickListener(this);
         buttonRefresh.setOnClickListener(this);
         buttonAgainLearn.setOnClickListener(this);
+        buttonReset.setOnClickListener(this);
+
         jtViewPager.addOnPageChangeListener(new MySimpleOnPageChangeListener());
 
         initResources();
@@ -159,6 +164,12 @@ public class LearningFragment extends BaseFragment
                 }
 
                 learnCurrentWord();
+                break;
+            case R.id.button_reset:
+                reader.stop();
+                MainActivity mainActivity = (MainActivity) getActivity();
+                Objects.requireNonNull(
+                        mainActivity).getMainNavigationHandler().updateStudyFragment();
                 break;
         }
     }
