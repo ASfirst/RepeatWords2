@@ -15,8 +15,7 @@ import com.jeramtough.repeatwords2.util.DateTimeUtil;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-@JtServiceImpl
-class DictionaryServiceImpl implements DictionaryService {
+@JtServiceImpl class DictionaryServiceImpl implements DictionaryService {
 
     private DictionaryMapper dictionaryMapper;
     private OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider;
@@ -25,7 +24,9 @@ class DictionaryServiceImpl implements DictionaryService {
     private Executor executor;
 
     @IocAutowire
-    DictionaryServiceImpl(DictionaryMapper dictionaryMapper, OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider, YoudaoTranslator youdaoTranslator) {
+    DictionaryServiceImpl(DictionaryMapper dictionaryMapper,
+                          OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider,
+                          YoudaoTranslator youdaoTranslator) {
         this.dictionaryMapper = dictionaryMapper;
         this.operateWordsMapperFactoryProvider = operateWordsMapperFactoryProvider;
         this.youdaoTranslator = youdaoTranslator;
@@ -55,9 +56,36 @@ class DictionaryServiceImpl implements DictionaryService {
             }
             dictionaryMapper.addNewWord(word);
             Word newWord = dictionaryMapper.getWordByEn(en);
-            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
-            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
-            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+
+            getDictionaryWords(businessCaller);
+        });
+    }
+
+    @Override
+    public void addNewWordIntoDictionary(Word word, BusinessCaller businessCaller) {
+        executor.execute(() -> {
+            if (word.getPhonetic().length() == 0 || word.getPhonetic() == null) {
+                YoudaoQueryResult youdaoQueryResult = youdaoTranslator.translate(word.getEn());
+                if (youdaoQueryResult.getBasic() != null) {
+                    word.setPhonetic(youdaoQueryResult.getBasic().getUkPhonetic());
+                }
+            }
+
+            dictionaryMapper.addNewWord(word);
+            //n ew word just have the id
+            Word newWord = dictionaryMapper.getWordByEn(word.getEn());
+            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
 
             getDictionaryWords(businessCaller);
         });
@@ -68,20 +96,32 @@ class DictionaryServiceImpl implements DictionaryService {
         executor.execute(() -> {
             dictionaryMapper.deleteWordById(wordId);
 
-            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getHaveGraspedMapper().removeWordRecordById(wordId);
-            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().removeWordRecordById(wordId);
-            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getMarkedMapper().removeWordRecordById(wordId);
-            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getDesertedLearningMapper().removeWordRecordById(wordId);
+            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getHaveGraspedMapper().removeWordRecordById(
+                    wordId);
+            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().removeWordRecordById(
+                    wordId);
+            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getMarkedMapper().removeWordRecordById(
+                    wordId);
+            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getDesertedLearningMapper().removeWordRecordById(
+                    wordId);
 
-            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getHaveGraspedMapper().removeWordRecordById(wordId);
-            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().removeWordRecordById(wordId);
-            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getMarkedMapper().removeWordRecordById(wordId);
-            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getDesertedLearningMapper().removeWordRecordById(wordId);
+            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getHaveGraspedMapper().removeWordRecordById(
+                    wordId);
+            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().removeWordRecordById(
+                    wordId);
+            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getMarkedMapper().removeWordRecordById(
+                    wordId);
+            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getDesertedLearningMapper().removeWordRecordById(
+                    wordId);
 
-            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getHaveGraspedMapper().removeWordRecordById(wordId);
-            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().removeWordRecordById(wordId);
-            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getMarkedMapper().removeWordRecordById(wordId);
-            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getDesertedLearningMapper().removeWordRecordById(wordId);
+            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getHaveGraspedMapper().removeWordRecordById(
+                    wordId);
+            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().removeWordRecordById(
+                    wordId);
+            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getMarkedMapper().removeWordRecordById(
+                    wordId);
+            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getDesertedLearningMapper().removeWordRecordById(
+                    wordId);
 
             getDictionaryWords(businessCaller);
         });
@@ -90,11 +130,15 @@ class DictionaryServiceImpl implements DictionaryService {
     @Override
     public void modifyWordOfDictionary(Word word, BusinessCaller businessCaller) {
         executor.execute(() -> {
-            YoudaoQueryResult youdaoQueryResult = youdaoTranslator.translate(word.getEn());
-            if (youdaoQueryResult.getBasic() != null) {
-                word.setPhonetic(youdaoQueryResult.getBasic().getUkPhonetic());
+            if (word.getPhonetic().length() == 0 || word.getPhonetic() == null) {
+                YoudaoQueryResult youdaoQueryResult = youdaoTranslator.translate(word.getEn());
+                if (youdaoQueryResult.getBasic() != null) {
+                    word.setPhonetic(youdaoQueryResult.getBasic().getUkPhonetic());
+                }
             }
             dictionaryMapper.addWord(word);
+            getDictionaryWords(businessCaller);
+
         });
     }
 

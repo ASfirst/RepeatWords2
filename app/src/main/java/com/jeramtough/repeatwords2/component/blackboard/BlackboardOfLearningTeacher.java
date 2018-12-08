@@ -1,7 +1,7 @@
 package com.jeramtough.repeatwords2.component.blackboard;
 
-import android.graphics.Color;
 import android.widget.TextView;
+
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.baidu.Reader;
 
@@ -29,6 +29,6 @@ public class BlackboardOfLearningTeacher extends BlackboardOfTeacher
         super.whileExposing(word, textView);
         String content = word.getId()+"-"+word.getEn() + "-" + word.getPhonetic() + "\n" + word.getCh();
         textView.setText(content);
-        getReader().speech(word.getCh());
+        getReader().speech(word.getCh()+","+word.getEn());
     }
 }

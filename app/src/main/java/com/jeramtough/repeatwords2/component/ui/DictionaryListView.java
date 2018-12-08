@@ -146,6 +146,13 @@ public class DictionaryListView extends ListView implements View.OnClickListener
         return false;
     }
 
+    public void moveToBottom() {
+        this.post(() -> {
+            int position=getAdapter().getCount()>0?getAdapter().getCount()-1:0;
+            setSelection(position);
+        });
+    }
+
     //************
     private Word getWordByPosition(int position) {
         return (Word) getAdapter().getItem(position);

@@ -9,7 +9,6 @@ import android.widget.EditText;
 import com.jeramtough.jtandroid.controller.dialog.JtIocDialog;
 import com.jeramtough.jtutil.WordUtil;
 import com.jeramtough.repeatwords2.R;
-import com.jeramtough.repeatwords2.bean.word.Word;
 
 /**
  * @author 11718
@@ -18,10 +17,12 @@ import com.jeramtough.repeatwords2.bean.word.Word;
 public class EditWordDialog extends JtIocDialog implements View.OnClickListener {
     private EditText editTextChinese;
     private EditText editTextEnglish;
+    private EditText editTextPhonetic;
+
     private Button buttonCancel;
     private Button buttonOk;
 
-    private String ch, en;
+    private String ch, en, phonetic;
 
     private OnEditNewWordListening onEditNewWordListening;
 
@@ -31,10 +32,12 @@ public class EditWordDialog extends JtIocDialog implements View.OnClickListener 
         initViews();
     }
 
-    public EditWordDialog(@NonNull Context context, String en, String ch) {
+    public EditWordDialog(@NonNull Context context, String en, String ch,
+                          String phonetic) {
         super(context);
         this.ch = ch;
         this.en = en;
+        this.phonetic = phonetic;
         this.setContentView(R.layout.dialog_add_new_word);
         initViews();
     }
@@ -44,6 +47,7 @@ public class EditWordDialog extends JtIocDialog implements View.OnClickListener 
         editTextEnglish = findViewById(R.id.editText_english);
         buttonCancel = findViewById(R.id.button_cancel);
         buttonOk = findViewById(R.id.button_ok);
+        editTextPhonetic = findViewById(R.id.editText_phonetic);
 
         buttonCancel.setOnClickListener(this);
         buttonOk.setOnClickListener(this);
@@ -54,6 +58,7 @@ public class EditWordDialog extends JtIocDialog implements View.OnClickListener 
     protected void initResources() {
         editTextChinese.setText(ch);
         editTextEnglish.setText(en);
+        editTextPhonetic.setText(phonetic);
     }
 
     @Override
@@ -70,11 +75,13 @@ public class EditWordDialog extends JtIocDialog implements View.OnClickListener 
                         onEditNewWordListening != null) {
                     String ch = editTextChinese.getText().toString();
                     String en = editTextEnglish.getText().toString();
+                    String phonetic = editTextPhonetic.getText().toString();
                     if (WordUtil.isContainsChinese(ch) && !WordUtil.isContainsChinese(en)) {
-                        onEditNewWordListening.onSure(en, ch);
+                        onEditNewWordListening.onSure(en, ch, phonetic);
                     }
                     cancel();
-                } else {
+                }
+                else {
                     buttonCancel.performClick();
                 }
             {
@@ -89,6 +96,6 @@ public class EditWordDialog extends JtIocDialog implements View.OnClickListener 
 
     //{{{{{{{{{}}}}}}}
     public interface OnEditNewWordListening {
-        void onSure(String en, String ch);
+        void onSure(String en, String ch, String phonetic);
     }
 }

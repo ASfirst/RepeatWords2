@@ -29,9 +29,11 @@ import com.jeramtough.repeatwords2.controller.dialog.SearchWordDialog;
  * @author 11718
  * on 2018  May 02 Wednesday 23:51.
  */
-public class DictionaryFragment extends BaseFragment implements DictionaryListView.OnItemOptionsWordListening {
+public class DictionaryFragment extends BaseFragment
+        implements DictionaryListView.OnItemOptionsWordListening {
     private static final int BUSINESS_CODE_MODIFY_DICTIONARY_WORD = 0;
     private static final int BUSINESS_CODE_GET_DICTIONARY_WORD = 1;
+    private static final int BUSINESS_CODE_ADD_DICTIONARY_WORD = 2;
 
 
     private TextView textViewWordsTotality;
@@ -40,13 +42,14 @@ public class DictionaryFragment extends BaseFragment implements DictionaryListVi
     private DictionaryListView listViewWords;
     private TimedCloseTextView timedCloseTextView;
 
-    private BaiduVoiceReader baiduVoiceReader;
-
     @InjectService
     private DictionaryService dictionaryService;
 
     @InjectComponent
     private BaiduVoiceReader reader;
+
+    public DictionaryFragment() {
+    }
 
     @Override
     public int loadFragmentLayoutId() {
@@ -75,16 +78,16 @@ public class DictionaryFragment extends BaseFragment implements DictionaryListVi
         timedCloseTextView.setPrimaryMessage("init the dictionary");
         timedCloseTextView.visible();
 
-        dictionaryService.getDictionaryWords(new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_GET_DICTIONARY_WORD));
+        dictionaryService.getDictionaryWords(
+                new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_GET_DICTIONARY_WORD));
     }
-    
+
     @Override
-    public void onSelected()
-    {
+    public void onSelected() {
         super.onSelected();
         reader.getBaiduVoiceSetting().setRepeated(false);
     }
-    
+
     @Override
     public void onClick(View v, int viewId) {
         switch (viewId) {
@@ -92,36 +95,46 @@ public class DictionaryFragment extends BaseFragment implements DictionaryListVi
                 EditWordDialog dialog = new EditWordDialog(getContext());
                 dialog.setOnEditNewWordListening(new EditWordDialog.OnEditNewWordListening() {
                     @Override
-                    public void onSure(String en, String ch) {
+                    public void onSure(String en, String ch, String phonetic) {
                         timedCloseTextView.post(() -> {
                             timedCloseTextView.setPrimaryMessage("adding...");
                         });
-                        dictionaryService.addNewWordIntoDictionary(ch, en, new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_MODIFY_DICTIONARY_WORD));
+                        Word word = new Word();
+                        word.setPhonetic(phonetic);
+                        word.setCh(ch);
+                        word.setEn(en);
+                        dictionaryService.addNewWordIntoDictionary(word,
+                                new BusinessCaller(getFragmentHandler(),
+                                        BUSINESS_CODE_ADD_DICTIONARY_WORD));
                     }
                 });
                 dialog.show();
                 break;
             case R.id.button_search:
                 SearchWordDialog searchWordDialog = new SearchWordDialog(getContext());
-                searchWordDialog.setOnEditWordInfoListening(new SearchWordDialog.OnEditWordInfoListening() {
-                    @Override
-                    public void onEditWordId(int wordId) {
-                        boolean isSuccessful = listViewWords.moveToPositionOfWordByWordId(wordId);
-                        movingToPositionOfWordIsSuccessful(isSuccessful);
-                    }
+                searchWordDialog.setOnEditWordInfoListening(
+                        new SearchWordDialog.OnEditWordInfoListening() {
+                            @Override
+                            public void onEditWordId(int wordId) {
+                                boolean isSuccessful = listViewWords.moveToPositionOfWordByWordId(
+                                        wordId);
+                                movingToPositionOfWordIsSuccessful(isSuccessful);
+                            }
 
-                    @Override
-                    public void onEditWordEn(String en) {
-                        boolean isSuccessful = listViewWords.moveToPositionOfWordByEn(en);
-                        movingToPositionOfWordIsSuccessful(isSuccessful);
-                    }
+                            @Override
+                            public void onEditWordEn(String en) {
+                                boolean isSuccessful = listViewWords.moveToPositionOfWordByEn(
+                                        en);
+                                movingToPositionOfWordIsSuccessful(isSuccessful);
+                            }
 
-                    @Override
-                    public void onEditWordCh(String ch) {
-                        boolean isSuccessful = listViewWords.moveToPositionOfWordByCh(ch);
-                        movingToPositionOfWordIsSuccessful(isSuccessful);
-                    }
-                });
+                            @Override
+                            public void onEditWordCh(String ch) {
+                                boolean isSuccessful = listViewWords.moveToPositionOfWordByCh(
+                                        ch);
+                                movingToPositionOfWordIsSuccessful(isSuccessful);
+                            }
+                        });
                 searchWordDialog.show();
                 break;
         }
@@ -129,13 +142,18 @@ public class DictionaryFragment extends BaseFragment implements DictionaryListVi
 
     @Override
     public void onItemDeleteWord(Word word) {
-        AlertDialog dialog = new AlertDialog.Builder(getContext()).setMessage("Are you sure to remove this word for \"" + word.getEn() + "\"?").setNegativeButton("Cancel", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                int wordId = word.getId();
-                dictionaryService.deleteWordFromDictionary(wordId, new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_MODIFY_DICTIONARY_WORD));
-            }
-        }).show();
+        AlertDialog dialog = new AlertDialog.Builder(getContext()).setMessage(
+                "Are you sure to remove this word for \"" + word.getEn() + "\"?").setNegativeButton(
+                "Cancel", null).setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int wordId = word.getId();
+                        dictionaryService.deleteWordFromDictionary(wordId,
+                                new BusinessCaller(getFragmentHandler(),
+                                        BUSINESS_CODE_MODIFY_DICTIONARY_WORD));
+                    }
+                }).show();
     }
 
     @Override
@@ -152,14 +170,18 @@ public class DictionaryFragment extends BaseFragment implements DictionaryListVi
 
     @Override
     public void onItemModifyWord(final Word word) {
-        EditWordDialog editWordDialog = new EditWordDialog(getContext(), word.getEn(), word.getCh());
+        EditWordDialog editWordDialog = new EditWordDialog(getContext(), word.getEn(),
+                word.getCh(), word.getPhonetic());
         editWordDialog.setOnEditNewWordListening(new EditWordDialog.OnEditNewWordListening() {
             @Override
-            public void onSure(String en, String ch) {
+            public void onSure(String en, String ch, String phonetic) {
                 timedCloseTextView.setPrimaryMessage("updating the word...");
                 word.setEn(en);
                 word.setCh(ch);
-                dictionaryService.modifyWordOfDictionary(word, new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_MODIFY_DICTIONARY_WORD));
+                word.setPhonetic(phonetic);
+                dictionaryService.modifyWordOfDictionary(word,
+                        new BusinessCaller(getFragmentHandler(),
+                                BUSINESS_CODE_MODIFY_DICTIONARY_WORD));
             }
         });
         editWordDialog.show();
@@ -172,14 +194,20 @@ public class DictionaryFragment extends BaseFragment implements DictionaryListVi
         if (words != null) {
             if (dictionaryWordsAdapter == null) {
                 dictionaryWordsAdapter = new DictionaryWordsAdapter(getContext(), words);
-            } else {
+            }
+            else {
                 dictionaryWordsAdapter.setWords(words);
                 dictionaryWordsAdapter.notifyDataSetChanged();
             }
-            textViewWordsTotality.setText(words.length + "");
+            textViewWordsTotality.setText(String.valueOf(words.length));
         }
 
         switch (message.what) {
+            case BUSINESS_CODE_ADD_DICTIONARY_WORD:
+                listViewWords.setAdapter(dictionaryWordsAdapter);
+                timedCloseTextView.invisible();
+                listViewWords.moveToBottom();
+                break;
             case BUSINESS_CODE_GET_DICTIONARY_WORD:
             case BUSINESS_CODE_MODIFY_DICTIONARY_WORD:
                 listViewWords.setAdapter(dictionaryWordsAdapter);
@@ -191,10 +219,11 @@ public class DictionaryFragment extends BaseFragment implements DictionaryListVi
     //**********************
     private void movingToPositionOfWordIsSuccessful(boolean isSuccessful) {
         if (!isSuccessful) {
-            timedCloseTextView.setErrorMessage("don't find this word");
+            timedCloseTextView.setErrorMessage("Can't find this word");
             timedCloseTextView.visible();
             timedCloseTextView.closeDelayed(2000);
-        } else {
+        }
+        else {
             timedCloseTextView.setNiceMessage("find this word");
             timedCloseTextView.visible();
             timedCloseTextView.closeDelayed(2000);

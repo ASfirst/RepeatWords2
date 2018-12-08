@@ -19,6 +19,12 @@
             android:layout_height="wrap_content"
             android:hint="english"/>
 
+    <EditText
+        android:id="@+id/editText_phonetic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="update by youdao if here is empty"/>
+
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

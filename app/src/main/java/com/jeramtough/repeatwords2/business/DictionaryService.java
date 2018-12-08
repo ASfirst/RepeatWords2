@@ -10,7 +10,11 @@ import com.jeramtough.repeatwords2.bean.word.Word;
 public interface DictionaryService {
     void getDictionaryWords(BusinessCaller businessCaller);
 
+    @Deprecated
     void addNewWordIntoDictionary(String ch, String en,
+                                  BusinessCaller businessCaller);
+
+    void addNewWordIntoDictionary(Word word,
                                   BusinessCaller businessCaller);
 
     void deleteWordFromDictionary(int wordId, BusinessCaller businessCaller);
