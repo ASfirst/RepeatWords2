@@ -1,6 +1,8 @@
 package com.jeramtough.repeatwords2.controller.fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtutil.java.SimpleCallback;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.business.SettingService;
 import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
@@ -157,23 +160,33 @@ public class SettingFragment extends BaseFragment
         super.onClick(v, viewId);
         switch (viewId) {
             case R.id.button_backup:
-                progressDialog = new ProgressDialog(getContext());
-                progressDialog.show();
-                settingService.backupTheLearningRecord(new BusinessCaller(getFragmentHandler(),
-                        BUSINESS_CODE_BACKUP_LEARNING_RECORD));
+                showIsSureDialog("Are you sure to backup?", () -> {
+                    progressDialog = new ProgressDialog(getContext());
+                    progressDialog.show();
+                    settingService.backupTheLearningRecord(
+                            new BusinessCaller(getFragmentHandler(),
+                                    BUSINESS_CODE_BACKUP_LEARNING_RECORD));
+                });
                 break;
 
             case R.id.button_recover:
-                progressDialog = new ProgressDialog(getContext());
-                progressDialog.show();
-                settingService.recoverTheLearningRecord(
-                        new BusinessCaller(getFragmentHandler(),
-                                BUSINESS_CODE_RECOVER_LEARNING_RECORD));
+
+                showIsSureDialog("Are you sure to recover?", () -> {
+                    progressDialog = new ProgressDialog(getContext());
+                    progressDialog.show();
+                    settingService.recoverTheLearningRecord(
+                            new BusinessCaller(getFragmentHandler(),
+                                    BUSINESS_CODE_RECOVER_LEARNING_RECORD));
+                });
                 break;
 
             case R.id.button_clear_today:
-                settingService.clearHavedLearnedWordToday(new BusinessCaller
-                        (getFragmentHandler(), BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY));
+                showIsSureDialog("Are you sure to clear today's learned words?", () -> {
+                    progressDialog = new ProgressDialog(getContext());
+                    settingService.clearHavedLearnedWordToday(new BusinessCaller
+                            (getFragmentHandler(),
+                                    BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY));
+                });
                 break;
         }
     }
@@ -228,6 +241,17 @@ public class SettingFragment extends BaseFragment
             settingService.setRepeatIntervalTime(
                     Long.parseLong(editTextIntervalTime.getText().toString()));
         }
+    }
+
+    private void showIsSureDialog(String message, SimpleCallback simpleCallback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(message).setNegativeButton("Cancel", null).setPositiveButton
+                ("Sure", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        simpleCallback.doSometing();
+                    }
+                }).create().show();
     }
 
 }

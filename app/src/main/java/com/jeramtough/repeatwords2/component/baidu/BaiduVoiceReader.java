@@ -11,7 +11,7 @@ import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtlog.with.WithJtLogger;
-import com.jeramtough.jtutil.WordUtil;
+import com.jeramtough.jtutil.core.WordUtil;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
