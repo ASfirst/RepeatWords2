@@ -162,6 +162,7 @@ public class SettingFragment extends BaseFragment
             case R.id.button_backup:
                 showIsSureDialog("Are you sure to backup?", () -> {
                     progressDialog = new ProgressDialog(getContext());
+                    progressDialog.setCancelable(false);
                     progressDialog.show();
                     settingService.backupTheLearningRecord(
                             new BusinessCaller(getFragmentHandler(),
@@ -173,6 +174,7 @@ public class SettingFragment extends BaseFragment
 
                 showIsSureDialog("Are you sure to recover?", () -> {
                     progressDialog = new ProgressDialog(getContext());
+                    progressDialog.setCancelable(false);
                     progressDialog.show();
                     settingService.recoverTheLearningRecord(
                             new BusinessCaller(getFragmentHandler(),
@@ -183,6 +185,7 @@ public class SettingFragment extends BaseFragment
             case R.id.button_clear_today:
                 showIsSureDialog("Are you sure to clear today's learned words?", () -> {
                     progressDialog = new ProgressDialog(getContext());
+                    progressDialog.setCancelable(false);
                     settingService.clearHavedLearnedWordToday(new BusinessCaller
                             (getFragmentHandler(),
                                     BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY));
@@ -209,6 +212,9 @@ public class SettingFragment extends BaseFragment
             case BUSINESS_CODE_RECOVER_LEARNING_RECORD:
                 if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL)) {
                     Toast.makeText(getContext(), "recover ok", Toast.LENGTH_SHORT).show();
+                    settingService.clearHavedLearnedWordToday(new BusinessCaller
+                            (getFragmentHandler(),
+                                    BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY));
                 }
                 else {
                     Toast.makeText(getContext(), "recover fail", Toast.LENGTH_SHORT).show();

@@ -28,6 +28,9 @@ public class LearningRecordManager {
     private File recordFile1;
     private File recordFile2;
     private File recordFile3;
+    private File recordBackupFile1;
+    private File recordBackupFile2;
+    private File recordBackupFile3;
 
     @IocAutowire
     public LearningRecordManager() {
@@ -38,12 +41,24 @@ public class LearningRecordManager {
         }
 
         recordFile1 =
-                new File(backupDirectory.getAbsoluteFile() + File.separator + learningRecordFileName);
+                new File(
+                        backupDirectory.getAbsoluteFile() + File.separator + learningRecordFileName);
         recordFile2 =
-                new File(backupDirectory.getAbsoluteFile() + File.separator + speakingRecordFileName);
+                new File(
+                        backupDirectory.getAbsoluteFile() + File.separator + speakingRecordFileName);
         recordFile3 =
-                new File(backupDirectory.getAbsoluteFile() + File.separator + writingRecordFileName);
+                new File(
+                        backupDirectory.getAbsoluteFile() + File.separator + writingRecordFileName);
 
+        recordBackupFile1 = new File(
+                backupDirectory.getAbsoluteFile() + File.separator +
+                        learningRecordFileName + ".backup");
+        recordBackupFile2 = new File(
+                backupDirectory.getAbsoluteFile() + File.separator +
+                        speakingRecordFileName + ".backup");
+        recordBackupFile3 = new File(
+                backupDirectory.getAbsoluteFile() + File.separator +
+                        writingRecordFileName + ".backup");
     }
 
     public boolean backup(Map<String, LearningRecord> learningRecords) {
@@ -51,19 +66,34 @@ public class LearningRecordManager {
             for (String recordKey : learningRecords.keySet()) {
                 LearningRecord learningRecord = learningRecords.get(recordKey);
                 File recordFile = null;
+                File recordBackupFile = null;
                 if (recordKey.equals(learningRecordFileName)) {
                     recordFile = recordFile1;
-                } else if (recordKey.equals(speakingRecordFileName)) {
-                    recordFile = recordFile2;
-                } else if (recordKey.equals(writingRecordFileName)) {
-                    recordFile = recordFile3;
+                    recordBackupFile = recordBackupFile1;
                 }
+                else if (recordKey.equals(speakingRecordFileName)) {
+                    recordFile = recordFile2;
+                    recordBackupFile = recordBackupFile2;
+                }
+                else if (recordKey.equals(writingRecordFileName)) {
+                    recordFile = recordFile3;
+                    recordBackupFile = recordBackupFile3;
+                }
+
+                //backup
+                recordBackupFile1.delete();
+                recordBackupFile2.delete();
+                recordBackupFile3.delete();
+                recordFile.renameTo(recordBackupFile);
+
                 try {
                     byte[] bytes = JSON.toJSONBytes(learningRecord);
-                    FileOutputStream fileOutputStream = new FileOutputStream(Objects.requireNonNull(recordFile));
+                    FileOutputStream fileOutputStream = new FileOutputStream(
+                            Objects.requireNonNull(recordFile));
                     fileOutputStream.write(bytes);
                     fileOutputStream.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -79,11 +109,15 @@ public class LearningRecordManager {
                 String jsonStr1 = IOUtils.toString(new FileInputStream(recordFile1), "UTF-8");
                 String jsonStr2 = IOUtils.toString(new FileInputStream(recordFile2), "UTF-8");
                 String jsonStr3 = IOUtils.toString(new FileInputStream(recordFile3), "UTF-8");
-                learningRecords.put(learningRecordFileName, JSON.parseObject(jsonStr1, LearningRecord.class));
-                learningRecords.put(speakingRecordFileName, JSON.parseObject(jsonStr2, LearningRecord.class));
-                learningRecords.put(writingRecordFileName, JSON.parseObject(jsonStr3, LearningRecord.class));
+                learningRecords.put(learningRecordFileName,
+                        JSON.parseObject(jsonStr1, LearningRecord.class));
+                learningRecords.put(speakingRecordFileName,
+                        JSON.parseObject(jsonStr2, LearningRecord.class));
+                learningRecords.put(writingRecordFileName,
+                        JSON.parseObject(jsonStr3, LearningRecord.class));
                 return learningRecords;
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
