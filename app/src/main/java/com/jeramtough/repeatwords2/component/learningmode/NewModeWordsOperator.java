@@ -18,28 +18,28 @@ import java.util.List;
  */
 @JtComponent
 public class NewModeWordsOperator implements WordsOperator {
-    private OperateWordsMapperFactoryProvider operateWordMapperFactoryProvider;
+    private OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider;
 
     @IocAutowire
     public NewModeWordsOperator(
-            OperateWordsMapperFactoryProvider operateWordMapperFactoryProvider) {
-        this.operateWordMapperFactoryProvider = operateWordMapperFactoryProvider;
+            OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider) {
+        this.operateWordsMapperFactoryProvider = operateWordsMapperFactoryProvider;
     }
 
 
     @Override
     public void removeWordFromList(int wordId) {
         WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
-        operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                                        .getShallLearningMapper().removeWordRecordById(wordId);
-        operateWordMapperFactoryProvider.getOperateWordsMapperFactory().getHaveGraspedMapper()
-                                        .addWordRecord(wordRecord);
+        operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
+                                         .getShallLearningMapper().removeWordRecordById(wordId);
+        operateWordsMapperFactoryProvider.getOperateWordsMapperFactory().getHaveGraspedMapper()
+                                         .addWordRecord(wordRecord);
     }
 
     @Override
     public List<Integer> getWordIdsOfNeeding(int size) {
         //拿出今日已学所有单词
-        List<Integer> haveLearnedWordIds = operateWordMapperFactoryProvider
+        List<Integer> haveLearnedWordIds = operateWordsMapperFactoryProvider
                 .getOperateWordsMapperFactory().getHaveLearnedTodayMapper()
                 .getWordIds();
 
@@ -59,8 +59,8 @@ public class NewModeWordsOperator implements WordsOperator {
 
         //根据时间排序翻倍取出，然后取随机的一半
         int perLearningCount = size * 2;
-        List<Integer> shallLearningIds = operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                                                                         .getShallLearningMapper().getIdsOrderByTime(
+        List<Integer> shallLearningIds = operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
+                                                                          .getShallLearningMapper().getIdsOrderByTime(
                         perLearningCount, noNeededIdsOfLearning);
 
         Collections.shuffle(shallLearningIds);
@@ -74,5 +74,11 @@ public class NewModeWordsOperator implements WordsOperator {
         }
 
         return shallLearningIds1;
+    }
+
+    @Override
+    public void learnWordToday(WordRecord wordRecord) {
+        operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
+                                         .getHaveLearnedTodayMapper().addWordRecord(wordRecord);
     }
 }

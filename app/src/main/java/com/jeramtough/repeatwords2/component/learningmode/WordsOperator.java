@@ -1,5 +1,7 @@
 package com.jeramtough.repeatwords2.component.learningmode;
 
+import com.jeramtough.repeatwords2.bean.word.WordRecord;
+
 import java.util.List;
 
 /**
@@ -15,5 +17,7 @@ public interface WordsOperator
 	 * @return ids
 	 */
 	List<Integer> getWordIdsOfNeeding(int size);
+
+	void learnWordToday(WordRecord wordRecord);
 	
 }
