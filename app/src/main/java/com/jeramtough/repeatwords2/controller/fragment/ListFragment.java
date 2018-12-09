@@ -76,16 +76,15 @@ public class ListFragment extends BaseFragment
 
     @Override
     protected void initResources() {
-
+        radioButtonTodayWords.setChecked(true);
     }
 
     @Override
     public void onSelected() {
-        //选中监听要有变化才生效,所有先选中mark，然后又选中today
-        if (radioButtonTodayWords.isChecked()) {
-            radioButtonHaveMarkedWords.setChecked(true);
+        //重新选中时，默认选中today
+        if (!radioButtonTodayWords.isChecked()) {
+            radioButtonTodayWords.setChecked(true);
         }
-        radioButtonTodayWords.setChecked(true);
     }
 
     @Override
