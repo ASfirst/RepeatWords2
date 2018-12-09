@@ -85,6 +85,10 @@ public class ListFragment extends BaseFragment
         if (!radioButtonTodayWords.isChecked()) {
             radioButtonTodayWords.setChecked(true);
         }
+        else{
+            //如果已经选中today,刷新一下
+            onCheckedChanged(null,radioButtonTodayWords.getId());
+        }
     }
 
     @Override
