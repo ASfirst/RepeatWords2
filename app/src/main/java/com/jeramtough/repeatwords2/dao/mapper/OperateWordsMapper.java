@@ -24,6 +24,18 @@ public abstract class OperateWordsMapper extends DaoMapper {
 
     protected abstract String loadOperateWordTableName();
 
+    public List<Integer> getWordIds() {
+        List<Integer> ids = new ArrayList<>();
+        String sql = "SELECT id FROM " + tableName;
+        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            ids.add(id);
+        }
+        cursor.close();
+        return ids;
+    }
+
     public void removeWordRecordById(int wordId) {
         String sql = "DELETE FROM " + tableName + " WHERE id =" + wordId;
         this.getSqLiteDatabase().execSQL(sql);

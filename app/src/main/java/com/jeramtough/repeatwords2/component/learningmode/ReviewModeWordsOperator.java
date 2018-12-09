@@ -39,14 +39,15 @@ public class ReviewModeWordsOperator implements WordsOperator {
     public List<Integer> getWordIdsOfNeeding(int size) {
 
         //拿出今日已学三分之一单词
-        int sizeFromHavedLearnedToday = size / 3 * 1;
+        int sizeFromHavedLearnedToday = size / 3;
         List<Integer> haveLearnedWordIdsToday = operateWordsMapperFactoryProvider
                 .getOperateWordsMapperFactory().getHaveLearnedTodayMapper()
-                .getHaveLearnedWordIdsToday(sizeFromHavedLearnedToday);
+                .getIdsForRandom(sizeFromHavedLearnedToday);
 
         List<Integer> shallLearningIds = operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                                                                          .getShallLearningMapper().getIdsForRandom(
-                        size - sizeFromHavedLearnedToday);
+                                                                          .getHaveGraspedMapper()
+                                                                          .getIdsForRandom(
+                                                                                  size - sizeFromHavedLearnedToday);
 
         shallLearningIds.addAll(haveLearnedWordIdsToday);
         Collections.shuffle(shallLearningIds);

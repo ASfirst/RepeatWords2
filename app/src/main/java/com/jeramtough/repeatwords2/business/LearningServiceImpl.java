@@ -189,9 +189,10 @@ public class LearningServiceImpl implements LearningService {
     public void learnedWord(Word word) {
         wordsTeacher.removeWordFromList(word);
         executorService.submit(() -> {
+            WordRecord wordRecord = new WordRecord(word.getId(), DateTimeUtil.getDateTime());
             operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
-                                            .getHaveLearnedTodayMapper().addWordIdInToday(
-                    word.getId());
+                                            .getHaveLearnedTodayMapper().addWordRecord(
+                    wordRecord);
         });
     }
 

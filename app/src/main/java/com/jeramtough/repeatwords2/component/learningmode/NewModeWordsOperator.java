@@ -41,7 +41,7 @@ public class NewModeWordsOperator implements WordsOperator {
         //拿出今日已学所有单词
         List<Integer> haveLearnedWordIds = operateWordMapperFactoryProvider
                 .getOperateWordsMapperFactory().getHaveLearnedTodayMapper()
-                .getHaveLearnedWordIdsToday();
+                .getWordIds();
 
         //算出两次以上的今日已学的单词加入黑名单
         SparseIntArray countMap = new SparseIntArray();

@@ -18,7 +18,8 @@ public class SpeakHaveLearnedTodayMapper extends HaveLearnedTodayMapper {
     }
 
     @Override
-    protected String loadHavedLearnedWordTableName() {
+    protected String loadOperateWordTableName() {
         return DatabaseConstants.TABLE_NAME_B_5;
     }
+
 }

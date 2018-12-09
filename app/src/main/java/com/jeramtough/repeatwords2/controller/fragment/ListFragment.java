@@ -29,11 +29,13 @@ public class ListFragment extends BaseFragment
     private static final int BUSINESS_CODE_GET_SHALL_LEARNING_WORDS = 2;
     private static final int BUSINESS_CODE_GET_MARKED_WORDS = 3;
     private static final int BUSINESS_CODE_GET_DESERTED_WORDS = 4;
+    private static final int BUSINESS_CODE_GET_TODAY_WORDS = 5;
 
-    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_HAVE_GRASPED_LIST = 6;
-    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_SHALL_LEARNING_LIST = 7;
-    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_MARKED_LIST = 8;
-    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_DESERTED_LIST = 9;
+    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_HAVE_GRASPED_LIST = 11;
+    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_SHALL_LEARNING_LIST = 12;
+    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_MARKED_LIST = 13;
+    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_DESERTED_LIST = 14;
+    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_TODAY_LIST = 15;
 
     private RadioGroup radioGroup;
     private RadioButton radioButtonTodayWords;
@@ -58,7 +60,7 @@ public class ListFragment extends BaseFragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         radioGroup = findViewById(R.id.radioGroup);
-        radioButtonTodayWords=findViewById(R.id.radioButton_today_words);
+        radioButtonTodayWords = findViewById(R.id.radioButton_today_words);
         radioButtonHaveGraspedWords = findViewById(R.id.radioButton_have_grasped_words);
         radioButtonShallLearningWords = findViewById(R.id.radioButton_shall_learning_words);
         radioButtonHaveMarkedWords = findViewById(R.id.radioButton_have_marked_words);
@@ -92,8 +94,8 @@ public class ListFragment extends BaseFragment
             case R.id.radioButton_today_words:
                 timedCloseTextView.setPrimaryMessage("init today words");
                 timedCloseTextView.visible();
-                listService.getHaveGraspedWords(new BusinessCaller(getFragmentHandler(),
-                        BUSINESS_CODE_GET_HAVE_GRASPED_WORDS));
+                listService.getTodaysHaveLearnedWords(new BusinessCaller(getFragmentHandler(),
+                        BUSINESS_CODE_GET_TODAY_WORDS));
                 break;
 
             case R.id.radioButton_have_grasped_words:
@@ -143,7 +145,14 @@ public class ListFragment extends BaseFragment
                                                                   .setPositiveButton("Yes",
                                                                           (DialogInterface dialog1, int which) -> {
                                                                               int wordId = wordWithRecordTime.getId();
-                                                                              if (radioButtonHaveGraspedWords.isChecked()) {
+                                                                              if (radioButtonTodayWords.isChecked()) {
+                                                                                  listService.removeWordFromTodaysHaveLearnedList(
+                                                                                          wordId,
+                                                                                          new BusinessCaller(
+                                                                                                  getFragmentHandler(),
+                                                                                                  BUSINESS_CODE_REMOVE_WORD_FROM_TODAY_LIST));
+                                                                              }
+                                                                              else if (radioButtonHaveGraspedWords.isChecked()) {
                                                                                   listService.removeWordFromHaveGraspedList(
                                                                                           wordId,
                                                                                           new BusinessCaller(
@@ -195,20 +204,21 @@ public class ListFragment extends BaseFragment
         textViewWordsTotality.setText(wordWithRecordTimes.length + "");
 
         switch (message.what) {
+            case BUSINESS_CODE_GET_TODAY_WORDS:
+            case BUSINESS_CODE_REMOVE_WORD_FROM_TODAY_LIST:
+
             case BUSINESS_CODE_REMOVE_WORD_FROM_HAVE_GRASPED_LIST:
             case BUSINESS_CODE_GET_HAVE_GRASPED_WORDS:
-                listViewWords.setAdapter(wordsAdapter);
-                break;
+
             case BUSINESS_CODE_REMOVE_WORD_FROM_SHALL_LEARNING_LIST:
             case BUSINESS_CODE_GET_SHALL_LEARNING_WORDS:
-                listViewWords.setAdapter(wordsAdapter);
-                break;
+
             case BUSINESS_CODE_REMOVE_WORD_FROM_MARKED_LIST:
             case BUSINESS_CODE_GET_MARKED_WORDS:
-                listViewWords.setAdapter(wordsAdapter);
-                break;
+
             case BUSINESS_CODE_REMOVE_WORD_FROM_DESERTED_LIST:
             case BUSINESS_CODE_GET_DESERTED_WORDS:
+
                 listViewWords.setAdapter(wordsAdapter);
                 break;
         }

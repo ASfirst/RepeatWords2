@@ -12,132 +12,148 @@ import com.jeramtough.repeatwords2.util.DateTimeUtil;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-@JtServiceImpl
-final class ListServiceImpl implements ListService
-{
-    
+@JtServiceImpl final class ListServiceImpl implements ListService {
+
     private OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider;
     private Executor executor;
-    
+
     @IocAutowire
     private ListServiceImpl(
-            OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider)
-    {
+            OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider) {
         this.operateWordsMapperFactoryProvider = operateWordsMapperFactoryProvider;
         executor = JtExecutors.newCachedThreadPool();
     }
-    
+
     @Override
-    public void getHaveGraspedWords(BusinessCaller businessCaller)
-    {
+    public void getHaveGraspedWords(BusinessCaller businessCaller) {
         executor.execute(() -> {
             List<WordWithRecordTime> wordWithRecordTimeList =
                     operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                            .getHaveGraspedMapper().getWordWithRecordTimeListOrderByTime();
+                                                     .getHaveGraspedMapper().getWordWithRecordTimeListOrderByTime();
             WordWithRecordTime[] wordWithRecordTimes = wordWithRecordTimeList
                     .toArray(new WordWithRecordTime[wordWithRecordTimeList.size()]);
             businessCaller.getData()
-                    .putSerializable("wordWithRecordTimes", wordWithRecordTimes);
+                          .putSerializable("wordWithRecordTimes", wordWithRecordTimes);
             businessCaller.callBusiness();
         });
     }
-    
+
     @Override
-    public void getShallLearningWords(BusinessCaller businessCaller)
-    {
+    public void getShallLearningWords(BusinessCaller businessCaller) {
         executor.execute(() -> {
             List<WordWithRecordTime> wordWithRecordTimeList =
                     operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                            .getShallLearningMapper().getWordWithRecordTimeListOrderByTime();
+                                                     .getShallLearningMapper().getWordWithRecordTimeListOrderByTime();
             WordWithRecordTime[] wordWithRecordTimes = wordWithRecordTimeList
                     .toArray(new WordWithRecordTime[wordWithRecordTimeList.size()]);
             businessCaller.getData()
-                    .putSerializable("wordWithRecordTimes", wordWithRecordTimes);
+                          .putSerializable("wordWithRecordTimes", wordWithRecordTimes);
             businessCaller.callBusiness();
         });
     }
-    
+
     @Override
-    public void getMarkedWords(BusinessCaller businessCaller)
-    {
+    public void getMarkedWords(BusinessCaller businessCaller) {
         executor.execute(() -> {
             List<WordWithRecordTime> wordWithRecordTimeList =
                     operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                            .getMarkedMapper().getWordWithRecordTimeListOrderByTime();
+                                                     .getMarkedMapper().getWordWithRecordTimeListOrderByTime();
             WordWithRecordTime[] wordWithRecordTimes = wordWithRecordTimeList
                     .toArray(new WordWithRecordTime[wordWithRecordTimeList.size()]);
             businessCaller.getData()
-                    .putSerializable("wordWithRecordTimes", wordWithRecordTimes);
+                          .putSerializable("wordWithRecordTimes", wordWithRecordTimes);
             businessCaller.callBusiness();
         });
     }
-    
+
     @Override
-    public void getDesertedWords(BusinessCaller businessCaller)
-    {
+    public void getDesertedWords(BusinessCaller businessCaller) {
         executor.execute(() -> {
             List<WordWithRecordTime> wordWithRecordTimeList =
                     operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                            .getDesertedLearningMapper()
-                            .getWordWithRecordTimeListOrderByTime();
+                                                     .getDesertedLearningMapper()
+                                                     .getWordWithRecordTimeListOrderByTime();
             WordWithRecordTime[] wordWithRecordTimes = wordWithRecordTimeList
                     .toArray(new WordWithRecordTime[wordWithRecordTimeList.size()]);
             businessCaller.getData()
-                    .putSerializable("wordWithRecordTimes", wordWithRecordTimes);
+                          .putSerializable("wordWithRecordTimes", wordWithRecordTimes);
             businessCaller.callBusiness();
         });
     }
 
     @Override
     public void getTodaysHaveLearnedWords(BusinessCaller businessCaller) {
-
+        executor.execute(() -> {
+            List<WordWithRecordTime> wordWithRecordTimeList =
+                    operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
+                                                     .getHaveLearnedTodayMapper()
+                                                     .getWordWithRecordTimeListOrderByTime();
+            WordWithRecordTime[] wordWithRecordTimes = wordWithRecordTimeList
+                    .toArray(new WordWithRecordTime[wordWithRecordTimeList.size()]);
+            businessCaller.getData()
+                          .putSerializable("wordWithRecordTimes", wordWithRecordTimes);
+            businessCaller.callBusiness();
+        });
     }
 
     @Override
-    public void removeWordFromHaveGraspedList(int wordId, BusinessCaller businessCaller)
-    {
+    public void removeWordFromTodaysHaveLearnedList(int wordId,
+                                                    BusinessCaller businessCaller) {
         executor.execute(() -> {
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                    .getHaveGraspedMapper().removeWordRecordById(wordId);
+                                             .getHaveLearnedTodayMapper()
+                                             .removeWordRecordById(
+                                                     wordId);
+            getTodaysHaveLearnedWords(businessCaller);
+        });
+    }
+
+    @Override
+    public void removeWordFromHaveGraspedList(int wordId, BusinessCaller businessCaller) {
+        executor.execute(() -> {
+            operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
+                                             .getHaveGraspedMapper().removeWordRecordById(
+                    wordId);
             WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                    .getShallLearningMapper().addWordRecord(wordRecord);
+                                             .getShallLearningMapper().addWordRecord(
+                    wordRecord);
             getHaveGraspedWords(businessCaller);
         });
     }
-    
+
     @Override
-    public void removeWordFromShallLearningList(int wordId, BusinessCaller businessCaller)
-    {
+    public void removeWordFromShallLearningList(int wordId, BusinessCaller businessCaller) {
         executor.execute(() -> {
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                    .getShallLearningMapper().removeWordRecordById(wordId);
+                                             .getShallLearningMapper().removeWordRecordById(
+                    wordId);
             WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                    .getHaveGraspedMapper().addWordRecord(wordRecord);
+                                             .getHaveGraspedMapper().addWordRecord(wordRecord);
             getShallLearningWords(businessCaller);
         });
     }
-    
+
     @Override
-    public void removeWordFromMarkedList(int wordId, BusinessCaller businessCaller)
-    {
+    public void removeWordFromMarkedList(int wordId, BusinessCaller businessCaller) {
         executor.execute(() -> {
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory().getMarkedMapper()
-                    .removeWordRecordById(wordId);
+                                             .removeWordRecordById(wordId);
             getMarkedWords(businessCaller);
         });
     }
-    
+
     @Override
-    public void removeWordFromDesertedList(int wordId, BusinessCaller businessCaller)
-    {
+    public void removeWordFromDesertedList(int wordId, BusinessCaller businessCaller) {
         executor.execute(() -> {
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                    .getDesertedLearningMapper().removeWordRecordById(wordId);
+                                             .getDesertedLearningMapper().removeWordRecordById(
+                    wordId);
             WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                    .getShallLearningMapper().addWordRecord(wordRecord);
+                                             .getShallLearningMapper().addWordRecord(
+                    wordRecord);
             getDesertedWords(businessCaller);
         });
     }

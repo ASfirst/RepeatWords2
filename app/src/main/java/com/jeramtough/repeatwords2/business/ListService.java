@@ -13,6 +13,8 @@ public interface ListService {
 
     void getTodaysHaveLearnedWords(BusinessCaller businessCaller);
 
+    void removeWordFromTodaysHaveLearnedList(int wordId, BusinessCaller businessCaller);
+
     void removeWordFromHaveGraspedList(int wordId, BusinessCaller businessCaller);
 
     void removeWordFromShallLearningList(int wordId, BusinessCaller businessCaller);

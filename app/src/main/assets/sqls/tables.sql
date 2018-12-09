@@ -14,7 +14,8 @@ CREATE TABLE `listen_have_grasped_tb` (
 
 DROP TABLE IF EXISTS `listen_have_learned_today_tb`;
 CREATE TABLE `listen_have_learned_today_tb` (
-  `id` int
+  `id` int DEFAULT NULL,
+ 	`time` DATETIME
 ) ;
 
 DROP TABLE IF EXISTS `listen_marked_tb`;
@@ -43,7 +44,8 @@ CREATE TABLE `speak_have_grasped_tb` (
 
 DROP TABLE IF EXISTS `speak_have_learned_today_tb`;
 CREATE TABLE `speak_have_learned_today_tb` (
-  `id` int
+ `id` int DEFAULT NULL,
+  	`time` DATETIME
 ) ;
 
 DROP TABLE IF EXISTS `speak_marked_tb`;
@@ -72,7 +74,8 @@ CREATE TABLE `write_have_grasped_tb` (
 
 DROP TABLE IF EXISTS `write_have_learned_today_tb`;
 CREATE TABLE `write_have_learned_today_tb` (
-  `id` int
+ `id` int DEFAULT NULL,
+  	`time` DATETIME
 ) ;
 
 DROP TABLE IF EXISTS `write_marked_tb`;
