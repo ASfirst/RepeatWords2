@@ -87,7 +87,12 @@ final class ListServiceImpl implements ListService
             businessCaller.callBusiness();
         });
     }
-    
+
+    @Override
+    public void getTodaysHaveLearnedWords(BusinessCaller businessCaller) {
+
+    }
+
     @Override
     public void removeWordFromHaveGraspedList(int wordId, BusinessCaller businessCaller)
     {

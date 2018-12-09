@@ -16,6 +16,19 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:id="@+id/radioButton_today_words"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="@drawable/my_radiobutton"
+                android:button="@null"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="today"/>
+
+            <RadioButton
                 android:id="@+id/radioButton_have_grasped_words"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

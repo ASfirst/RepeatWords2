@@ -11,6 +11,8 @@ public interface ListService {
 
     void getDesertedWords(BusinessCaller businessCaller);
 
+    void getTodaysHaveLearnedWords(BusinessCaller businessCaller);
+
     void removeWordFromHaveGraspedList(int wordId, BusinessCaller businessCaller);
 
     void removeWordFromShallLearningList(int wordId, BusinessCaller businessCaller);

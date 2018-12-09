@@ -7,6 +7,7 @@ import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.bean.word.WordRecord;
 import com.jeramtough.repeatwords2.bean.youdao.YoudaoQueryResult;
+import com.jeramtough.repeatwords2.component.dictionary.WordsPool;
 import com.jeramtough.repeatwords2.component.youdao.YoudaoTranslator;
 import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
@@ -20,16 +21,19 @@ import java.util.concurrent.Executor;
     private DictionaryMapper dictionaryMapper;
     private OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider;
     private YoudaoTranslator youdaoTranslator;
+    private WordsPool wordsPool;
 
     private Executor executor;
 
     @IocAutowire
     DictionaryServiceImpl(DictionaryMapper dictionaryMapper,
                           OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider,
-                          YoudaoTranslator youdaoTranslator) {
+                          YoudaoTranslator youdaoTranslator,
+                          WordsPool wordsPool) {
         this.dictionaryMapper = dictionaryMapper;
         this.operateWordsMapperFactoryProvider = operateWordsMapperFactoryProvider;
         this.youdaoTranslator = youdaoTranslator;
+        this.wordsPool = wordsPool;
 
         executor = JtExecutors.newCachedThreadPool();
     }
@@ -39,6 +43,10 @@ import java.util.concurrent.Executor;
         executor.execute(() -> {
             List<Word> words = dictionaryMapper.getAllWordsOrderById();
             Word[] words1 = words.toArray(new Word[words.size()]);
+
+            wordsPool.clear();
+            wordsPool.addWords(words);
+
             businessCaller.getData().putSerializable("words", words1);
             businessCaller.callBusiness();
         });
