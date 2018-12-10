@@ -1,8 +1,9 @@
-package com.jeramtough.repeatwords2.component.learningmode;
+package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
+import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 
 /**
@@ -34,7 +35,7 @@ public class WordsOperateProvider
 	{
 		switch (getLearningMode())
 		{
-			case NEW:
+			case LearningMode.NEW:
 				return newModeWordsOperator;
 			case REVIME:
 				return reviewModeWordsOperator;

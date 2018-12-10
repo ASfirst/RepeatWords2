@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.learningmode;
+package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
@@ -12,12 +12,13 @@ import java.util.List;
  * on 2018  May 08 Tuesday 00:24.
  */
 @JtComponent
-public class MarkModeWordsOperator implements WordsOperator {
+public class MarkModeWordsOperator extends BaseWordsOperator {
     private OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider;
 
     @IocAutowire
     public MarkModeWordsOperator(
             OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider) {
+        super(operateWordsMapperFactoryProvider);
         this.operateWordsMapperFactoryProvider = operateWordsMapperFactoryProvider;
     }
 

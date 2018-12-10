@@ -6,10 +6,11 @@ import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.bean.word.WordRecord;
+import com.jeramtough.repeatwords2.bean.word.WordWithIsLearnedAtLeastTwiceToday;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.dictionary.WordsPool;
 import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
-import com.jeramtough.repeatwords2.component.learningmode.WordsOperateProvider;
+import com.jeramtough.repeatwords2.component.learningmode.wordoperator.WordsOperateProvider;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.teacher.WordsTeacher;
 import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper;
@@ -59,6 +60,9 @@ public class LearningServiceImpl implements LearningService {
             List<Integer> shallLearningIds = wordsOperateProvider.getWordsOperator()
                                                                  .getWordIdsOfNeeding(
                                                                          perLearningCount);
+            List<Integer> todaysHaveLearnedWordsIdAtLeastTwice = wordsOperateProvider
+                    .getWordsOperator()
+                    .getTodaysHaveLearnedWordsIdAtLeastTwice();
 
             for (Integer id : shallLearningIds) {
                 Word word = wordsPool.getWord(id);
@@ -70,10 +74,16 @@ public class LearningServiceImpl implements LearningService {
             }
 
             Word[] shallLearningWords = wordsTeacher.getAllRandomNeedLearningWords();
+            WordWithIsLearnedAtLeastTwiceToday[]
+                    wordWithIsLearnedAtLeastTwiceTodays = wordsTeacher
+                    .getAllRandomNeedLearningWordsWithIsLearedTodayAtLeastTwice
+                            (todaysHaveLearnedWordsIdAtLeastTwice);
 
             businessCaller.getData()
                           .putInt("shallLearningSize", shallLearningWords.length);
             businessCaller.getData().putSerializable("shallLearningWords", shallLearningWords);
+            businessCaller.getData().putSerializable("wordWithIsLearnedAtLeastTwiceTodays",
+                    wordWithIsLearnedAtLeastTwiceTodays);
 
             wordsTeacher.clear();
 

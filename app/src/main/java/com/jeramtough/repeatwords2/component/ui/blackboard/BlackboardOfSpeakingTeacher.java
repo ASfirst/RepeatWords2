@@ -1,6 +1,5 @@
-package com.jeramtough.repeatwords2.component.blackboard;
+package com.jeramtough.repeatwords2.component.ui.blackboard;
 
-import android.graphics.Color;
 import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.bean.word.Word;
@@ -9,7 +8,7 @@ import com.jeramtough.repeatwords2.component.baidu.Reader;
 /**
  * @author 11718
  */
-public class BlackboardOfSpeakingTeacher extends BlackboardOfTeacher {
+public class BlackboardOfSpeakingTeacher extends BaseBlackboardOfTeacher {
 
     public BlackboardOfSpeakingTeacher(Reader reader) {
         super(reader);

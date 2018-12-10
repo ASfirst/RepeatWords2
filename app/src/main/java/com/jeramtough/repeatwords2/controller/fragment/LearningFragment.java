@@ -23,16 +23,17 @@ import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.bean.word.Word;
+import com.jeramtough.repeatwords2.bean.word.WordWithIsLearnedAtLeastTwiceToday;
 import com.jeramtough.repeatwords2.business.LearningService;
 import com.jeramtough.repeatwords2.component.adapter.MarkedWordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.NewWordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.ReviewWordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
-import com.jeramtough.repeatwords2.component.blackboard.BlackboardOfLearningTeacher;
-import com.jeramtough.repeatwords2.component.blackboard.BlackboardOfSpeakingTeacher;
-import com.jeramtough.repeatwords2.component.blackboard.BlackboardOfTeacher;
-import com.jeramtough.repeatwords2.component.blackboard.BlackboardOfWritingTeacher;
+import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfLearningTeacher;
+import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfSpeakingTeacher;
+import com.jeramtough.repeatwords2.component.ui.blackboard.BaseBlackboardOfTeacher;
+import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfWritingTeacher;
 import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
@@ -69,7 +70,7 @@ public class LearningFragment extends BaseFragment
     @InjectComponent
     private BaiduVoiceReader reader;
 
-    private BlackboardOfTeacher blackboardOfTeacher;
+    private BaseBlackboardOfTeacher baseBlackboardOfTeacher;
 
     private int shallLearningCount;
     private int surplusLearningCount;
@@ -132,7 +133,7 @@ public class LearningFragment extends BaseFragment
             WordCardView wordCardView =
                     jtViewPager.findViewWithTag(jtViewPager.getCurrentItem());
             if (wordCardView != null) {
-                blackboardOfTeacher.whileDismiss(wordCardView.getTextViewContent());
+                baseBlackboardOfTeacher.whileDismiss(wordCardView.getTextViewContent());
             }
         }
     }
@@ -189,12 +190,12 @@ public class LearningFragment extends BaseFragment
 
     @Override
     public void inExposingArea(Word word, TextView textView) {
-        blackboardOfTeacher.whileExposing(word, textView);
+        baseBlackboardOfTeacher.whileExposing(word, textView);
     }
 
     @Override
     public void outExposingArea(Word word, TextView textView) {
-        blackboardOfTeacher.whileLearning(word, textView);
+        baseBlackboardOfTeacher.whileLearning(word, textView);
     }
 
     @Override
@@ -223,10 +224,10 @@ public class LearningFragment extends BaseFragment
     @Override
     public void onSingleClickWord(Word word, TextView textView) {
         if (!reader.isReading()) {
-            blackboardOfTeacher.whileLearning(word, textView);
+            baseBlackboardOfTeacher.whileLearning(word, textView);
         }
         else {
-            blackboardOfTeacher.whileDismiss(textView);
+            baseBlackboardOfTeacher.whileDismiss(textView);
         }
     }
 
@@ -257,12 +258,20 @@ public class LearningFragment extends BaseFragment
                 shallLearningCount = message.getData().getInt("shallLearningSize");
 
                 if (shallLearningCount > 0) {
-                    Word[] words =
-                            (Word[]) message.getData().getSerializable("shallLearningWords");
-                    surplusLearningCount = Objects.requireNonNull(words).length;
+                    /*Word[] words =
+                            (Word[]) message.getData().getSerializable("shallLearningWords");*/
+                    WordWithIsLearnedAtLeastTwiceToday[]
+                            wordWithIsLearnedAtLeastTwiceTodays =
+                            (WordWithIsLearnedAtLeastTwiceToday[])
+                                    message.getData()
+                                           .getSerializable(
+                                                   "wordWithIsLearnedAtLeastTwiceTodays");
+
+
+                    surplusLearningCount = Objects.requireNonNull(wordWithIsLearnedAtLeastTwiceTodays).length;
 
                     WordCardsPagerAdapter wordCardsPagerAdapter =
-                            this.processingWordCardsPagerAdapter(words);
+                            this.processingWordCardsPagerAdapter(wordWithIsLearnedAtLeastTwiceTodays);
 
                     jtViewPager.setAdapter(wordCardsPagerAdapter);
                     jtViewPager.setInitFinishedCaller(() -> {
@@ -333,13 +342,13 @@ public class LearningFragment extends BaseFragment
 
         switch (currentTeacherType) {
             case LISTENING_TEACHER:
-                blackboardOfTeacher = new BlackboardOfLearningTeacher(reader);
+                baseBlackboardOfTeacher = new BlackboardOfLearningTeacher(reader);
                 break;
             case SPEAKING_TEACHER:
-                blackboardOfTeacher = new BlackboardOfSpeakingTeacher(reader);
+                baseBlackboardOfTeacher = new BlackboardOfSpeakingTeacher(reader);
                 break;
             case WRITING_TEACHER:
-                blackboardOfTeacher = new BlackboardOfWritingTeacher(reader);
+                baseBlackboardOfTeacher = new BlackboardOfWritingTeacher(reader);
                 break;
         }
     }
@@ -366,7 +375,7 @@ public class LearningFragment extends BaseFragment
     private void learnCurrentWord() {
         WordCardView wordCardView = jtViewPager.findViewWithTag(jtViewPager.getCurrentItem());
         if (wordCardView != null) {
-            blackboardOfTeacher
+            baseBlackboardOfTeacher
                     .whileLearning(wordCardView.getWord(), wordCardView.getTextViewContent());
         }
         else {

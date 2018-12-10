@@ -3,6 +3,7 @@ package com.jeramtough.repeatwords2.component.teacher;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.repeatwords2.bean.word.Word;
+import com.jeramtough.repeatwords2.bean.word.WordWithIsLearnedAtLeastTwiceToday;
 
 import org.apache.commons.lang3.RandomUtils;
 
@@ -80,6 +81,35 @@ public class WordsTeacher implements Teacher {
             return getAllRandomNeedLearningWords();
         }
 
+    }
+
+    @Override
+    public WordWithIsLearnedAtLeastTwiceToday[] getAllRandomNeedLearningWordsWithIsLearedTodayAtLeastTwice(
+            List<Integer> todaysHaveLearnedWordsIdAtLeastTwice) {
+        WordWithIsLearnedAtLeastTwiceToday[] wordWithIsLearnedAtLeastTwiceTodays = new
+                WordWithIsLearnedAtLeastTwiceToday[shallLearningWords.size()];
+        for (int i = 0; i < shallLearningWords.size(); i++) {
+            Word word = shallLearningWords.get(i);
+            boolean isLearedAtLeastTwiceToday = false;
+            for (int haveLearnedWordsId : todaysHaveLearnedWordsIdAtLeastTwice) {
+                if (word.getId() == haveLearnedWordsId) {
+                    isLearedAtLeastTwiceToday = true;
+                    break;
+                }
+            }
+            WordWithIsLearnedAtLeastTwiceToday wordWithIsLearnedAtLeastTwiceToday = new
+                    WordWithIsLearnedAtLeastTwiceToday();
+            wordWithIsLearnedAtLeastTwiceToday.setLearnedAtLeastTwiceToday(
+                    isLearedAtLeastTwiceToday);
+            wordWithIsLearnedAtLeastTwiceToday.setCh(word.getCh());
+            wordWithIsLearnedAtLeastTwiceToday.setEn(word.getEn());
+            wordWithIsLearnedAtLeastTwiceToday.setId(word.getId());
+            wordWithIsLearnedAtLeastTwiceToday.setPhonetic(word.getPhonetic());
+
+            wordWithIsLearnedAtLeastTwiceTodays[i] = wordWithIsLearnedAtLeastTwiceToday;
+        }
+
+        return wordWithIsLearnedAtLeastTwiceTodays;
     }
 
 

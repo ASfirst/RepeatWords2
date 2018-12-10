@@ -1,6 +1,4 @@
-package com.jeramtough.repeatwords2.component.learningmode;
-
-import android.util.SparseIntArray;
+package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
@@ -17,12 +15,13 @@ import java.util.List;
  * on 2018  May 08 Tuesday 00:22.
  */
 @JtComponent
-public class NewModeWordsOperator implements WordsOperator {
+public class NewModeWordsOperator extends BaseWordsOperator {
     private OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider;
 
     @IocAutowire
     public NewModeWordsOperator(
             OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider) {
+        super(operateWordsMapperFactoryProvider);
         this.operateWordsMapperFactoryProvider = operateWordsMapperFactoryProvider;
     }
 
@@ -31,31 +30,16 @@ public class NewModeWordsOperator implements WordsOperator {
     public void removeWordFromList(int wordId) {
         WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
         operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                                         .getShallLearningMapper().removeWordRecordById(wordId);
+                                         .getShallLearningMapper().removeWordRecordById(
+                wordId);
         operateWordsMapperFactoryProvider.getOperateWordsMapperFactory().getHaveGraspedMapper()
                                          .addWordRecord(wordRecord);
     }
 
     @Override
     public List<Integer> getWordIdsOfNeeding(int size) {
-        //拿出今日已学所有单词
-        List<Integer> haveLearnedWordIds = operateWordsMapperFactoryProvider
-                .getOperateWordsMapperFactory().getHaveLearnedTodayMapper()
-                .getWordIds();
-
         //算出两次以上的今日已学的单词加入黑名单
-        SparseIntArray countMap = new SparseIntArray();
-        List<Integer> noNeededIdsOfLearning = new ArrayList<>();
-        for (Integer integer : haveLearnedWordIds) {
-            int count = countMap.get(integer);
-            count++;
-            if (count >= 2) {
-                noNeededIdsOfLearning.add(integer);
-            }
-            else {
-                countMap.put(integer, count);
-            }
-        }
+        List<Integer> noNeededIdsOfLearning = getTodaysHaveLearnedWordsIdAtLeastTwice();
 
         //根据时间排序翻倍取出，然后取随机的一半
         int perLearningCount = size * 2;
@@ -79,6 +63,7 @@ public class NewModeWordsOperator implements WordsOperator {
     @Override
     public void learnWordToday(WordRecord wordRecord) {
         operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                                         .getHaveLearnedTodayMapper().addWordRecord(wordRecord);
+                                         .getHaveLearnedTodayMapper().addWordRecord(
+                wordRecord);
     }
 }

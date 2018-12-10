@@ -1,11 +1,11 @@
-package com.jeramtough.repeatwords2.component.blackboard;
+package com.jeramtough.repeatwords2.component.ui.blackboard;
 
 import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.baidu.Reader;
 
-public class BlackboardOfLearningTeacher extends BlackboardOfTeacher
+public class BlackboardOfLearningTeacher extends BaseBlackboardOfTeacher
 {
     
     public BlackboardOfLearningTeacher(Reader reader)
