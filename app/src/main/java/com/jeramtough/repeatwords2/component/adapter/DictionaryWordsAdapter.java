@@ -27,46 +27,71 @@ public class DictionaryWordsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return words.length;
+        return words.length + 1;
     }
 
     @Override
     public Object getItem(int position) {
-        return words[position];
+        if (position != words.length) {
+            return words[position];
+        }
+        else {
+            return words[position - 1];
+        }
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        if (position != words.length ) {
+            return position;
+        }
+        else {
+            return position - 1;
+        }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.items_dictionary_word, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.items_dictionary_word,
+                    null);
 
             viewHolder = new ViewHolder();
             viewHolder.textViewWordId = convertView.findViewById(R.id.textView_word_id);
             viewHolder.textViewWordEn = convertView.findViewById(R.id.textView_word_en);
             viewHolder.textViewWordCh = convertView.findViewById(R.id.textView_word_ch);
-            viewHolder.textViewWordPhonetic = convertView.findViewById(R.id.textView_word_phonetic);
-            viewHolder.imageViewWordDelete = convertView.findViewById(R.id.imageView_word_delete);
-            viewHolder.imageViewWordModify = convertView.findViewById(R.id.imageView_word_modify);
-            viewHolder.imageViewWordSpeak = convertView.findViewById(R.id.imageView_word_speak);
-            viewHolder.imageViewWordDetail = convertView.findViewById(R.id.imageView_word_detail);
+            viewHolder.textViewWordPhonetic = convertView.findViewById(
+                    R.id.textView_word_phonetic);
+            viewHolder.imageViewWordDelete = convertView.findViewById(
+                    R.id.imageView_word_delete);
+            viewHolder.imageViewWordModify = convertView.findViewById(
+                    R.id.imageView_word_modify);
+            viewHolder.imageViewWordSpeak = convertView.findViewById(
+                    R.id.imageView_word_speak);
+            viewHolder.imageViewWordDetail = convertView.findViewById(
+                    R.id.imageView_word_detail);
 
             convertView.setTag(viewHolder);
-        } else {
+        }
+        else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Word word = words[position];
-        if (word != null) {
-            viewHolder.textViewWordId.setText(word.getId() + "");
-            viewHolder.textViewWordEn.setText(word.getEn());
-            viewHolder.textViewWordCh.setText(word.getCh());
-            viewHolder.textViewWordPhonetic.setText(word.getPhonetic());
+        if (position != words.length) {
+            Word word = words[position];
+            if (word != null) {
+                viewHolder.textViewWordId.setText(word.getId() + "");
+                viewHolder.textViewWordEn.setText(word.getEn());
+                viewHolder.textViewWordCh.setText(word.getCh());
+                viewHolder.textViewWordPhonetic.setText(word.getPhonetic());
+            }
+        }
+        else {
+            viewHolder.textViewWordId.setText("/\n/");
+            viewHolder.textViewWordEn.setText("/\n/");
+            viewHolder.textViewWordCh.setText("/\n/");
+            viewHolder.textViewWordPhonetic.setText("/\n/");
         }
         return convertView;
     }
