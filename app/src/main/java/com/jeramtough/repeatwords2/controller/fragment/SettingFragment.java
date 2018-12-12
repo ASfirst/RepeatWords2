@@ -160,7 +160,7 @@ public class SettingFragment extends BaseFragment
         super.onClick(v, viewId);
         switch (viewId) {
             case R.id.button_backup:
-                showIsSureDialog("Are you sure to backup?", () -> {
+                showIsSureDialog("Do you want to backup?", () -> {
                     progressDialog = new ProgressDialog(getContext());
                     progressDialog.setCancelable(false);
                     progressDialog.show();
@@ -172,7 +172,7 @@ public class SettingFragment extends BaseFragment
 
             case R.id.button_recover:
 
-                showIsSureDialog("Are you sure to recover?", () -> {
+                showIsSureDialog("Do you want to recover?", () -> {
                     progressDialog = new ProgressDialog(getContext());
                     progressDialog.setCancelable(false);
                     progressDialog.show();
@@ -183,7 +183,7 @@ public class SettingFragment extends BaseFragment
                 break;
 
             case R.id.button_clear_today:
-                showIsSureDialog("Are you sure to clear today's learned words?", () -> {
+                showIsSureDialog("Do you want to clear today's learned words?", () -> {
                     progressDialog = new ProgressDialog(getContext());
                     progressDialog.setCancelable(false);
                     settingService.clearHavedLearnedWordToday(new BusinessCaller
@@ -251,8 +251,8 @@ public class SettingFragment extends BaseFragment
 
     private void showIsSureDialog(String message, SimpleCallback simpleCallback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(message).setNegativeButton("Cancel", null).setPositiveButton
-                ("Sure", new DialogInterface.OnClickListener() {
+        builder.setMessage(message).setNegativeButton("NO", null).setPositiveButton
+                ("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         simpleCallback.doSometing();

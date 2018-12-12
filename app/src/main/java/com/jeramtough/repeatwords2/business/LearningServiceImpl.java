@@ -126,7 +126,8 @@ public class LearningServiceImpl implements LearningService {
                                                 .getDesertedLearningMapper().addWordRecord(
                         wordRecord);
 
-                learnedWord(word);
+                //learnedWordInToday(word);
+                wordsTeacher.removeWordFromList(word);
 
                 businessCaller.callBusiness();
             }
@@ -148,7 +149,7 @@ public class LearningServiceImpl implements LearningService {
                                                 .getShallLearningMapper().removeWordRecordById(
                         id);
 
-                learnedWord(word);
+                learnedWordInToday(word);
 
                 businessCaller.callBusiness();
             }
@@ -196,12 +197,11 @@ public class LearningServiceImpl implements LearningService {
 
 
     @Override
-    public void learnedWord(Word word) {
+    public void learnedWordInToday(Word word) {
         wordsTeacher.removeWordFromList(word);
 
         executorService.submit(() -> {
             WordRecord wordRecord = new WordRecord(word.getId(), DateTimeUtil.getDateTime());
-
             wordsOperateProvider.getWordsOperator().learnWordToday(wordRecord);
         });
     }

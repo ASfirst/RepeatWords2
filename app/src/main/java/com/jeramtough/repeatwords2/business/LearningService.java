@@ -33,7 +33,7 @@ public interface LearningService {
      */
     void removeWord(Word word, BusinessCaller businessCaller);
 
-    void learnedWord(Word word);
+    void learnedWordInToday(Word word);
 
     TeacherType getTeacherType();
 

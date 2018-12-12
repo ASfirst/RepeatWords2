@@ -30,12 +30,12 @@ import com.jeramtough.repeatwords2.component.adapter.NewWordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.ReviewWordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
-import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfLearningTeacher;
-import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfSpeakingTeacher;
-import com.jeramtough.repeatwords2.component.ui.blackboard.BaseBlackboardOfTeacher;
-import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfWritingTeacher;
 import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.ui.blackboard.BaseBlackboardOfTeacher;
+import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfLearningTeacher;
+import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfSpeakingTeacher;
+import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfWritingTeacher;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
 import com.jeramtough.repeatwords2.controller.activity.MainActivity;
 import com.jeramtough.repeatwords2.controller.dialog.WriteFromMemoryDialog;
@@ -218,6 +218,7 @@ public class LearningFragment extends BaseFragment
 
     @Override
     public void atLearningArea(Word word, TextView textView) {
+        learningService.learnedWordInToday(word);
         removePager(word);
     }
 
@@ -360,7 +361,7 @@ public class LearningFragment extends BaseFragment
             adapter.removeWord(word);
         }
 
-        learningService.learnedWord(word);
+        //learningService.learnedWordInToday(word);
 
         if (lastPosition < jtViewPager.getAdapter().getCount()) {
             jtViewPager.setCurrentItem(lastPosition, true);
