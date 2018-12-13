@@ -47,7 +47,7 @@ public class ReviewModeWordsOperator extends BaseWordsOperator {
         List<Integer> todaysHaveLearnedWordsAtLeastTwice = getTodaysHaveLearnedWordsIdAtLeastTwice();
 
         //拿出今日已学三分之一单词
-        int sizeFromHavedLearnedToday = size / 3;
+        int sizeFromHavedLearnedToday = size / 4;
         sizeFromHavedLearnedToday = todaysHaveLearnedWordsAtLeastTwice.size()
                 > sizeFromHavedLearnedToday ? sizeFromHavedLearnedToday : todaysHaveLearnedWordsAtLeastTwice
                 .size();

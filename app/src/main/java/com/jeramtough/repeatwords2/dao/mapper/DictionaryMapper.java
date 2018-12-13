@@ -55,7 +55,11 @@ public class DictionaryMapper extends DaoMapper {
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, new String[]{en});
         List<Word> words = processWordsForCursor(cursor);
         cursor.close();
-        return words.get(0);
+        if (words.size() > 0) {
+            return words.get(0);
+        } else {
+            return null;
+        }
     }
 
     public Word getWordByEn(String en, int exceptId) {

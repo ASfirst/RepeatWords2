@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatImageButton;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.jeramtough.jtandroid.business.BusinessCaller;
@@ -25,6 +25,8 @@ import com.jeramtough.repeatwords2.controller.activity.WordActivity;
 import com.jeramtough.repeatwords2.controller.dialog.EditWordDialog;
 import com.jeramtough.repeatwords2.controller.dialog.SearchWordDialog;
 
+import java.util.Objects;
+
 /**
  * @author 11718
  * on 2018  May 02 Wednesday 23:51.
@@ -37,8 +39,10 @@ public class DictionaryFragment extends BaseFragment
 
 
     private TextView textViewWordsTotality;
-    private Button buttonAdd;
-    private Button buttonSearch;
+    private AppCompatImageButton buttonAdd;
+    private AppCompatImageButton buttonSearch;
+    private AppCompatImageButton buttonGoTop;
+    private AppCompatImageButton buttonGoBottom;
     private DictionaryListView listViewWords;
     private TimedCloseTextView timedCloseTextView;
 
@@ -63,12 +67,16 @@ public class DictionaryFragment extends BaseFragment
         textViewWordsTotality = findViewById(R.id.textView_words_totality);
         buttonAdd = findViewById(R.id.button_add);
         buttonSearch = findViewById(R.id.button_search);
+        buttonGoTop = findViewById(R.id.button_go_top);
+        buttonGoBottom = findViewById(R.id.button_go_bottom);
         listViewWords = findViewById(R.id.listView_words);
         timedCloseTextView = findViewById(R.id.timedCloseTextView);
 
         buttonAdd.setOnClickListener(this);
         buttonSearch.setOnClickListener(this);
         listViewWords.setOnItemOptionsWordListening(this);
+        buttonGoBottom.setOnClickListener(this);
+        buttonGoTop.setOnClickListener(this);
 
         this.initResources();
     }
@@ -137,6 +145,12 @@ public class DictionaryFragment extends BaseFragment
                         });
                 searchWordDialog.show();
                 break;
+            case R.id.button_go_top:
+                listViewWords.moveToTop();
+                break;
+            case R.id.button_go_bottom:
+                listViewWords.moveToBottom();
+                break;
         }
     }
 
@@ -204,14 +218,36 @@ public class DictionaryFragment extends BaseFragment
 
         switch (message.what) {
             case BUSINESS_CODE_ADD_DICTIONARY_WORD:
-                listViewWords.setAdapter(dictionaryWordsAdapter);
-                timedCloseTextView.invisible();
-                listViewWords.moveToBottom();
+                if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL)) {
+                    listViewWords.setAdapter(dictionaryWordsAdapter);
+                    timedCloseTextView.invisible();
+                    listViewWords.moveToBottom();
+                    timedCloseTextView.setNiceMessage("ok~");
+                    timedCloseTextView.closeDelayed(1000);
+                    Word word = (Word) message.getData().getSerializable("newWord");
+                    boolean isSuccessful = listViewWords.moveToPositionOfWordByEn(
+                            Objects.requireNonNull(word).getEn());
+                    movingToPositionOfWordIsSuccessful(isSuccessful);
+                }
+                else {
+                    timedCloseTextView.setErrorMessage(message.getData().getString
+                            (BusinessCaller.MESSAGE));
+                    timedCloseTextView.closeDelayed(1000);
+                }
+
                 break;
             case BUSINESS_CODE_GET_DICTIONARY_WORD:
+                listViewWords.setAdapter(dictionaryWordsAdapter);
+                timedCloseTextView.invisible();
+                break;
             case BUSINESS_CODE_MODIFY_DICTIONARY_WORD:
                 listViewWords.setAdapter(dictionaryWordsAdapter);
                 timedCloseTextView.invisible();
+                Word word = (Word) message.getData().getSerializable("word");
+                word = Objects.requireNonNull(word);
+                boolean isSuccessful = listViewWords.moveToPositionOfWordByWordId(
+                        word.getId());
+                movingToPositionOfWordIsSuccessful(isSuccessful);
                 break;
         }
     }

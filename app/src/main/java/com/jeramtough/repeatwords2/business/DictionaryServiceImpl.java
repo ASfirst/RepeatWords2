@@ -48,6 +48,7 @@ import java.util.concurrent.Executor;
             wordsPool.addWords(words);
 
             businessCaller.getData().putSerializable("words", words1);
+            businessCaller.setSuccessful(true);
             businessCaller.callBusiness();
         });
     }
@@ -78,24 +79,34 @@ import java.util.concurrent.Executor;
     @Override
     public void addNewWordIntoDictionary(Word word, BusinessCaller businessCaller) {
         executor.execute(() -> {
-            if (word.getPhonetic().length() == 0 || word.getPhonetic() == null) {
-                YoudaoQueryResult youdaoQueryResult = youdaoTranslator.translate(word.getEn());
-                if (youdaoQueryResult.getBasic() != null) {
-                    word.setPhonetic(youdaoQueryResult.getBasic().getUkPhonetic());
+            if (dictionaryMapper.getWordByEn(word.getEn()) == null) {
+
+                if (word.getPhonetic().length() == 0 || word.getPhonetic() == null) {
+                    YoudaoQueryResult youdaoQueryResult = youdaoTranslator.translate(
+                            word.getEn());
+                    if (youdaoQueryResult.getBasic() != null) {
+                        word.setPhonetic(youdaoQueryResult.getBasic().getUkPhonetic());
+                    }
                 }
+
+                dictionaryMapper.addNewWord(word);
+                //n ew word just have the id
+                Word newWord = dictionaryMapper.getWordByEn(word.getEn());
+                operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                        new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+                operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                        new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+                operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                        new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+
+                businessCaller.getData().putSerializable("newWord", word);
+                getDictionaryWords(businessCaller);
             }
-
-            dictionaryMapper.addNewWord(word);
-            //n ew word just have the id
-            Word newWord = dictionaryMapper.getWordByEn(word.getEn());
-            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
-            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
-            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
-
-            getDictionaryWords(businessCaller);
+            else {
+                businessCaller.setMessage("word have existed");
+                businessCaller.setSuccessful(false);
+                businessCaller.callBusiness();
+            }
         });
     }
 
@@ -145,6 +156,7 @@ import java.util.concurrent.Executor;
                 }
             }
             dictionaryMapper.addWord(word);
+            businessCaller.getData().putSerializable("word", word);
             getDictionaryWords(businessCaller);
 
         });

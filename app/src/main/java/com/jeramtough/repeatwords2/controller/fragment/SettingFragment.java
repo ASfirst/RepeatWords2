@@ -212,9 +212,6 @@ public class SettingFragment extends BaseFragment
             case BUSINESS_CODE_RECOVER_LEARNING_RECORD:
                 if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL)) {
                     Toast.makeText(getContext(), "recover ok", Toast.LENGTH_SHORT).show();
-                    settingService.clearHavedLearnedWordToday(new BusinessCaller
-                            (getFragmentHandler(),
-                                    BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY));
                 }
                 else {
                     Toast.makeText(getContext(), "recover fail", Toast.LENGTH_SHORT).show();

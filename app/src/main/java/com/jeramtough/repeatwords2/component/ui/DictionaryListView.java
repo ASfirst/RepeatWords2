@@ -15,7 +15,8 @@ import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.adapter.DictionaryWordsAdapter;
 
-public class DictionaryListView extends ListView implements View.OnClickListener, AdapterView.OnItemLongClickListener {
+public class DictionaryListView extends ListView
+        implements View.OnClickListener, AdapterView.OnItemLongClickListener {
 
     private OnItemOptionsWordListening onItemOptionsWordListening;
     private int position;
@@ -46,7 +47,8 @@ public class DictionaryListView extends ListView implements View.OnClickListener
             }
 
             @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                                 int totalItemCount) {
             }
         });
     }
@@ -100,7 +102,8 @@ public class DictionaryListView extends ListView implements View.OnClickListener
         }
     }
 
-    public void setOnItemOptionsWordListening(OnItemOptionsWordListening onItemOptionsWordListening) {
+    public void setOnItemOptionsWordListening(
+            OnItemOptionsWordListening onItemOptionsWordListening) {
         this.onItemOptionsWordListening = onItemOptionsWordListening;
     }
 
@@ -148,8 +151,16 @@ public class DictionaryListView extends ListView implements View.OnClickListener
 
     public void moveToBottom() {
         this.post(() -> {
-            int position=getAdapter().getCount()>0?getAdapter().getCount()-1:0;
+            int position = getAdapter().getCount() > 0 ? getAdapter().getCount() - 1 : 0;
             setSelection(position);
+        });
+    }
+
+    public void moveToTop() {
+        this.post(() -> {
+            if (getAdapter().getCount() > 0) {
+                setSelection(0);
+            }
         });
     }
 
