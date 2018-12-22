@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.java.Directory;
-import com.jeramtough.repeatwords2.bean.record.LearningRecord;
+import com.jeramtough.jtutil.core.CompressorUtil;
 import com.jeramtough.repeatwords2.bean.word.Dictionary;
 import com.jeramtough.repeatwords2.component.app.AppConstants;
 
@@ -22,10 +22,12 @@ import java.io.InputStream;
 public class DictionaryManager {
 
     private String recordFileName = "dictionary.json";
+    private String recordBackupZipFileName = "dictionary.zip";
 
     private Context context;
     private Directory backupDirectory;
     private File recordFile;
+    private File recordBackupZipFile;
 
     @IocAutowire
     public DictionaryManager(Context context) {
@@ -38,6 +40,8 @@ public class DictionaryManager {
         }
         recordFile =
                 new File(backupDirectory.getAbsoluteFile() + File.separator + recordFileName);
+        recordBackupZipFile = new File(
+                backupDirectory.getAbsoluteFile() + File.separator + recordBackupZipFileName);
     }
 
     public Dictionary getDictionaryFromAssets() {
@@ -46,7 +50,8 @@ public class DictionaryManager {
             String jsonStr = IOUtils.toString(inputStream, "UTF-8");
             Dictionary dictionary = JSON.parseObject(jsonStr, Dictionary.class);
             return dictionary;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -54,13 +59,21 @@ public class DictionaryManager {
 
     public boolean backup(Dictionary dictionary) {
         if (backupDirectory.exists()) {
+
+            if (recordFile.exists()) {
+                recordBackupZipFile.delete();
+                CompressorUtil.compress(new File[]{recordFile},
+                        recordBackupZipFile.getAbsolutePath());
+            }
+
             try {
                 byte[] bytes = JSON.toJSONBytes(dictionary);
                 FileOutputStream fileOutputStream = new FileOutputStream(recordFile);
                 fileOutputStream.write(bytes);
                 fileOutputStream.close();
                 return true;
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -74,7 +87,8 @@ public class DictionaryManager {
                 Dictionary dictionary =
                         JSON.parseObject(jsonStr, Dictionary.class);
                 return dictionary;
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }

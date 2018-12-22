@@ -4,14 +4,20 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.java.Directory;
+import com.jeramtough.jtutil.core.CompressorUtil;
 import com.jeramtough.repeatwords2.bean.record.LearningRecord;
 import com.jeramtough.repeatwords2.component.app.AppConstants;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -25,12 +31,11 @@ public class LearningRecordManager {
     private String learningRecordFileName = "leaning_record.json";
     private String speakingRecordFileName = "speaking_record.json";
     private String writingRecordFileName = "writing_record.json";
+    private String recordJsonBackupFileName = "RecordJsonBackupFiles.zip";
     private File recordFile1;
     private File recordFile2;
     private File recordFile3;
-    private File recordBackupFile1;
-    private File recordBackupFile2;
-    private File recordBackupFile3;
+    private File recordBackupZipFile;
 
     @IocAutowire
     public LearningRecordManager() {
@@ -50,41 +55,42 @@ public class LearningRecordManager {
                 new File(
                         backupDirectory.getAbsoluteFile() + File.separator + writingRecordFileName);
 
-        recordBackupFile1 = new File(
+        recordBackupZipFile = new File(
                 backupDirectory.getAbsoluteFile() + File.separator +
-                        learningRecordFileName + ".backup");
-        recordBackupFile2 = new File(
-                backupDirectory.getAbsoluteFile() + File.separator +
-                        speakingRecordFileName + ".backup");
-        recordBackupFile3 = new File(
-                backupDirectory.getAbsoluteFile() + File.separator +
-                        writingRecordFileName + ".backup");
+                        recordJsonBackupFileName);
     }
 
     public boolean backup(Map<String, LearningRecord> learningRecords) {
+
         if (backupDirectory.exists()) {
+
+            //backup
+            recordBackupZipFile.delete();
+            List<File> recodeFiles = new ArrayList<>();
+            if (recordFile1.exists()) {
+                recodeFiles.add(recordFile1);
+            }
+            if (recordFile2.exists()) {
+                recodeFiles.add(recordFile2);
+            }
+            if (recordFile3.exists()) {
+                recodeFiles.add(recordFile3);
+            }
+            CompressorUtil.compress(recodeFiles.toArray(new File[recodeFiles.size()]),
+                    recordBackupZipFile.getAbsolutePath());
+
             for (String recordKey : learningRecords.keySet()) {
                 LearningRecord learningRecord = learningRecords.get(recordKey);
                 File recordFile = null;
-                File recordBackupFile = null;
                 if (recordKey.equals(learningRecordFileName)) {
                     recordFile = recordFile1;
-                    recordBackupFile = recordBackupFile1;
                 }
                 else if (recordKey.equals(speakingRecordFileName)) {
                     recordFile = recordFile2;
-                    recordBackupFile = recordBackupFile2;
                 }
                 else if (recordKey.equals(writingRecordFileName)) {
                     recordFile = recordFile3;
-                    recordBackupFile = recordBackupFile3;
                 }
-
-                //backup
-                recordBackupFile1.delete();
-                recordBackupFile2.delete();
-                recordBackupFile3.delete();
-                recordFile.renameTo(recordBackupFile);
 
                 try {
                     byte[] bytes = JSON.toJSONBytes(learningRecord);

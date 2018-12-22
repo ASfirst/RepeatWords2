@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtutil.java.SimpleCallback;
+import com.jeramtough.jtutil.java.callback.SimpleCallback;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.business.SettingService;
 import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
