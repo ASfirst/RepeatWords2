@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.java.Directory;
+import com.jeramtough.jtlog.with.WithJtLogger;
 import com.jeramtough.jtutil.core.CompressorUtil;
 import com.jeramtough.repeatwords2.bean.record.LearningRecord;
 import com.jeramtough.repeatwords2.component.app.AppConstants;
@@ -26,7 +27,7 @@ import java.util.Objects;
  * on 2018  May 06 Sunday 18:05.
  */
 @JtComponent
-public class LearningRecordManager {
+public class LearningRecordManager implements WithJtLogger {
     private Directory backupDirectory;
     private String learningRecordFileName = "leaning_record.json";
     private String speakingRecordFileName = "speaking_record.json";
@@ -105,7 +106,10 @@ public class LearningRecordManager {
             }
             return true;
         }
-        return false;
+        else {
+            getJtLogger().error("The backup directory didn't exist");
+            return false;
+        }
     }
 
     public Map<String, LearningRecord> recover() {
