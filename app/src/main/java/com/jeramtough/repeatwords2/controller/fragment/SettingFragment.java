@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtutil.java.callback.SimpleCallback;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.business.SettingService;
 import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
@@ -246,13 +245,13 @@ public class SettingFragment extends BaseFragment
         }
     }
 
-    private void showIsSureDialog(String message, SimpleCallback simpleCallback) {
+    private void showIsSureDialog(String message, Runnable simpleCallback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(message).setNegativeButton("NO", null).setPositiveButton
                 ("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        simpleCallback.doSometing();
+                        simpleCallback.run();
                     }
                 }).create().show();
     }

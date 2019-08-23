@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.java.Directory;
-import com.jeramtough.jtutil.core.CompressorUtil;
 import com.jeramtough.repeatwords2.bean.word.Dictionary;
 import com.jeramtough.repeatwords2.component.app.AppConstants;
 
@@ -62,8 +61,7 @@ public class DictionaryManager {
 
             if (recordFile.exists()) {
                 recordBackupZipFile.delete();
-                CompressorUtil.compress(new File[]{recordFile},
-                        recordBackupZipFile.getAbsolutePath());
+                recordBackupZipFile.getAbsolutePath();
             }
 
             try {

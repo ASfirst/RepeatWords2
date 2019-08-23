@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtandroid.java.Directory;
-import com.jeramtough.jtlog.with.WithJtLogger;
-import com.jeramtough.jtutil.core.CompressorUtil;
+import com.jeramtough.jtcomponent.utils.CompressorUtil;
+import com.jeramtough.jtlog.with.WithLogger;
 import com.jeramtough.repeatwords2.bean.record.LearningRecord;
 import com.jeramtough.repeatwords2.component.app.AppConstants;
 
@@ -27,7 +27,7 @@ import java.util.Objects;
  * on 2018  May 06 Sunday 18:05.
  */
 @JtComponent
-public class LearningRecordManager implements WithJtLogger {
+public class LearningRecordManager implements WithLogger {
     private Directory backupDirectory;
     private String learningRecordFileName = "leaning_record.json";
     private String speakingRecordFileName = "speaking_record.json";
@@ -107,7 +107,7 @@ public class LearningRecordManager implements WithJtLogger {
             return true;
         }
         else {
-            getJtLogger().error("The backup directory didn't exist");
+            getLogger().error("The backup directory didn't exist");
             return false;
         }
     }

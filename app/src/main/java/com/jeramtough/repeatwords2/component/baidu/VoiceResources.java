@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtlog.with.WithJtLogger;
+import com.jeramtough.jtlog.with.WithLogger;
 
 import org.apache.commons.io.IOUtils;
 
@@ -18,7 +18,7 @@ import java.io.InputStream;
  * @author 11718
  */
 @JtComponent
-public class VoiceResources implements WithJtLogger {
+public class VoiceResources implements WithLogger {
     private Context context;
     private String textModelFilePath;
     private String speechMaleModelFilePath;
@@ -36,7 +36,7 @@ public class VoiceResources implements WithJtLogger {
         File appDirFile = new File(appVoiceDataPath);
         if (!new File(getTextModelFilePath()).exists()) {
             boolean isCreatedSuccessful = appDirFile.mkdirs();
-            getJtLogger().info("create the RepeatWords foldr is " + isCreatedSuccessful);
+            getLogger().info("create the RepeatWords foldr is " + isCreatedSuccessful);
 
             copyVoiceResourceFromTheAssetsToAppDir(context.getAssets()
                             .open(BaiduVoiceConstants.TEXT_MODEL_FILE_FULL_PATH_NAME),
@@ -78,7 +78,7 @@ public class VoiceResources implements WithJtLogger {
                                                         String filePath) {
         try {
             File file = new File(filePath);
-            getJtLogger().info("create new voice data is " + file.createNewFile());
+            getLogger().info("create new voice data is " + file.createNewFile());
 
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             IOUtils.copy(inputStream, fileOutputStream);

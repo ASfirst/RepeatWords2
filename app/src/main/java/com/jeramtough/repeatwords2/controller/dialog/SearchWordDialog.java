@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.jeramtough.jtandroid.controller.dialog.JtIocDialog;
-import com.jeramtough.jtutil.core.WordUtil;
+import com.jeramtough.jtcomponent.utils.WordUtil;
 import com.jeramtough.repeatwords2.R;
 
 /**

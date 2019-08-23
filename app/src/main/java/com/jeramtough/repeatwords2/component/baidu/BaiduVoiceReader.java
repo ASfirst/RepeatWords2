@@ -10,8 +10,8 @@ import com.baidu.tts.client.TtsMode;
 import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtlog.with.WithJtLogger;
-import com.jeramtough.jtutil.core.WordUtil;
+import com.jeramtough.jtcomponent.utils.WordUtil;
+import com.jeramtough.jtlog.with.WithLogger;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @author 11718
  */
 @JtComponent
-public class BaiduVoiceReader implements Reader, WithJtLogger {
+public class BaiduVoiceReader implements Reader, WithLogger {
     private SpeechSynthesizer speechSynthesizer;
     private VoiceResources voiceResources;
     private Context context;
@@ -82,17 +82,17 @@ public class BaiduVoiceReader implements Reader, WithJtLogger {
         if (!authInfo.isSuccess()) {
             // 离线授权需要网站上的应用填写包名。本demo的包名是com.baidu.tts.sample，定义在build.gradle中
             String errorMsg = authInfo.getTtsError().getDetailMessage();
-            getJtLogger().error("鉴权失败 =" + errorMsg);
+            getLogger().error("鉴权失败 =" + errorMsg);
         }
         else {
-            getJtLogger().info("验证通过，离线正式授权文件存在。");
+            getLogger().info("验证通过，离线正式授权文件存在。");
             int result = speechSynthesizer.initTts(TtsMode.MIX);
             if (result != 0) {
-                getJtLogger().error("初始化失败 + errorCode：" + result);
+                getLogger().error("初始化失败 + errorCode：" + result);
             }
             else {
                 // 此时可以调用 speak和synthesize方法
-                getJtLogger().info("合成引擎初始化成功");
+                getLogger().info("合成引擎初始化成功");
             }
         }
 
