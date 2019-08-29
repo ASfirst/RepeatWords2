@@ -9,6 +9,14 @@ android {
         versionCode 34
         versionName "2019.01.01"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+        packagingOptions {
+            exclude "lib/arm64-v8a/libsqlitejdbc.so"
+        }
+
     }
 
     buildTypes {
@@ -30,6 +38,7 @@ android {
             jniLibs.srcDirs = ['jniLibs']
         }
     }
+    buildToolsVersion = '28.0.3'
 
 }
 
@@ -41,9 +50,9 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.aar'], dir: 'aars')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation(name: 'jtandroid-release', ext: 'aar')
 
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.4'
@@ -53,7 +62,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation group: 'com.jeramtough', name: 'jtlog', version: '1.7.3-LOCAL'
-    implementation group: 'com.jeramtough', name: 'jtcomponent', version: '1.1.1-LOCAL'
+    implementation group: 'com.jeramtough', name: 'jtcomponent', version: '1.2.2-LOCAL'
+    implementation group: 'com.jeramtough', name: 'oeds_lib', version: '1.0.4'
     implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'commons-io:commons-io:2.5'

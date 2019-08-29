@@ -3,7 +3,7 @@ package com.jeramtough.repeatwords2.component.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import com.jeramtough.repeatwords2.controller.fragment.*;
+import com.jeramtough.repeatwords2.action.fragment.*;
 
 import java.util.ArrayList;
 import java.util.List;

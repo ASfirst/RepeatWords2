@@ -50,6 +50,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper implements WithLogger {
     }
 
     //*****************************
+
     private void executeSqlFile(Context context, String sqlFileName,
                                 SQLiteDatabase sqLiteDatabase) {
         String[] sqls = new String[0];

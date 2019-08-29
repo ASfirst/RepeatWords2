@@ -2,7 +2,7 @@ package com.jeramtough.repeatwords2.component.youdao;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.jeramtough.repeatwords2.bean.youdao.YoudaoQueryResult;
+import com.jeramtough.repeatwords2.component.youdao.bean.YoudaoQueryResult;
 
 public class QueryResultParser {
 

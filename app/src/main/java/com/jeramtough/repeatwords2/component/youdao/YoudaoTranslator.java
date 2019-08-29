@@ -2,7 +2,7 @@ package com.jeramtough.repeatwords2.component.youdao;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.repeatwords2.bean.youdao.YoudaoQueryResult;
+import com.jeramtough.repeatwords2.component.youdao.bean.YoudaoQueryResult;
 
 import java.io.IOException;
 

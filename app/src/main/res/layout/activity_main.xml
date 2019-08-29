@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        tools:context="com.jeramtough.repeatwords2.controller.activity.MainActivity">
+        tools:context="com.jeramtough.repeatwords2.action.activity.MainActivity">
 
 
     <FrameLayout

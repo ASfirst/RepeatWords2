@@ -19,7 +19,7 @@ public class DaoMapper
 	}
 	
 	
-	protected SQLiteDatabase getSqLiteDatabase()
+	 SQLiteDatabase getSqLiteDatabase()
 	{
 		return sqLiteDatabase;
 	}
