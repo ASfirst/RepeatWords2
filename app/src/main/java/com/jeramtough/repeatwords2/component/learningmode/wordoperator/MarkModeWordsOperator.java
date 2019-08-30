@@ -2,7 +2,7 @@ package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.repeatwords2.bean.word.WordRecord;
+import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class MarkModeWordsOperator extends BaseWordsOperator {
     public List<Integer> getWordIdsOfNeeding(int size) {
 
         return operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                .getMarkedMapper().getIdsOrderById(size);
+                .getMarkedMapper().getWordIdsOrderByWordId(size);
     }
 
     @Override

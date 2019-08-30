@@ -2,9 +2,8 @@ package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.repeatwords2.bean.word.WordRecord;
+import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
-import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,10 +33,10 @@ public class ReviewModeWordsOperator extends BaseWordsOperator {
         if (has) {
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory().getHaveGraspedMapper()
                                              .removeWordRecordById(wordId);
-            WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
+//            WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getShallLearningMapper().addWordRecord(
-                    wordRecord);
+                    null);
         }
     }
 
@@ -54,7 +53,7 @@ public class ReviewModeWordsOperator extends BaseWordsOperator {
 
         List<Integer> shallLearningIds = operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                                                           .getHaveGraspedMapper()
-                                                                          .getIdsForRandom(
+                                                                          .getWordIdsForRandom(
                                                                                   size - sizeFromHavedLearnedToday);
 
 

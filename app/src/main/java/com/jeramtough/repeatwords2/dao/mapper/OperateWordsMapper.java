@@ -2,10 +2,10 @@ package com.jeramtough.repeatwords2.dao.mapper;
 
 import android.database.Cursor;
 
-import com.jeramtough.repeatwords2.bean.word.WordRecord;
 import com.jeramtough.repeatwords2.bean.word.WordWithRecordTime;
 import com.jeramtough.repeatwords2.dao.DatabaseConstants;
 import com.jeramtough.repeatwords2.dao.MyDatabaseHelper;
+import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,22 +14,29 @@ import java.util.List;
  * @author 11718
  * on 2018  May 05 Saturday 11:03.
  */
-public abstract class OperateWordsMapper extends DaoMapper {
+public class OperateWordsMapper extends DaoMapper {
     private String tableName;
 
-    public OperateWordsMapper(MyDatabaseHelper myDatabaseHelper) {
+    OperateWordsMapper(MyDatabaseHelper myDatabaseHelper) {
         super(myDatabaseHelper);
         this.tableName = loadOperateWordTableName();
     }
 
-    protected abstract String loadOperateWordTableName();
+    public OperateWordsMapper(MyDatabaseHelper myDatabaseHelper, String tableName) {
+        super(myDatabaseHelper);
+        this.tableName = tableName;
+    }
+
+    protected String loadOperateWordTableName() {
+        return null;
+    }
 
     public List<Integer> getWordIds() {
         List<Integer> ids = new ArrayList<>();
-        String sql = "SELECT id FROM " + tableName;
+        String sql = "SELECT word_id FROM " + tableName;
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            int id = cursor.getInt(cursor.getColumnIndex("word_id"));
             ids.add(id);
         }
         cursor.close();
@@ -37,57 +44,64 @@ public abstract class OperateWordsMapper extends DaoMapper {
     }
 
     public void removeWordRecordById(int wordId) {
-        String sql = "DELETE FROM " + tableName + " WHERE id =" + wordId;
+        String sql = "DELETE FROM " + tableName + " WHERE word_id =" + wordId;
         this.getSqLiteDatabase().execSQL(sql);
     }
 
     @Deprecated
     public void insertIdOfWord(int wordId) {
-        String sql = "INSERT INTO " + tableName + " VALUES(?,datetime('now'))";
+        String sql = "INSERT INTO " + tableName + " VALUES(null,?,datetime('now'))";
         this.getSqLiteDatabase().execSQL(sql, new Object[]{wordId});
     }
 
     public void addWordRecord(WordRecord wordRecord) {
-        String sql = "INSERT INTO " + tableName + " VALUES(?,?)";
+        String sql = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
         this.getSqLiteDatabase().execSQL(sql,
-                new Object[]{wordRecord.getWordId(), wordRecord.getTime()});
+                new Object[]{null, wordRecord.getWordId(), wordRecord,
+                        wordRecord.getLevel()});
     }
 
-    public List<Integer> getIdsOrderById() {
-        List<Integer> ids = new ArrayList<>();
-        String sql = "SELECT id FROM " + tableName;
-        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            ids.add(id);
-        }
-        cursor.close();
-        return ids;
-    }
-
+    @Deprecated
     public List<WordRecord> getWordRecordsOrderById() {
         List<WordRecord> wordRecords = new ArrayList<>();
         String sql = "SELECT * FROM " + tableName + " ORDER BY id";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            int fdId = cursor.getInt(cursor.getColumnIndex("fd_id"));
+            int level = cursor.getInt(cursor.getColumnIndex("level"));
+            int wordId = cursor.getInt(cursor.getColumnIndex("word_id"));
             String time = cursor.getString(cursor.getColumnIndex("time"));
-            wordRecords.add(new WordRecord(id, time));
+            wordRecords.add(new WordRecord(fdId, wordId, time, level));
         }
         cursor.close();
         return wordRecords;
     }
 
-    public List<Integer> getIdsOrderById(int limit) {
+    public List<WordRecord> getWordRecordsOrderByLevel() {
+        List<WordRecord> wordRecords = new ArrayList<>();
+        String sql = "SELECT * FROM " + tableName + " ORDER BY level";
+        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            int fdId = cursor.getInt(cursor.getColumnIndex("fd_id"));
+            int level = cursor.getInt(cursor.getColumnIndex("level"));
+            int wordId = cursor.getInt(cursor.getColumnIndex("word_id"));
+            String time = cursor.getString(cursor.getColumnIndex("time"));
+            wordRecords.add(new WordRecord(fdId, wordId, time, level));
+        }
+        cursor.close();
+        return wordRecords;
+    }
+
+    public List<Integer> getWordIdsOrderByWordId(int limit) {
         ArrayList<Integer> list = new ArrayList<>();
 
-        String sql = "SELECT id FROM " + tableName + " ORDER BY id LIMIT " + limit + ";";
+        String sql = "SELECT word_id FROM " + tableName + " ORDER BY id LIMIT " + limit + ";";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
             do {
-                int id = cursor.getInt(cursor.getColumnIndex("id"));
-                list.add(id);
+                int wordId = cursor.getInt(cursor.getColumnIndex("wordId"));
+                list.add(wordId);
             }
             while (cursor.moveToNext());
         }
@@ -96,92 +110,34 @@ public abstract class OperateWordsMapper extends DaoMapper {
         return list;
     }
 
-    public List<Integer> getIdsOrderById(int limit, List<Integer> noNeededIds) {
-
-        ArrayList<Integer> list = new ArrayList<>();
-        String sql = "SELECT id FROM " + getTableName();
-
-        if (noNeededIds.size() > 0) {
-            sql = sql + " WHERE ";
-            for (int id : noNeededIds) {
-                sql = sql + "(id!=" + id + ") AND ";
-            }
-            sql = sql.substring(0, sql.length() - 5);
-        }
-
-        sql = sql + " ORDER BY id LIMIT " + limit + ";";
-        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndex("id"));
-                list.add(id);
-            }
-            while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        return list;
-    }
-
-    public List<Integer> getIdsOrderByTime(int limit, List<Integer> noNeededIds) {
+    public List<Integer> getWordIdsOrderByTime(int limit, List<Integer> noNeededIds) {
         List<Integer> ids = new ArrayList<>();
-        String sql = "SELECT id FROM " + getTableName();
+        String sql = "SELECT word_id FROM " + getTableName();
 
         if (noNeededIds.size() > 0) {
             sql = sql + " WHERE ";
             for (int id : noNeededIds) {
-                sql = sql + "(id!=" + id + ") AND ";
+                sql = sql + "(word_id!=" + id + ") AND ";
             }
             sql = sql.substring(0, sql.length() - 5);
         }
 
         sql = sql + " ORDER BY time DESC LIMIT " + limit + ";";
-//        L.debug(sql);
-//        String sql = "SELECT id FROM " + tableName + " ORDER BY time DESC LIMIT " + limit;
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            ids.add(id);
+            int wordId = cursor.getInt(cursor.getColumnIndex("word_id"));
+            ids.add(wordId);
         }
         cursor.close();
         return ids;
     }
 
-    public List<Integer> getIdsOrderByTime(int limit) {
-        List<Integer> ids = new ArrayList<>();
-        String sql = "SELECT id FROM " + tableName + " ORDER BY time DESC LIMIT " + limit;
-        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            ids.add(id);
-        }
-        cursor.close();
-        return ids;
-    }
-
-    public List<Integer> getIdsOrderByTime() {
-        List<Integer> ids = new ArrayList<>();
-        String sql = "SELECT id FROM " + tableName + " ORDER BY time DESC";
-        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            ids.add(id);
-        }
-        cursor.close();
-        return ids;
-    }
 
     public void clearAll() {
         String sql = "DELETE FROM " + tableName;
         getSqLiteDatabase().execSQL(sql);
     }
 
-    public void addIds(List<Integer> wordIds) {
-        for (Integer id : wordIds) {
-            insertIdOfWord(id);
-        }
-    }
 
     public void addWordRecords(List<WordRecord> wordRecords) {
         for (WordRecord wordRecord : wordRecords) {
@@ -189,33 +145,27 @@ public abstract class OperateWordsMapper extends DaoMapper {
         }
     }
 
-    public int getDictionaryWordsCount() {
-        Cursor cursor = getSqLiteDatabase()
-                .rawQuery("SELECT count(*) FROM " + tableName, null);
-        cursor.moveToFirst();
-        int count = cursor.getInt(0);
-        cursor.close();
-        return count;
-    }
 
     public String getTableName() {
         return tableName;
     }
 
-    public List<Integer> getIdsForRandom(int limit) {
+    public List<Integer> getWordIdsForRandom(int limit) {
 
         ArrayList<Integer> list = new ArrayList<>();
 
-        String sql = "SELECT id FROM " + getTableName() + " ORDER BY RANDOM() LIMIT " + limit;
+        String sql =
+                "SELECT word_id FROM " + getTableName() + " ORDER BY RANDOM() LIMIT " + limit;
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            list.add(id);
+            int wordId = cursor.getInt(cursor.getColumnIndex("word_id"));
+            list.add(wordId);
         }
         cursor.close();
         return list;
     }
 
+    @Deprecated
     public List<WordWithRecordTime> getWordWithRecordTimeListOrderByTime() {
 
         List<WordWithRecordTime> wordWithRecordTimeList = new ArrayList<>();
@@ -243,9 +193,9 @@ public abstract class OperateWordsMapper extends DaoMapper {
     }
 
     public boolean hasWordId(int wordId) {
-        String sql = "SELECT * FROM " + tableName + " WHERE id =" + wordId;
+        String sql = "SELECT * FROM " + tableName + " WHERE word_id =" + wordId;
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
-        boolean has = cursor.getCount() > 0 ? true : false;
+        boolean has = cursor.getCount() > 0;
         cursor.close();
         return has;
     }

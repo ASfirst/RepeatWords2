@@ -5,7 +5,25 @@ package com.jeramtough.repeatwords2.component.teacher;
  * on 2018  May 07 Monday 14:57.
  */
 public enum TeacherType {
-    LISTENING_TEACHER(0), SPEAKING_TEACHER(1), WRITING_TEACHER(2);
+    /**
+     *
+     */
+    LISTENING_TEACHER(0),
+
+    /**
+     *
+     */
+    SPEAKING_TEACHER(1),
+
+    /**
+     *
+     */
+    WRITING_TEACHER(2),
+
+    /**
+     *
+     */
+    READ_TEACHER(3);
 
     private int teacherTypeId;
 

@@ -5,7 +5,6 @@ import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.repeatwords2.bean.word.Word;
-import com.jeramtough.repeatwords2.bean.word.WordRecord;
 import com.jeramtough.repeatwords2.bean.word.WordWithIsLearnedAtLeastTwiceToday;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.dictionary.WordsPool;
@@ -13,6 +12,7 @@ import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
 import com.jeramtough.repeatwords2.component.learningmode.wordoperator.WordsOperateProvider;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.teacher.WordsTeacher;
+import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper1;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
 import com.jeramtough.repeatwords2.util.DateTimeUtil;
@@ -121,7 +121,8 @@ public class LearningServiceImpl implements LearningService {
                 operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
                                                 .getShallLearningMapper().removeWordRecordById(
                         id);
-                WordRecord wordRecord = new WordRecord(id, DateTimeUtil.getDateTime());
+                WordRecord wordRecord = new WordRecord(null, null, DateTimeUtil.getDateTime(),
+                        null);
                 operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
                                                 .getDesertedLearningMapper().addWordRecord(
                         wordRecord);
@@ -141,7 +142,8 @@ public class LearningServiceImpl implements LearningService {
                 businessCaller.getData().putSerializable("word", word);
 
                 int id = word.getId();
-                WordRecord wordRecord = new WordRecord(id, DateTimeUtil.getDateTime());
+                WordRecord wordRecord = new WordRecord(null, null, DateTimeUtil.getDateTime(),
+                        null);
                 operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
                                                 .getHaveGraspedMapper().addWordRecord(
                         wordRecord);
@@ -166,7 +168,8 @@ public class LearningServiceImpl implements LearningService {
                 boolean has = operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
                                                               .getMarkedMapper().hasWordId(id);
                 if (!has) {
-                    WordRecord wordRecord = new WordRecord(id, DateTimeUtil.getDateTime());
+                    WordRecord wordRecord = new WordRecord(null, id,
+                            DateTimeUtil.getDateTime(), null);
                     operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
                                                     .getMarkedMapper().addWordRecord(
                             wordRecord);
@@ -201,7 +204,8 @@ public class LearningServiceImpl implements LearningService {
         wordsTeacher.removeWordFromList(word);
 
         executorService.submit(() -> {
-            WordRecord wordRecord = new WordRecord(word.getId(), DateTimeUtil.getDateTime());
+            WordRecord wordRecord = new WordRecord(null, null, DateTimeUtil.getDateTime(),
+                    null);
             wordsOperateProvider.getWordsOperator().learnWordToday(wordRecord);
         });
     }

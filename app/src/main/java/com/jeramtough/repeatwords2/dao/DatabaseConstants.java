@@ -8,8 +8,10 @@ package com.jeramtough.repeatwords2.dao;
 public class DatabaseConstants {
     public static final String DATABASE_NAME = "repeat_words2.db";
 
-    public static final String SQL_FILE_1 = "sqls/tables.sql";
-    public static final String SQL_FILE_2 = "sqls/datas.sql";
+    public static final String SQL_FILE_1 = "sqls/tables_listen.sql";
+    public static final String SQL_FILE_2 = "sqls/tables_read.sql";
+    public static final String SQL_FILE_3 = "sqls/tables_speak.sql";
+    public static final String SQL_FILE_4 = "sqls/tables_write.sql";
 
     public static final String TABLE_NAME_Z = "dictionary_tb";
 
@@ -30,4 +32,10 @@ public class DatabaseConstants {
     public static final String TABLE_NAME_C_3 = "write_shall_learning_tb";
     public static final String TABLE_NAME_C_4 = "write_deserted_learning_tb";
     public static final String TABLE_NAME_C_5 = "write_have_learned_today_tb";
+
+    public static final String TABLE_NAME_D_1 = "read_have_grasped_tb";
+    public static final String TABLE_NAME_D_2 = "read_marked_tb";
+    public static final String TABLE_NAME_D_3 = "read_shall_learning_tb";
+    public static final String TABLE_NAME_D_4 = "read_deserted_learning_tb";
+    public static final String TABLE_NAME_D_5 = "read_have_learned_today_tb";
 }

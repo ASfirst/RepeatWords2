@@ -2,7 +2,7 @@ package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.repeatwords2.bean.word.WordRecord;
+import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
 import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
@@ -28,7 +28,7 @@ public class NewModeWordsOperator extends BaseWordsOperator {
 
     @Override
     public void removeWordFromList(int wordId) {
-        WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
+        WordRecord wordRecord = new WordRecord(null,wordId, DateTimeUtil.getDateTime(),null);
         operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                          .getShallLearningMapper().removeWordRecordById(
                 wordId);
@@ -44,7 +44,7 @@ public class NewModeWordsOperator extends BaseWordsOperator {
         //根据时间排序翻倍取出，然后取随机的一半
         int perLearningCount = size * 2;
         List<Integer> shallLearningIds = operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
-                                                                          .getShallLearningMapper().getIdsOrderByTime(
+                                                                          .getShallLearningMapper().getWordIdsOrderByTime(
                         perLearningCount, noNeededIdsOfLearning);
 
         Collections.shuffle(shallLearningIds);

@@ -4,7 +4,7 @@ import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
-import com.jeramtough.repeatwords2.bean.word.WordRecord;
+import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.bean.word.WordWithRecordTime;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
 import com.jeramtough.repeatwords2.util.DateTimeUtil;
@@ -114,7 +114,7 @@ import java.util.concurrent.Executor;
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getHaveGraspedMapper().removeWordRecordById(
                     wordId);
-            WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
+            WordRecord wordRecord = new WordRecord(null,wordId, DateTimeUtil.getDateTime(),null);
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getShallLearningMapper().addWordRecord(
                     wordRecord);
@@ -128,7 +128,7 @@ import java.util.concurrent.Executor;
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getShallLearningMapper().removeWordRecordById(
                     wordId);
-            WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
+            WordRecord wordRecord = new WordRecord(null,wordId, DateTimeUtil.getDateTime(),null);
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getHaveGraspedMapper().addWordRecord(wordRecord);
             getShallLearningWords(businessCaller);
@@ -150,7 +150,7 @@ import java.util.concurrent.Executor;
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getDesertedLearningMapper().removeWordRecordById(
                     wordId);
-            WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
+            WordRecord wordRecord = new WordRecord(null,wordId, DateTimeUtil.getDateTime(),null);
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getShallLearningMapper().addWordRecord(
                     wordRecord);

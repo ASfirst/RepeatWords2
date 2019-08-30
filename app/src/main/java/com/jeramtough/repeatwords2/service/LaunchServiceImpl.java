@@ -4,22 +4,23 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 
+import com.jeramtough.jtandroid.function.FirstBoot;
 import com.jeramtough.jtandroid.function.PermissionManager;
 import com.jeramtough.jtandroid.ioc.IocContext;
+import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
 import com.jeramtough.jtcomponent.task.response.ResponseFactory;
 import com.jeramtough.oedslib.mapper.DictionaryMapper;
-import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
-import com.jeramtough.repeatwords2.component.dictionary.Dictionary;
 import com.jeramtough.repeatwords2.component.dictionary.DictionaryManager;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
-import com.jeramtough.repeatwords2.dao.MyDatabaseHelper;
 import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper1;
+import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordsMapperProvider;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
+import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperProvider;
 import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 /**
@@ -35,6 +36,8 @@ class LaunchServiceImpl implements LaunchService {
     private DictionaryManager dictionaryManager;
     private BaiduVoiceReader baiduVoiceReader;
     private MyAppSetting myAppSetting;
+    private FirstBoot firstBoot;
+    private OperateWordsMapperProvider operateWordsMapperProvider;
 
     @IocAutowire
     private LaunchServiceImpl(Context context,
@@ -42,8 +45,10 @@ class LaunchServiceImpl implements LaunchService {
                               DictionaryMapper1 dictionaryMapper1,
                               OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider,
                               DictionaryManager dictionaryManager,
-                              BaiduVoiceReader baiduVoiceReader, MyAppSetting myAppSetting
-    ) {
+                              BaiduVoiceReader baiduVoiceReader, MyAppSetting myAppSetting,
+                              FirstBoot firstBoot,
+                              @InjectComponent(impl = DefaultOperateWordsMapperProvider.class)
+                                      OperateWordsMapperProvider operateWordsMapperProvider) {
         this.context = context;
         this.permissionManager = permissionManager;
         this.dictionaryMapper1 = dictionaryMapper1;
@@ -51,6 +56,8 @@ class LaunchServiceImpl implements LaunchService {
         this.dictionaryManager = dictionaryManager;
         this.baiduVoiceReader = baiduVoiceReader;
         this.myAppSetting = myAppSetting;
+        this.firstBoot = firstBoot;
+        this.operateWordsMapperProvider = operateWordsMapperProvider;
     }
 
 
@@ -92,17 +99,17 @@ class LaunchServiceImpl implements LaunchService {
                     preTaskResult.setMessage("Preparing the learn scheme");
                     runningTaskCallback.onTaskRunning(preTaskResult, 2, denominator);
 
-                    MyDatabaseHelper myDatabaseHelper = new MyDatabaseHelper(context);
-                    int wordsCount = myDatabaseHelper.getDictionaryWordsCount();
+                    if (firstBoot.isFirstBoot()) {
+
+                    }
+                    /*int wordsCount = myDatabaseHelper.getDictionaryWordsCount();
                     if (wordsCount == 0) {
                         Dictionary dictionary = dictionaryManager.getDictionaryFromAssets();
                         for (Word word : dictionary.getWords()) {
                             dictionaryMapper1.addWord(word.getId(), word.getEn(), word.getCh(),
                                     word.getPhonetic());
                         }
-
-                        myDatabaseHelper.initTables();
-                    }
+                    }*/
 
                     //clear learning recodes if today is new day
                     preTaskResult.setMessage(

@@ -5,13 +5,11 @@ import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.repeatwords2.bean.word.Word;
-import com.jeramtough.repeatwords2.bean.word.WordRecord;
-import com.jeramtough.repeatwords2.component.youdao.bean.YoudaoQueryResult;
 import com.jeramtough.repeatwords2.component.dictionary.WordsPool;
 import com.jeramtough.repeatwords2.component.youdao.YoudaoTranslator;
+import com.jeramtough.repeatwords2.component.youdao.bean.YoudaoQueryResult;
 import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper1;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
-import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -65,13 +63,8 @@ public class DictionaryServiceImpl implements DictionaryService {
                 word.setPhonetic(youdaoQueryResult.getBasic().getUkPhonetic());
             }
             dictionaryMapper1.addNewWord(word);
-            Word newWord = dictionaryMapper1.getWordByEn(en);
-            operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
-            operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
-            operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                    new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+
+
 
             getDictionaryWords(businessCaller);
         });
@@ -93,12 +86,12 @@ public class DictionaryServiceImpl implements DictionaryService {
                 dictionaryMapper1.addNewWord(word);
                 //n ew word just have the id
                 Word newWord = dictionaryMapper1.getWordByEn(word.getEn());
-                operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
+                /*operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
                         new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
                 operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
                         new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
                 operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                        new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+                        new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));*/
 
                 businessCaller.getData().putSerializable("newWord", word);
                 getDictionaryWords(businessCaller);

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
+import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.jtlog.with.WithLogger;
 import com.jeramtough.repeatwords2.util.SqlUtil;
 
@@ -24,11 +25,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper implements WithLogger {
     public MyDatabaseHelper(Context context) {
         super(context, DatabaseConstants.DATABASE_NAME, null, 1);
         this.context = context;
+        L.arrive();
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        //create tables
         executeSqlFile(context, DatabaseConstants.SQL_FILE_1, sqLiteDatabase);
+        executeSqlFile(context, DatabaseConstants.SQL_FILE_2, sqLiteDatabase);
+        executeSqlFile(context, DatabaseConstants.SQL_FILE_3, sqLiteDatabase);
+        executeSqlFile(context, DatabaseConstants.SQL_FILE_4, sqLiteDatabase);
     }
 
     @Override
@@ -36,18 +42,17 @@ public class MyDatabaseHelper extends SQLiteOpenHelper implements WithLogger {
 
     }
 
+    @Deprecated
     public int getDictionaryWordsCount() {
         Cursor cursor = this.getReadableDatabase()
-                .rawQuery("SELECT count(*) FROM " + DatabaseConstants.TABLE_NAME_Z, null);
+                            .rawQuery("SELECT count(*) FROM " + DatabaseConstants.TABLE_NAME_Z,
+                                    null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();
         return count;
     }
 
-    public void initTables() {
-        executeSqlFile(context, DatabaseConstants.SQL_FILE_2, getWritableDatabase());
-    }
 
     //*****************************
 
@@ -56,7 +61,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper implements WithLogger {
         String[] sqls = new String[0];
         try {
             sqls = SqlUtil.processSqls(context.getAssets().open(sqlFileName));
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 

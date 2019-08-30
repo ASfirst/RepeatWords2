@@ -90,8 +90,9 @@ public class LaunchActivity extends BasicActivity {
 
                     @Override
                     protected void onTaskCompleted(TaskResult taskResult) {
-                        IntentUtil.toTheOtherActivity(LaunchActivity.this, MainActivity.class);
-                        LaunchActivity.this.finish();
+                        /*IntentUtil.toTheOtherActivity(LaunchActivity.this,
+                                MainActivity.class);
+                        LaunchActivity.this.finish();*/
                     }
                 });
     }

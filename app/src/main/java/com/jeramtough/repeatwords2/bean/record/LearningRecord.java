@@ -1,6 +1,6 @@
 package com.jeramtough.repeatwords2.bean.record;
 
-import com.jeramtough.repeatwords2.bean.word.WordRecord;
+import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 
 import java.io.Serializable;
 import java.util.List;
