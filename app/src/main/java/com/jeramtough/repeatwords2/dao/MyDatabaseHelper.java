@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.jtlog.facade.L;
 import com.jeramtough.jtlog.with.WithLogger;
 import com.jeramtough.repeatwords2.util.SqlUtil;
 
@@ -25,21 +24,27 @@ public class MyDatabaseHelper extends SQLiteOpenHelper implements WithLogger {
     public MyDatabaseHelper(Context context) {
         super(context, DatabaseConstants.DATABASE_NAME, null, 1);
         this.context = context;
-        L.arrive();
     }
 
+    /**
+     * @deprecated :必须插入一条数据才能创建巨辣鸡
+     */
     @Override
+    @Deprecated
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        //create tables
-        executeSqlFile(context, DatabaseConstants.SQL_FILE_1, sqLiteDatabase);
-        executeSqlFile(context, DatabaseConstants.SQL_FILE_2, sqLiteDatabase);
-        executeSqlFile(context, DatabaseConstants.SQL_FILE_3, sqLiteDatabase);
-        executeSqlFile(context, DatabaseConstants.SQL_FILE_4, sqLiteDatabase);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public void createTables() {
+        //create tables
+        executeSqlFile(context, DatabaseConstants.SQL_FILE_1, getWritableDatabase());
+        executeSqlFile(context, DatabaseConstants.SQL_FILE_2, getWritableDatabase());
+        executeSqlFile(context, DatabaseConstants.SQL_FILE_3, getWritableDatabase());
+        executeSqlFile(context, DatabaseConstants.SQL_FILE_4, getWritableDatabase());
     }
 
     @Deprecated
@@ -67,6 +72,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper implements WithLogger {
         }
 
         for (String sql : sqls) {
+            getLogger().debug(sql);
             sqLiteDatabase.execSQL(sql);
         }
     }

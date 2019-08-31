@@ -12,8 +12,8 @@ import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.jtcomponent.task.bean.PreTaskResult;
 import com.jeramtough.jtcomponent.task.bean.TaskResult;
 import com.jeramtough.repeatwords2.R;
-import com.jeramtough.repeatwords2.service.LaunchService;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
+import com.jeramtough.repeatwords2.service.LaunchService;
 
 /**
  * @author 11718
@@ -28,6 +28,7 @@ public class LaunchActivity extends BasicActivity {
     private LaunchService launchService;
 
     private TextView textViewMessage;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

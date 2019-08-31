@@ -2,7 +2,7 @@ package com.jeramtough.repeatwords2.service;
 
 import android.app.Activity;
 
-import com.jeramtough.jtandroid.ioc.IocContext;
+import com.jeramtough.jtandroid.ioc.context.IocContext;
 import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 
@@ -25,5 +25,5 @@ public interface LaunchService
      * processing the data of app.
      *
      */
-    FutureTaskResponse initApp(IocContext iocContext,TaskCallbackInMain taskCallback);
+    FutureTaskResponse initApp(IocContext iocContext, TaskCallbackInMain taskCallback);
 }

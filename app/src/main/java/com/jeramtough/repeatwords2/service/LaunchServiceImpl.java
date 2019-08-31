@@ -6,10 +6,10 @@ import android.content.Context;
 
 import com.jeramtough.jtandroid.function.FirstBoot;
 import com.jeramtough.jtandroid.function.PermissionManager;
-import com.jeramtough.jtandroid.ioc.IocContext;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
+import com.jeramtough.jtandroid.ioc.context.IocContext;
 import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
 import com.jeramtough.jtcomponent.task.response.ResponseFactory;
 import com.jeramtough.oedslib.mapper.DictionaryMapper;
@@ -17,6 +17,7 @@ import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
 import com.jeramtough.repeatwords2.component.dictionary.DictionaryManager;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
+import com.jeramtough.repeatwords2.dao.MyDatabaseHelper;
 import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper1;
 import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordsMapperProvider;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
@@ -38,6 +39,7 @@ class LaunchServiceImpl implements LaunchService {
     private MyAppSetting myAppSetting;
     private FirstBoot firstBoot;
     private OperateWordsMapperProvider operateWordsMapperProvider;
+    private MyDatabaseHelper myDatabaseHelper;
 
     @IocAutowire
     private LaunchServiceImpl(Context context,
@@ -48,7 +50,8 @@ class LaunchServiceImpl implements LaunchService {
                               BaiduVoiceReader baiduVoiceReader, MyAppSetting myAppSetting,
                               FirstBoot firstBoot,
                               @InjectComponent(impl = DefaultOperateWordsMapperProvider.class)
-                                      OperateWordsMapperProvider operateWordsMapperProvider) {
+                                          OperateWordsMapperProvider operateWordsMapperProvider,
+                              MyDatabaseHelper myDatabaseHelper) {
         this.context = context;
         this.permissionManager = permissionManager;
         this.dictionaryMapper1 = dictionaryMapper1;
@@ -58,6 +61,7 @@ class LaunchServiceImpl implements LaunchService {
         this.myAppSetting = myAppSetting;
         this.firstBoot = firstBoot;
         this.operateWordsMapperProvider = operateWordsMapperProvider;
+        this.myDatabaseHelper = myDatabaseHelper;
     }
 
 
@@ -100,7 +104,7 @@ class LaunchServiceImpl implements LaunchService {
                     runningTaskCallback.onTaskRunning(preTaskResult, 2, denominator);
 
                     if (firstBoot.isFirstBoot()) {
-
+                        myDatabaseHelper.createTables();
                     }
                     /*int wordsCount = myDatabaseHelper.getDictionaryWordsCount();
                     if (wordsCount == 0) {
