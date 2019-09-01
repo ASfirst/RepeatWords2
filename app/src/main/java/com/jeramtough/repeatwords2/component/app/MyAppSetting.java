@@ -6,7 +6,6 @@ import com.jeramtough.jtandroid.function.AppSetting;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
-import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 /**
  * @author 11718
@@ -49,12 +48,12 @@ public class MyAppSetting extends AppSetting {
         getEditor().apply();
     }
 
-    public String getLastDateOpenedApp() {
-        return getSharedPreferences().getString("lastDateOpenedApp", null);
+    public String getDateForLastOpenedApp() {
+        return getSharedPreferences().getString("lastOpenedAppDate", null);
     }
 
-    public void setLastDateOpenedApp(String date) {
-        getEditor().putString("lastDateOpenedApp", date);
+    public void setDateForLastOpenedApp(String date) {
+        getEditor().putString("lastOpenedAppDate", date);
         getEditor().apply();
     }
 

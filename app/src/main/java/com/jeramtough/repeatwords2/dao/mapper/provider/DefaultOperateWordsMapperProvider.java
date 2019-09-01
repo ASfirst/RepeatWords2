@@ -3,7 +3,7 @@ package com.jeramtough.repeatwords2.dao.mapper.provider;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
-import com.jeramtough.repeatwords2.component.condition.WordCondition;
+import com.jeramtough.repeatwords2.bean.word.WordCondition;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 import com.jeramtough.repeatwords2.dao.MyDatabaseHelper;
 import com.jeramtough.repeatwords2.dao.mapper.OperateWordsMapper;
@@ -31,13 +31,13 @@ public class DefaultOperateWordsMapperProvider implements OperateWordsMapperProv
         operateWordsMapperDoubleMap = new HashMap<>();
 
         for (TeacherType teacherType : TeacherType.values()) {
+            Map<WordCondition, OperateWordsMapper> mapperMap = new HashMap<>();
             for (WordCondition wordCondition : WordCondition.values()) {
                 String tableName =
-                        teacherType.name().toLowerCase() + "_" + wordCondition.name().toLowerCase() + "_tb";
+                        teacherType.getTag().toLowerCase() + "_" + wordCondition.name().toLowerCase() + "_tb";
                 OperateWordsMapper operateWordsMapper = new OperateWordsMapper(
                         myDatabaseHelper,
                         tableName);
-                Map<WordCondition, OperateWordsMapper> mapperMap = new HashMap<>();
                 mapperMap.put(wordCondition, operateWordsMapper);
                 operateWordsMapperDoubleMap.put(teacherType, mapperMap);
             }

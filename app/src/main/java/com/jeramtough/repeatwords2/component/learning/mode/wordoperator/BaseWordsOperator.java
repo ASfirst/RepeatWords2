@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
+package com.jeramtough.repeatwords2.component.learning.mode.wordoperator;
 
 import android.util.SparseIntArray;
 

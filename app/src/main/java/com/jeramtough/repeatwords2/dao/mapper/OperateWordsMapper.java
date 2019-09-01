@@ -57,7 +57,7 @@ public class OperateWordsMapper extends DaoMapper {
     public void addWordRecord(WordRecord wordRecord) {
         String sql = "INSERT INTO " + tableName + " VALUES(?,?,?,?)";
         this.getSqLiteDatabase().execSQL(sql,
-                new Object[]{null, wordRecord.getWordId(), wordRecord,
+                new Object[]{null, wordRecord.getWordId(), wordRecord.getTime(),
                         wordRecord.getLevel()});
     }
 
@@ -67,9 +67,9 @@ public class OperateWordsMapper extends DaoMapper {
         String sql = "SELECT * FROM " + tableName + " ORDER BY id";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
-            int fdId = cursor.getInt(cursor.getColumnIndex("fd_id"));
+            long fdId = cursor.getInt(cursor.getColumnIndex("fd_id"));
             int level = cursor.getInt(cursor.getColumnIndex("level"));
-            int wordId = cursor.getInt(cursor.getColumnIndex("word_id"));
+            long wordId = cursor.getInt(cursor.getColumnIndex("word_id"));
             String time = cursor.getString(cursor.getColumnIndex("time"));
             wordRecords.add(new WordRecord(fdId, wordId, time, level));
         }
@@ -82,9 +82,9 @@ public class OperateWordsMapper extends DaoMapper {
         String sql = "SELECT * FROM " + tableName + " ORDER BY level";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
-            int fdId = cursor.getInt(cursor.getColumnIndex("fd_id"));
+            long fdId = cursor.getInt(cursor.getColumnIndex("fd_id"));
             int level = cursor.getInt(cursor.getColumnIndex("level"));
-            int wordId = cursor.getInt(cursor.getColumnIndex("word_id"));
+            long wordId = cursor.getInt(cursor.getColumnIndex("word_id"));
             String time = cursor.getString(cursor.getColumnIndex("time"));
             wordRecords.add(new WordRecord(fdId, wordId, time, level));
         }

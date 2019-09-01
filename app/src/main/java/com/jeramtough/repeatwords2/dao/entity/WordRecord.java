@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class WordRecord implements Serializable {
 
-    private Integer fdId;
-    private Integer wordId;
+    private Long fdId;
+    private Long wordId;
     private String time;
     private Integer level;
 
@@ -13,26 +13,26 @@ public class WordRecord implements Serializable {
     }
 
 
-    public WordRecord(Integer fdId, Integer wordId, String time, Integer level) {
+    public WordRecord(Long fdId, Long wordId, String time, Integer level) {
         this.fdId = fdId;
         this.wordId = wordId;
         this.time = time;
         this.level = level;
     }
 
-    public Integer getFdId() {
+    public Long getFdId() {
         return fdId;
     }
 
-    public void setFdId(Integer fdId) {
+    public void setFdId(Long fdId) {
         this.fdId = fdId;
     }
 
-    public Integer getWordId() {
+    public Long getWordId() {
         return wordId;
     }
 
-    public void setWordId(Integer wordId) {
+    public void setWordId(Long wordId) {
         this.wordId = wordId;
     }
 

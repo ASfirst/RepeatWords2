@@ -2,13 +2,11 @@ package com.jeramtough.repeatwords2.action.activity;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
-import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.jtcomponent.task.bean.PreTaskResult;
 import com.jeramtough.jtcomponent.task.bean.TaskResult;
 import com.jeramtough.repeatwords2.R;
@@ -22,7 +20,6 @@ import com.jeramtough.repeatwords2.service.LaunchService;
 public class LaunchActivity extends BasicActivity {
 
     private static final int REQUEST_PERMISSIONS_CODE = 666;
-    private static final int BUSINESS_CODE_INIT_APP = 1;
 
     @InjectService()
     private LaunchService launchService;
@@ -67,15 +64,6 @@ public class LaunchActivity extends BasicActivity {
         }
     }
 
-    @Override
-    public void handleActivityMessage(Message message) {
-        switch (message.what) {
-            case BUSINESS_CODE_INIT_APP:
-                IntentUtil.toTheOtherActivity(this, MainActivity.class);
-                this.finish();
-                break;
-        }
-    }
 
     //-----------------------------------------------------
 

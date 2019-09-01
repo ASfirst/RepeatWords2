@@ -8,8 +8,8 @@ import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.bean.word.WordWithIsLearnedAtLeastTwiceToday;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.dictionary.WordsPool;
-import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
-import com.jeramtough.repeatwords2.component.learningmode.wordoperator.WordsOperateProvider;
+import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
+import com.jeramtough.repeatwords2.component.learning.mode.wordoperator.WordsOperateProvider;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.teacher.WordsTeacher;
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;
@@ -168,7 +168,7 @@ public class LearningServiceImpl implements LearningService {
                 boolean has = operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
                                                               .getMarkedMapper().hasWordId(id);
                 if (!has) {
-                    WordRecord wordRecord = new WordRecord(null, id,
+                    WordRecord wordRecord = new WordRecord(null, (long) id,
                             DateTimeUtil.getDateTime(), null);
                     operateWordMapperFactoryProvider.getOperateWordsMapperFactory()
                                                     .getMarkedMapper().addWordRecord(

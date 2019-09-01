@@ -8,31 +8,37 @@ public enum TeacherType {
     /**
      *
      */
-    LISTENING_TEACHER(0),
+    LISTENING_TEACHER(0, "listen"),
 
     /**
      *
      */
-    SPEAKING_TEACHER(1),
+    SPEAKING_TEACHER(1, "speak"),
 
     /**
      *
      */
-    WRITING_TEACHER(2),
+    WRITING_TEACHER(2, "write"),
 
     /**
      *
      */
-    READ_TEACHER(3);
+    READING_TEACHER(3, "read");
 
     private int teacherTypeId;
+    private String tag;
 
-    TeacherType(int teacherTypeId) {
+    TeacherType(int teacherTypeId, String tag) {
         this.teacherTypeId = teacherTypeId;
+        this.tag = tag;
     }
 
     public int getTeacherTypeId() {
         return teacherTypeId;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     public static TeacherType getLearningMode(int learningModeId) {

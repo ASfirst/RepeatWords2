@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
+package com.jeramtough.repeatwords2.component.learning.mode.wordoperator;
 
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 

@@ -1,6 +1,4 @@
-package com.jeramtough.repeatwords2.component.learningmode;
-
-import java.util.List;
+package com.jeramtough.repeatwords2.component.learning.mode;
 
 /**
  * @author 11718

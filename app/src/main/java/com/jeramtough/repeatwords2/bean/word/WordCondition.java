@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.condition;
+package com.jeramtough.repeatwords2.bean.word;
 
 /**
  * Created on 2019-08-30 01:00
@@ -9,7 +9,7 @@ public enum WordCondition {
     /**
      * The word will be learning
      */
-    SHELL_LEARN(0),
+    SHALL_LEARNING(0),
 
     /**
      * The word has been learned in today

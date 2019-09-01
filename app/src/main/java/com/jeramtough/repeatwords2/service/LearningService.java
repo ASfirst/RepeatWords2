@@ -2,7 +2,7 @@ package com.jeramtough.repeatwords2.service;
 
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.repeatwords2.bean.word.Word;
-import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
+import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 
 /**

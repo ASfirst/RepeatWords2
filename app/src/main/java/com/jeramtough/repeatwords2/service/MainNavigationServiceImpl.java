@@ -3,7 +3,7 @@ package com.jeramtough.repeatwords2.service;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
-import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
+import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 
 @JtServiceImpl

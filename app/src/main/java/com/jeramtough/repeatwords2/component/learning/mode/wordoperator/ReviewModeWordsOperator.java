@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
+package com.jeramtough.repeatwords2.component.learning.mode.wordoperator;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;

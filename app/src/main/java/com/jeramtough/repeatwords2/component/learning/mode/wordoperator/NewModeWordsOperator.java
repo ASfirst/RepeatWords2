@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.learningmode.wordoperator;
+package com.jeramtough.repeatwords2.component.learning.mode.wordoperator;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
@@ -28,7 +28,7 @@ public class NewModeWordsOperator extends BaseWordsOperator {
 
     @Override
     public void removeWordFromList(int wordId) {
-        WordRecord wordRecord = new WordRecord(null,wordId, DateTimeUtil.getDateTime(),null);
+        WordRecord wordRecord = new WordRecord(null, (long) wordId, DateTimeUtil.getDateTime(),null);
         operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                          .getShallLearningMapper().removeWordRecordById(
                 wordId);

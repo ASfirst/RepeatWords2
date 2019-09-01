@@ -30,7 +30,7 @@ import com.jeramtough.repeatwords2.component.adapter.NewWordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.ReviewWordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
-import com.jeramtough.repeatwords2.component.learningmode.LearningMode;
+import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
 import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.ui.blackboard.BaseBlackboardOfTeacher;
 import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfLearningTeacher;

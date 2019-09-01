@@ -114,7 +114,7 @@ import java.util.concurrent.Executor;
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getHaveGraspedMapper().removeWordRecordById(
                     wordId);
-            WordRecord wordRecord = new WordRecord(null,wordId, DateTimeUtil.getDateTime(),null);
+            WordRecord wordRecord = new WordRecord(null, (long) wordId, DateTimeUtil.getDateTime(),null);
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getShallLearningMapper().addWordRecord(
                     wordRecord);
@@ -128,7 +128,7 @@ import java.util.concurrent.Executor;
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getShallLearningMapper().removeWordRecordById(
                     wordId);
-            WordRecord wordRecord = new WordRecord(null,wordId, DateTimeUtil.getDateTime(),null);
+            WordRecord wordRecord = new WordRecord(null, (long) wordId, DateTimeUtil.getDateTime(),null);
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getHaveGraspedMapper().addWordRecord(wordRecord);
             getShallLearningWords(businessCaller);
@@ -150,7 +150,7 @@ import java.util.concurrent.Executor;
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getDesertedLearningMapper().removeWordRecordById(
                     wordId);
-            WordRecord wordRecord = new WordRecord(null,wordId, DateTimeUtil.getDateTime(),null);
+            WordRecord wordRecord = new WordRecord(null, (long) wordId, DateTimeUtil.getDateTime(),null);
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getShallLearningMapper().addWordRecord(
                     wordRecord);
