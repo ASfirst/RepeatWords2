@@ -22,8 +22,7 @@ import com.jeramtough.repeatwords2.component.adapter.ListWordsAdapter;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 import com.jeramtough.repeatwords2.dao.dto.record.WordRecordDto;
 import com.jeramtough.repeatwords2.service.ListService;
-import com.jeramtough.repeatwords2.service.ListService1;
-import com.jeramtough.repeatwords2.service.impl.ListService1Impl;
+import com.jeramtough.repeatwords2.service.impl.ListServiceImpl;
 
 public class ListFragment extends BaseFragment
         implements RadioGroup.OnCheckedChangeListener, View.OnLongClickListener,
@@ -45,11 +44,8 @@ public class ListFragment extends BaseFragment
     private TimedCloseTextView timedCloseTextView;
 
 
-    @InjectService
+    @InjectService(impl = ListServiceImpl.class)
     private ListService listService;
-
-    @InjectService(impl = ListService1Impl.class)
-    private ListService1 listService1;
 
     @Override
     public int loadFragmentLayoutId() {
@@ -98,7 +94,7 @@ public class ListFragment extends BaseFragment
                 timedCloseTextView.setPrimaryMessage("init today words");
                 timedCloseTextView.visible();
                 ViewUtil.disableRadioGroup(radioGroup);
-                listService1.getHaveLearnedWordRecordsInToday(new TaskCallbackInMain() {
+                listService.getHaveLearnedWordRecordsInToday(new TaskCallbackInMain() {
                     @Override
                     protected void onTaskCompleted(TaskResult taskResult) {
                         WordRecordDto[] wordRecordDtos =
@@ -113,7 +109,7 @@ public class ListFragment extends BaseFragment
                 timedCloseTextView.setPrimaryMessage("init have grasped words");
                 timedCloseTextView.visible();
                 ViewUtil.disableRadioGroup(radioGroup);
-                listService1.getHaveGraspedWords(new TaskCallbackInMain() {
+                listService.getHaveGraspedWords(new TaskCallbackInMain() {
                     @Override
                     protected void onTaskCompleted(TaskResult taskResult) {
                         WordRecordDto[] wordRecordDtos =
@@ -129,7 +125,7 @@ public class ListFragment extends BaseFragment
                 timedCloseTextView.setPrimaryMessage("init shall learning words");
                 timedCloseTextView.visible();
                 ViewUtil.disableRadioGroup(radioGroup);
-                listService1.getShallLearningWords(new TaskCallbackInMain() {
+                listService.getShallLearningWords(new TaskCallbackInMain() {
                     @Override
                     protected void onTaskCompleted(TaskResult taskResult) {
                         WordRecordDto[] wordRecordDtos =
@@ -145,7 +141,7 @@ public class ListFragment extends BaseFragment
                 timedCloseTextView.setPrimaryMessage("init marked words");
                 timedCloseTextView.visible();
                 ViewUtil.disableRadioGroup(radioGroup);
-                listService1.getMarkedWords(new TaskCallbackInMain() {
+                listService.getMarkedWords(new TaskCallbackInMain() {
                     @Override
                     protected void onTaskCompleted(TaskResult taskResult) {
                         WordRecordDto[] wordRecordDtos =
@@ -160,7 +156,7 @@ public class ListFragment extends BaseFragment
                 timedCloseTextView.setPrimaryMessage("init deserted words");
                 timedCloseTextView.visible();
                 ViewUtil.disableRadioGroup(radioGroup);
-                listService1.getDesertedWords(new TaskCallbackInMain() {
+                listService.getDesertedWords(new TaskCallbackInMain() {
                     @Override
                     protected void onTaskCompleted(TaskResult taskResult) {
                         WordRecordDto[] wordRecordDtos =
@@ -190,7 +186,7 @@ public class ListFragment extends BaseFragment
                 null).setPositiveButton("Yes",
                 (DialogInterface dialog1, int which) -> {
                     if (radioButtonTodayWords.isChecked()) {
-                        listService1.removeWordFromHaveLearnedTodayList(wordRecordDto,
+                        listService.removeWordFromHaveLearnedTodayList(wordRecordDto,
                                 new TaskCallbackInMain() {
                                     @Override
                                     protected void onTaskCompleted(TaskResult taskResult) {
@@ -200,7 +196,7 @@ public class ListFragment extends BaseFragment
                                 });
                     }
                     else if (radioButtonHaveGraspedWords.isChecked()) {
-                        listService1.removeWordFromHaveGraspedList(wordRecordDto,
+                        listService.removeWordFromHaveGraspedList(wordRecordDto,
                                 new TaskCallbackInMain() {
                                     @Override
                                     protected void onTaskCompleted(TaskResult taskResult) {
@@ -211,7 +207,7 @@ public class ListFragment extends BaseFragment
                                 });
                     }
                     else if (radioButtonShallLearningWords.isChecked()) {
-                        listService1.removeWordFromShallLearningList(wordRecordDto,
+                        listService.removeWordFromShallLearningList(wordRecordDto,
                                 new TaskCallbackInMain() {
                                     @Override
                                     protected void onTaskCompleted(TaskResult taskResult) {
@@ -221,7 +217,7 @@ public class ListFragment extends BaseFragment
                                 });
                     }
                     else if (radioButtonHaveMarkedWords.isChecked()) {
-                        listService1.removeWordFromMarkedList(wordRecordDto,
+                        listService.removeWordFromMarkedList(wordRecordDto,
                                 new TaskCallbackInMain() {
                                     @Override
                                     protected void onTaskCompleted(TaskResult taskResult) {
@@ -231,7 +227,7 @@ public class ListFragment extends BaseFragment
                                 });
                     }
                     else if (radioButtonHaveDesertedWords.isChecked()) {
-                        listService1.removeWordFromDesertedList(wordRecordDto,
+                        listService.removeWordFromDesertedList(wordRecordDto,
                                 new TaskCallbackInMain() {
                                     @Override
                                     protected void onTaskCompleted(TaskResult taskResult) {

@@ -10,19 +10,19 @@ import com.jeramtough.repeatwords2.component.learning.school.DefaultSchool;
 import com.jeramtough.repeatwords2.component.learning.school.School;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 import com.jeramtough.repeatwords2.dao.dto.record.WordRecordDto;
-import com.jeramtough.repeatwords2.service.ListService1;
+import com.jeramtough.repeatwords2.service.ListService;
 
 /**
  * Created on 2019-09-04 18:18
  * by @author JeramTough
  */
 @JtServiceImpl
-public class ListService1Impl implements ListService1 {
+public class ListServiceImpl implements ListService {
 
     private School school;
 
     @IocAutowire
-    public ListService1Impl(
+    public ListServiceImpl(
             @InjectComponent(impl = DefaultSchool.class) School school) {
         this.school = school;
     }
