@@ -16,16 +16,18 @@ public class BlackboardOfSpeakingTeacher extends BaseBlackboardOfTeacher {
 
 
     @Override
-    public void whileLearning(WordDto wordDto, TextView textView) {
-        super.whileLearning(wordDto, textView);
+    public void whileLearning(WordDto wordDto, TextView textView,
+                              TextView textViewBigBlackboard) {
+        super.whileLearning(wordDto, textView, textViewBigBlackboard);
 
         textView.setText(wordDto.getWord());
         getReader().speech(wordDto.getChExplain());
     }
 
     @Override
-    public void whileExposing(WordDto wordDto, TextView textView) {
-        super.whileExposing(wordDto, textView);
+    public void whileExposing(WordDto wordDto, TextView textView,
+                              TextView textViewBigBlackboard) {
+        super.whileExposing(wordDto, textView, textViewBigBlackboard);
 
         String content =
                 wordDto.getFdId() + "-" + wordDto.getWord() + "-" + wordDto.getPhonetic() +

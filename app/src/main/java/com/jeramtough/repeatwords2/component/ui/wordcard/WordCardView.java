@@ -38,6 +38,7 @@ public class WordCardView extends FrameLayout
     private ImageView imageViewExposingArea;
     private LinearLayout layoutContent;
     private TextView textViewContent;
+    private TextView textViewBigBlackboard;
     private AppCompatImageView imageViewVernier;
     private WordActionsListener wordActionsListener;
     private TextView textViewGrasped;
@@ -71,6 +72,7 @@ public class WordCardView extends FrameLayout
         imageViewExposingArea = findViewById(R.id.imageView_exposing_area);
         layoutContent = findViewById(R.id.layout_content);
         textViewContent = findViewById(R.id.textView_content);
+        textViewBigBlackboard = findViewById(R.id.textView_bigBlackboard);
         imageViewVernier = findViewById(R.id.imageView_vernier);
         textViewGrasped = findViewById(R.id.textView_grasped);
         textViewLearning = findViewById(R.id.textView_learning);
@@ -109,7 +111,8 @@ public class WordCardView extends FrameLayout
         textViewContent.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                wordActionsListener.onLongClickWord(wordDto, textViewContent);
+                wordActionsListener.onLongClickWord(wordDto, textViewContent,
+                        textViewBigBlackboard);
                 return true;
             }
         });
@@ -117,7 +120,8 @@ public class WordCardView extends FrameLayout
         textViewContent.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                wordActionsListener.onSingleClickWord(wordDto, textViewContent);
+                wordActionsListener.onSingleClickWord(wordDto, textViewContent,
+                        textViewBigBlackboard);
             }
         });
 
@@ -153,12 +157,14 @@ public class WordCardView extends FrameLayout
                                 layoutContent.getHeight() / 2 + textViewContent.getHeight();
                 if (x < exposingAreaLimitX && y > exposingAreaLimitY && !isInExposingArea) {
                     isInExposingArea = true;
-                    wordActionsListener.inExposingArea(wordDto, textViewContent);
+                    wordActionsListener.inExposingArea(wordDto, textViewContent,
+                            textViewBigBlackboard);
 
                 }
                 else if (x < exposingAreaLimitX && y < exposingAreaLimitY && isInExposingArea) {
                     isInExposingArea = false;
-                    wordActionsListener.outExposingArea(wordDto, textViewContent);
+                    wordActionsListener.outExposingArea(wordDto, textViewContent,
+                            textViewBigBlackboard);
                 }
 
                 int graspingAreaLimitX =
@@ -193,6 +199,10 @@ public class WordCardView extends FrameLayout
         return textViewContent;
     }
 
+    public TextView getTextViewBigBlackboard() {
+        return textViewBigBlackboard;
+    }
+
     public void setWordActionsListener(WordActionsListener wordActionsListener) {
         this.wordActionsListener = wordActionsListener;
     }
@@ -220,17 +230,21 @@ public class WordCardView extends FrameLayout
 
     //{{{{}}}}}}}}}
     public interface WordActionsListener {
-        void inExposingArea(WordDto wordDto, TextView textView);
+        void inExposingArea(WordDto wordDto, TextView textView,
+                            TextView textViewBigBlackboard);
 
-        void outExposingArea(WordDto wordDto, TextView textView);
+        void outExposingArea(WordDto wordDto, TextView textView,
+                             TextView textViewBigBlackboard);
 
         void atGraspingArea(WordDto wordDto, TextView textView);
 
         void atLearningArea(WordDto wordDto, TextView textView);
 
-        void onSingleClickWord(WordDto wordDto, TextView textView);
+        void onSingleClickWord(WordDto wordDto, TextView textView,
+                               TextView textViewBigBlackboard);
 
-        void onLongClickWord(WordDto wordDto, TextView textView);
+        void onLongClickWord(WordDto wordDto, TextView textView,
+                             TextView textViewBigBlackboard);
 
         void onClickMarkButton(WordDto wordDto, TextView textView);
 
@@ -240,12 +254,14 @@ public class WordCardView extends FrameLayout
 
     public class SimpleWordActionsListener implements WordActionsListener {
         @Override
-        public void inExposingArea(WordDto wordDto, TextView textView) {
+        public void inExposingArea(WordDto wordDto, TextView textView,
+                                   TextView textViewBigBlackboard) {
 
         }
 
         @Override
-        public void outExposingArea(WordDto wordDto, TextView textView) {
+        public void outExposingArea(WordDto wordDto, TextView textView,
+                                    TextView textViewBigBlackboard) {
 
         }
 
@@ -260,12 +276,14 @@ public class WordCardView extends FrameLayout
         }
 
         @Override
-        public void onSingleClickWord(WordDto wordDto, TextView textView) {
+        public void onSingleClickWord(WordDto wordDto, TextView textView,
+                                      TextView textViewBigBlackboard) {
 
         }
 
         @Override
-        public void onLongClickWord(WordDto wordDto, TextView textView) {
+        public void onLongClickWord(WordDto wordDto, TextView textView,
+                                    TextView textViewBigBlackboard) {
 
         }
 

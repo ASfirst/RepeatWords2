@@ -134,4 +134,24 @@ public class WordDto implements Serializable {
     public void setLearnedAtLeastTwiceToday(Boolean learnedAtLeastTwiceToday) {
         isLearnedAtLeastTwiceToday = learnedAtLeastTwiceToday;
     }
+
+    @Override
+    public String toString() {
+        return "WordDto{" +
+                "fdId=" + fdId +
+                ", word='" + word + '\'' +
+                ", phonetic='" + phonetic + '\'' +
+                ", enExplain='" + enExplain + '\'' +
+                ", chExplain='" + chExplain + '\'' +
+                ", position='" + position + '\'' +
+                ", collins=" + collins +
+                ", oxford=" + oxford +
+                ", tag='" + tag + '\'' +
+                ", bnc=" + bnc +
+                ", frq=" + frq +
+                ", exchange='" + exchange + '\'' +
+                ", length=" + length +
+                ", isLearnedAtLeastTwiceToday=" + isLearnedAtLeastTwiceToday +
+                '}';
+    }
 }

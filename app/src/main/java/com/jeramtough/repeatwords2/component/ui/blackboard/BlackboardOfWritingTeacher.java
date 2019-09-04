@@ -16,8 +16,9 @@ public class BlackboardOfWritingTeacher extends BaseBlackboardOfTeacher {
 
 
     @Override
-    public void whileLearning(WordDto wordDto, TextView textView) {
-        super.whileLearning(wordDto, textView);
+    public void whileLearning(WordDto wordDto, TextView textView,
+                              TextView textViewBigBlackboard) {
+        super.whileLearning(wordDto, textView, textViewBigBlackboard);
         if (wordDto.getChExplain().length() > 6) {
             String ch1 = wordDto.getChExplain().substring(0, 5);
             String ch2 = wordDto.getChExplain().substring(5, wordDto.getChExplain().length());
@@ -29,8 +30,9 @@ public class BlackboardOfWritingTeacher extends BaseBlackboardOfTeacher {
     }
 
     @Override
-    public void whileExposing(WordDto wordDto, TextView textView) {
-        super.whileExposing(wordDto, textView);
+    public void whileExposing(WordDto wordDto, TextView textView,
+                              TextView textViewBigBlackboard) {
+        super.whileExposing(wordDto, textView, textViewBigBlackboard);
 
         String content =
                 wordDto.getFdId() + "-" + wordDto.getWord() + "-" + wordDto.getPhonetic() +

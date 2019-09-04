@@ -23,7 +23,8 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     }
 
     @Override
-    public void whileLearning(WordDto wordDto, TextView textView) {
+    public void whileLearning(WordDto wordDto, TextView textView,
+                              TextView textViewBigBlackboard) {
         textView.setBackgroundResource(R.drawable.blackboard_background);
         if (wordDto.isLearnedAtLeastTwiceToday()) {
             textView.setTextColor(Color.BLUE);
@@ -35,7 +36,8 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     }
 
     @Override
-    public void whileExposing(WordDto wordDto, TextView textView) {
+    public void whileExposing(WordDto wordDto, TextView textView,
+                              TextView textViewBigBlackboard) {
         textView.setBackgroundResource(R.color.transparent);
         textView.setTextColor(Color.BLACK);
         reader.stop();

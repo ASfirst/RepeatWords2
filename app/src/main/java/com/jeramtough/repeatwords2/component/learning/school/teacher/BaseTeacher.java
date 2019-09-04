@@ -126,6 +126,7 @@ abstract class BaseTeacher implements Teacher1 {
                 else {
                     wordDto.setLearnedAtLeastTwiceToday(false);
                 }
+                wordDto.setChExplain(WordUtil.processChExplain(wordDto.getChExplain()));
             }
             wordDtos[i] = wordDto;
         }

@@ -13,13 +13,15 @@ public interface Blackboard
     /**
      * 当处于正在学习时的状态
      */
-    void whileLearning(WordDto wordDto, TextView textView);
+    void whileLearning(WordDto wordDto, TextView textView,
+                       TextView textViewBigBlackboard);
 
 
     /**
      * 当处于正在解释时的状态
      */
-    void whileExposing(WordDto wordDto, TextView textView);
+    void whileExposing(WordDto wordDto, TextView textView,
+                       TextView textViewBigBlackboard);
 
     /**
      *

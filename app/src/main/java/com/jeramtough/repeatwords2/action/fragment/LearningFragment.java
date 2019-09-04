@@ -35,6 +35,7 @@ import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
 import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 import com.jeramtough.repeatwords2.service.LearningService;
 import com.jeramtough.repeatwords2.service.impl.LearningServiceImpl;
+import com.jeramtough.repeatwords2.util.WordUtil;
 
 import java.util.Objects;
 
@@ -187,13 +188,15 @@ public class LearningFragment extends BaseFragment
     }
 
     @Override
-    public void inExposingArea(WordDto wordDto, TextView textView) {
-        blackBoardProvider.get().whileExposing(wordDto, textView);
+    public void inExposingArea(WordDto wordDto, TextView textView,
+                               TextView textViewBigBlackboard) {
+        blackBoardProvider.get().whileExposing(wordDto, textView, textViewBigBlackboard);
     }
 
     @Override
-    public void outExposingArea(WordDto wordDto, TextView textView) {
-        blackBoardProvider.get().whileLearning(wordDto, textView);
+    public void outExposingArea(WordDto wordDto, TextView textView,
+                                TextView textViewBigBlackboard) {
+        blackBoardProvider.get().whileLearning(wordDto, textView, textViewBigBlackboard);
     }
 
     @Override
@@ -218,9 +221,10 @@ public class LearningFragment extends BaseFragment
     }
 
     @Override
-    public void onSingleClickWord(WordDto wordDto, TextView textView) {
+    public void onSingleClickWord(WordDto wordDto, TextView textView,
+                                  TextView textViewBigBlackboard) {
         if (!reader.isReading()) {
-            blackBoardProvider.get().whileLearning(wordDto, textView);
+            blackBoardProvider.get().whileLearning(wordDto, textView, textViewBigBlackboard);
         }
         else {
             blackBoardProvider.get().whileDismiss(textView);
@@ -228,7 +232,8 @@ public class LearningFragment extends BaseFragment
     }
 
     @Override
-    public void onLongClickWord(WordDto wordDto, TextView textView) {
+    public void onLongClickWord(WordDto wordDto, TextView textView,
+                                TextView textViewBigBlackboard) {
         if (blackBoardProvider.getTeacherType() == TeacherType.WRITING_TEACHER) {
             new WriteFromMemoryDialog(Objects.requireNonNull(getContext()), wordDto).show();
         }
@@ -349,7 +354,8 @@ public class LearningFragment extends BaseFragment
         if (wordDto != null) {
             textViewPreviousContent
                     .setText(
-                            wordDto.getFdId() + ":" + wordDto.getWord() + "-" + wordDto.getChExplain());
+                            wordDto.getFdId() + ":" + wordDto.getWord() + "-" + WordUtil.abbreviateChinese(
+                                    wordDto.getChExplain()));
         }
     }
 
@@ -391,7 +397,8 @@ public class LearningFragment extends BaseFragment
         if (wordCardView != null) {
             blackBoardProvider.get()
                               .whileLearning(wordCardView.getWordDto(),
-                                      wordCardView.getTextViewContent());
+                                      wordCardView.getTextViewContent(),
+                                      wordCardView.getTextViewBigBlackboard());
         }
         else {
             reader.stop();
