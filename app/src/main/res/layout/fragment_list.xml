@@ -90,7 +90,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="wordDtoList totality:  " />
+                android:text="WordRecord totality:  " />
 
             <TextView
                 android:id="@+id/textView_words_totality"
@@ -110,7 +110,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
@@ -118,42 +118,46 @@
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/textView_word_en"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
                 android:text="EN"
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/textView_word_ch"
-                android:layout_width="0dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="CH"
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/textView_word_phonetic"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
-                android:text="phonetic"
+                android:text="ph"
                 android:textAllCaps="true"
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/textView_time"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="lv"
+                android:textAllCaps="true"
+                android:textColor="@color/black" />
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
                 android:text="time"
                 android:textAllCaps="true"

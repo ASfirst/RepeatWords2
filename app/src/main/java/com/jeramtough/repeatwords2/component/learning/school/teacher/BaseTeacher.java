@@ -6,6 +6,7 @@ import com.jeramtough.oedslib.mapper.DictionaryMapper;
 import com.jeramtough.repeatwords2.bean.word.WordCondition;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.dictionary.WordsPool;
+import com.jeramtough.repeatwords2.dao.dto.record.WordRecordDto;
 import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
@@ -40,6 +41,47 @@ abstract class BaseTeacher implements Teacher1 {
         this.dictionaryMapper = dictionaryMapper;
 
 
+    }
+
+
+    @Override
+    public WordRecordDto[] getWordRecordDtosByWordCondition(WordCondition wordCondition) {
+        OperateWordRecordMapper operateWordRecordMapper =
+                operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                        wordCondition);
+        List<WordRecord> wordRecordList = operateWordRecordMapper.getWordRecordsOrderByLevel();
+        WordRecordDto[] wordRecordDtos = new WordRecordDto[wordRecordList.size()];
+        for (int i = 0; i < wordRecordList.size(); i++) {
+            WordRecord wordRecord = wordRecordList.get(i);
+            LargeWord largeWord = dictionaryMapper.selectOneByFdId(wordRecord.getWordId());
+            WordRecordDto wordRecordDto = new WordRecordDto();
+            wordRecordDto.setFdId(wordRecord.getFdId());
+            wordRecordDto.setLevel(wordRecord.getLevel());
+            wordRecordDto.setTag(largeWord.getTag());
+            wordRecordDto.setTime(wordRecord.getTime());
+            wordRecordDto.setWord(largeWord.getWord());
+            wordRecordDto.setWordId(largeWord.getFdId());
+            wordRecordDto.setPhonetic(largeWord.getPhonetic());
+            wordRecordDto.setChExplain(largeWord.getChExplain());
+            wordRecordDto.setMiniChExplain(
+                    WordUtil.abbreviateChinese(largeWord.getChExplain()));
+            wordRecordDtos[i] = wordRecordDto;
+        }
+        return wordRecordDtos;
+    }
+
+    @Override
+    public void removeWordFromRecordList(WordRecordDto wordRecordDto) {
+        String wordRecordDtoJson = JSON.toJSONString(wordRecordDto);
+        WordDto wordDto = JSON.parseObject(wordRecordDtoJson, WordDto.class);
+        wordDto.setFdId(wordRecordDto.getWordId());
+        removeWordFromRecordList(wordDto);
+    }
+
+    @Override
+    public void removeWordFromHaveLearnedTodayRecordList(Long wordId) {
+        operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                WordCondition.LEARNED_TODAY).removeWordRecordByWordId(wordId);
     }
 
     /**
@@ -97,41 +139,46 @@ abstract class BaseTeacher implements Teacher1 {
     }
 
     @Override
-    public void recoverWordFromDesertedRecordList(WordDto wordDto) {
+    public void removeWordFromDesertedRecordList(WordRecordDto wordRecordDto) {
         operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
                 WordCondition.DESERTED)
-                                       .removeWordRecordByWordId(wordDto.getFdId());
+                                       .removeWordRecordByWordId(wordRecordDto.getWordId());
 
-        WordRecord wordRecord = WordUtil.wordDtoToWordRecord(wordDto);
+        WordRecord wordRecord = WordUtil.wordRecordDtoToWordRecord(wordRecordDto);
         wordRecord.setLevel(1);
         operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
                 WordCondition.SHALL_LEARNING)
                                        .addWordRecord(wordRecord);
     }
 
+    WordDto getWordDtoByWordId(Long wordId, List<Long> haveLearnedAtLeastTwiceIdsToday) {
+        WordDto wordDto = wordsPool.getWordDTO(wordId);
+        if (wordDto == null) {
+            LargeWord largeWord = dictionaryMapper.selectOneByFdId(wordId);
+            String beanJson = JSON.toJSONString(largeWord);
+            wordDto = JSON.parseObject(beanJson, WordDto.class);
+            if (haveLearnedAtLeastTwiceIdsToday.contains(wordDto.getFdId())) {
+                wordDto.setLearnedAtLeastTwiceToday(true);
+            }
+            else {
+                wordDto.setLearnedAtLeastTwiceToday(false);
+            }
+            wordDto.setChExplain(WordUtil.processChExplain(wordDto.getChExplain()));
+        }
+        return wordDto;
+    }
 
-    WordDto[] getWordDtosById(List<Long> wordIds) {
+    WordDto[] getWordDtosBywordId(List<Long> wordIds) {
         WordDto[] wordDtos = new WordDto[wordIds.size()];
         List<Long> haveLearnedAtLeastTwiceIdsToday = getHaveLearnedAtLeastTwiceIdsToday();
         for (int i = 0; i < wordIds.size(); i++) {
             Long wordId = wordIds.get(i);
-            WordDto wordDto = wordsPool.getWordDTO(wordId);
-            if (wordDto == null) {
-                LargeWord largeWord = dictionaryMapper.selectOneByFdId(wordId);
-                String beanJson = JSON.toJSONString(largeWord);
-                wordDto = JSON.parseObject(beanJson, WordDto.class);
-                if (haveLearnedAtLeastTwiceIdsToday.contains(wordDto.getFdId())) {
-                    wordDto.setLearnedAtLeastTwiceToday(true);
-                }
-                else {
-                    wordDto.setLearnedAtLeastTwiceToday(false);
-                }
-                wordDto.setChExplain(WordUtil.processChExplain(wordDto.getChExplain()));
-            }
+            WordDto wordDto = getWordDtoByWordId(wordId, haveLearnedAtLeastTwiceIdsToday);
             wordDtos[i] = wordDto;
         }
         return wordDtos;
     }
+
 
     List<Long> getHaveLearnedAtLeastTwiceIdsToday() {
 

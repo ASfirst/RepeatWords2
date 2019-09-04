@@ -2,6 +2,7 @@ package com.jeramtough.repeatwords2.util;
 
 import com.alibaba.fastjson.JSON;
 import com.jeramtough.jtcomponent.utils.DateTimeUtil;
+import com.jeramtough.repeatwords2.dao.dto.record.WordRecordDto;
 import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 
@@ -13,6 +14,12 @@ public class WordUtil {
 
     public static WordRecord wordDtoToWordRecord(WordDto wordDto) {
         WordRecord wordRecord = new WordRecord(null, wordDto.getFdId(),
+                DateTimeUtil.getCurrentDateTime(), null);
+        return wordRecord;
+    }
+
+    public static WordRecord wordRecordDtoToWordRecord(WordRecordDto wordRecordDto) {
+        WordRecord wordRecord = new WordRecord(null, wordRecordDto.getWordId(),
                 DateTimeUtil.getCurrentDateTime(), null);
         return wordRecord;
     }
@@ -36,7 +43,7 @@ public class WordUtil {
      */
     public static String abbreviateChinese(String chinese, int maxLength) {
         if (chinese.length() > maxLength) {
-            return chinese.substring(0, maxLength - 1);
+            return chinese.substring(0, maxLength - 1) + "..";
         }
         return chinese;
     }

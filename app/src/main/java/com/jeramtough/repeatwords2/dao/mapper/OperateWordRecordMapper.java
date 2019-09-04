@@ -97,9 +97,24 @@ public class OperateWordRecordMapper extends DaoMapper {
         return wordRecords;
     }
 
+    public List<WordRecord> getWordRecords() {
+        List<WordRecord> wordRecords = new ArrayList<>();
+        String sql = "SELECT * FROM " + tableName + ";";
+        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            long fdId = cursor.getInt(cursor.getColumnIndex("fd_id"));
+            int level = cursor.getInt(cursor.getColumnIndex("level"));
+            long wordId = cursor.getInt(cursor.getColumnIndex("word_id"));
+            String time = cursor.getString(cursor.getColumnIndex("time"));
+            wordRecords.add(new WordRecord(fdId, wordId, time, level));
+        }
+        cursor.close();
+        return wordRecords;
+    }
+
     public List<WordRecord> getWordRecordsOrderByLevel() {
         List<WordRecord> wordRecords = new ArrayList<>();
-        String sql = "SELECT * FROM " + tableName + " ORDER BY level";
+        String sql = "SELECT * FROM " + tableName + " ORDER BY level DESC";
         Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
         while (cursor.moveToNext()) {
             long fdId = cursor.getInt(cursor.getColumnIndex("fd_id"));

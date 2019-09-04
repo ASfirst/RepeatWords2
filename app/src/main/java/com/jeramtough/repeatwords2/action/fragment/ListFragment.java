@@ -13,24 +13,21 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
+import com.jeramtough.jtandroid.util.ViewUtil;
+import com.jeramtough.jtcomponent.task.bean.TaskResult;
 import com.jeramtough.repeatwords2.R;
-import com.jeramtough.repeatwords2.bean.word.WordWithRecordTime;
-import com.jeramtough.repeatwords2.service.ListService;
 import com.jeramtough.repeatwords2.component.adapter.ListWordsAdapter;
+import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
+import com.jeramtough.repeatwords2.dao.dto.record.WordRecordDto;
+import com.jeramtough.repeatwords2.service.ListService;
+import com.jeramtough.repeatwords2.service.ListService1;
+import com.jeramtough.repeatwords2.service.impl.ListService1Impl;
 
 public class ListFragment extends BaseFragment
         implements RadioGroup.OnCheckedChangeListener, View.OnLongClickListener,
         AdapterView.OnItemLongClickListener {
-
-    private static final int BUSINESS_CODE_GET_HAVE_GRASPED_WORDS = 1;
-    private static final int BUSINESS_CODE_GET_SHALL_LEARNING_WORDS = 2;
-    private static final int BUSINESS_CODE_GET_MARKED_WORDS = 3;
-    private static final int BUSINESS_CODE_GET_DESERTED_WORDS = 4;
-    private static final int BUSINESS_CODE_GET_TODAY_WORDS = 5;
-
     private static final int BUSINESS_CODE_REMOVE_WORD_FROM_HAVE_GRASPED_LIST = 11;
     private static final int BUSINESS_CODE_REMOVE_WORD_FROM_SHALL_LEARNING_LIST = 12;
     private static final int BUSINESS_CODE_REMOVE_WORD_FROM_MARKED_LIST = 13;
@@ -50,6 +47,9 @@ public class ListFragment extends BaseFragment
 
     @InjectService
     private ListService listService;
+
+    @InjectService(impl = ListService1Impl.class)
+    private ListService1 listService1;
 
     @Override
     public int loadFragmentLayoutId() {
@@ -71,7 +71,7 @@ public class ListFragment extends BaseFragment
 
         radioGroup.setOnCheckedChangeListener(this);
         listViewWords.setOnItemLongClickListener(this);
-       // initResources();
+        initResources();
     }
 
     @Override
@@ -85,9 +85,9 @@ public class ListFragment extends BaseFragment
         if (!radioButtonTodayWords.isChecked()) {
             radioButtonTodayWords.setChecked(true);
         }
-        else{
+        else {
             //如果已经选中today,刷新一下
-            onCheckedChanged(null,radioButtonTodayWords.getId());
+            onCheckedChanged(null, radioButtonTodayWords.getId());
         }
     }
 
@@ -97,36 +97,78 @@ public class ListFragment extends BaseFragment
             case R.id.radioButton_today_words:
                 timedCloseTextView.setPrimaryMessage("init today words");
                 timedCloseTextView.visible();
-                listService.getTodaysHaveLearnedWords(new BusinessCaller(getFragmentHandler(),
-                        BUSINESS_CODE_GET_TODAY_WORDS));
+                ViewUtil.disableRadioGroup(radioGroup);
+                listService1.getHaveLearnedWordRecordsInToday(new TaskCallbackInMain() {
+                    @Override
+                    protected void onTaskCompleted(TaskResult taskResult) {
+                        WordRecordDto[] wordRecordDtos =
+                                (WordRecordDto[]) taskResult.getSerializablePayload(
+                                        "wordRecordDtos");
+                        showList(wordRecordDtos);
+                    }
+                });
                 break;
 
             case R.id.radioButton_have_grasped_words:
                 timedCloseTextView.setPrimaryMessage("init have grasped words");
                 timedCloseTextView.visible();
-                listService.getHaveGraspedWords(new BusinessCaller(getFragmentHandler(),
-                        BUSINESS_CODE_GET_HAVE_GRASPED_WORDS));
+                ViewUtil.disableRadioGroup(radioGroup);
+                listService1.getHaveGraspedWords(new TaskCallbackInMain() {
+                    @Override
+                    protected void onTaskCompleted(TaskResult taskResult) {
+                        WordRecordDto[] wordRecordDtos =
+                                (WordRecordDto[]) taskResult.getSerializablePayload(
+                                        "wordRecordDtos");
+                        showList(wordRecordDtos);
+                    }
+                });
+
 
                 break;
             case R.id.radioButton_shall_learning_words:
                 timedCloseTextView.setPrimaryMessage("init shall learning words");
                 timedCloseTextView.visible();
-                listService.getShallLearningWords(new BusinessCaller(getFragmentHandler(),
-                        BUSINESS_CODE_GET_SHALL_LEARNING_WORDS));
+                ViewUtil.disableRadioGroup(radioGroup);
+                listService1.getShallLearningWords(new TaskCallbackInMain() {
+                    @Override
+                    protected void onTaskCompleted(TaskResult taskResult) {
+                        WordRecordDto[] wordRecordDtos =
+                                (WordRecordDto[]) taskResult.getSerializablePayload(
+                                        "wordRecordDtos");
+                        showList(wordRecordDtos);
+                    }
+                });
+
 
                 break;
             case R.id.radioButton_have_marked_words:
                 timedCloseTextView.setPrimaryMessage("init marked words");
                 timedCloseTextView.visible();
-                listService.getMarkedWords(new BusinessCaller(getFragmentHandler(),
-                        BUSINESS_CODE_GET_MARKED_WORDS));
+                ViewUtil.disableRadioGroup(radioGroup);
+                listService1.getMarkedWords(new TaskCallbackInMain() {
+                    @Override
+                    protected void onTaskCompleted(TaskResult taskResult) {
+                        WordRecordDto[] wordRecordDtos =
+                                (WordRecordDto[]) taskResult.getSerializablePayload(
+                                        "wordRecordDtos");
+                        showList(wordRecordDtos);
+                    }
+                });
 
                 break;
             case R.id.radioButton_have_deserted_words:
                 timedCloseTextView.setPrimaryMessage("init deserted words");
                 timedCloseTextView.visible();
-                listService.getDesertedWords(new BusinessCaller(getFragmentHandler(),
-                        BUSINESS_CODE_GET_DESERTED_WORDS));
+                ViewUtil.disableRadioGroup(radioGroup);
+                listService1.getDesertedWords(new TaskCallbackInMain() {
+                    @Override
+                    protected void onTaskCompleted(TaskResult taskResult) {
+                        WordRecordDto[] wordRecordDtos =
+                                (WordRecordDto[]) taskResult.getSerializablePayload(
+                                        "wordRecordDtos");
+                        showList(wordRecordDtos);
+                    }
+                });
 
                 break;
         }
@@ -139,51 +181,67 @@ public class ListFragment extends BaseFragment
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        final WordWithRecordTime wordWithRecordTime =
-                (WordWithRecordTime) listViewWords.getAdapter().getItem(position);
-        AlertDialog dialog = new AlertDialog.Builder(getContext()).setMessage(
-                "Are you sure to remove this word for \"" + wordWithRecordTime.getEn() + "\"?")
-                                                                  .setNegativeButton("Cancel",
-                                                                          null)
-                                                                  .setPositiveButton("Yes",
-                                                                          (DialogInterface dialog1, int which) -> {
-                                                                              int wordId = wordWithRecordTime.getId();
-                                                                              if (radioButtonTodayWords.isChecked()) {
-                                                                                  listService.removeWordFromTodaysHaveLearnedList(
-                                                                                          wordId,
-                                                                                          new BusinessCaller(
-                                                                                                  getFragmentHandler(),
-                                                                                                  BUSINESS_CODE_REMOVE_WORD_FROM_TODAY_LIST));
-                                                                              }
-                                                                              else if (radioButtonHaveGraspedWords.isChecked()) {
-                                                                                  listService.removeWordFromHaveGraspedList(
-                                                                                          wordId,
-                                                                                          new BusinessCaller(
-                                                                                                  getFragmentHandler(),
-                                                                                                  BUSINESS_CODE_REMOVE_WORD_FROM_HAVE_GRASPED_LIST));
-                                                                              }
-                                                                              else if (radioButtonShallLearningWords.isChecked()) {
-                                                                                  listService.removeWordFromShallLearningList(
-                                                                                          wordId,
-                                                                                          new BusinessCaller(
-                                                                                                  getFragmentHandler(),
-                                                                                                  BUSINESS_CODE_REMOVE_WORD_FROM_SHALL_LEARNING_LIST));
-                                                                              }
-                                                                              else if (radioButtonHaveMarkedWords.isChecked()) {
-                                                                                  listService.removeWordFromMarkedList(
-                                                                                          wordId,
-                                                                                          new BusinessCaller(
-                                                                                                  getFragmentHandler(),
-                                                                                                  BUSINESS_CODE_REMOVE_WORD_FROM_MARKED_LIST));
-                                                                              }
-                                                                              else if (radioButtonHaveDesertedWords.isChecked()) {
-                                                                                  listService.removeWordFromDesertedList(
-                                                                                          wordId,
-                                                                                          new BusinessCaller(
-                                                                                                  getFragmentHandler(),
-                                                                                                  BUSINESS_CODE_REMOVE_WORD_FROM_DESERTED_LIST));
-                                                                              }
-                                                                          }).show();
+        final WordRecordDto wordRecordDto =
+                (WordRecordDto) listViewWords.getAdapter().getItem(position);
+        new AlertDialog.Builder(getContext()).setMessage(
+                "Are you sure to remove this word for \""
+                        + wordRecordDto.getWord()
+                        + "\"?").setNegativeButton("Cancel",
+                null).setPositiveButton("Yes",
+                (DialogInterface dialog1, int which) -> {
+                    if (radioButtonTodayWords.isChecked()) {
+                        listService1.removeWordFromHaveLearnedTodayList(wordRecordDto,
+                                new TaskCallbackInMain() {
+                                    @Override
+                                    protected void onTaskCompleted(TaskResult taskResult) {
+                                        onCheckedChanged(radioGroup,
+                                                R.id.radioButton_today_words);
+                                    }
+                                });
+                    }
+                    else if (radioButtonHaveGraspedWords.isChecked()) {
+                        listService1.removeWordFromHaveGraspedList(wordRecordDto,
+                                new TaskCallbackInMain() {
+                                    @Override
+                                    protected void onTaskCompleted(TaskResult taskResult) {
+                                        onCheckedChanged(radioGroup,
+                                                R.id.radioButton_have_grasped_words);
+
+                                    }
+                                });
+                    }
+                    else if (radioButtonShallLearningWords.isChecked()) {
+                        listService1.removeWordFromShallLearningList(wordRecordDto,
+                                new TaskCallbackInMain() {
+                                    @Override
+                                    protected void onTaskCompleted(TaskResult taskResult) {
+                                        onCheckedChanged(radioGroup,
+                                                R.id.radioButton_shall_learning_words);
+                                    }
+                                });
+                    }
+                    else if (radioButtonHaveMarkedWords.isChecked()) {
+                        listService1.removeWordFromMarkedList(wordRecordDto,
+                                new TaskCallbackInMain() {
+                                    @Override
+                                    protected void onTaskCompleted(TaskResult taskResult) {
+                                        onCheckedChanged(radioGroup,
+                                                R.id.radioButton_have_marked_words);
+                                    }
+                                });
+                    }
+                    else if (radioButtonHaveDesertedWords.isChecked()) {
+                        listService1.removeWordFromDesertedList(wordRecordDto,
+                                new TaskCallbackInMain() {
+                                    @Override
+                                    protected void onTaskCompleted(TaskResult taskResult) {
+                                        onCheckedChanged(radioGroup,
+                                                R.id.radioButton_have_deserted_words);
+
+                                    }
+                                });
+                    }
+                }).show();
         return true;
     }
 
@@ -191,7 +249,7 @@ public class ListFragment extends BaseFragment
     @Override
     public void handleFragmentMessage(Message message) {
 
-        WordWithRecordTime[] wordWithRecordTimes = (WordWithRecordTime[]) message.getData()
+        /*WordWithRecordTime[] wordWithRecordTimes = (WordWithRecordTime[]) message.getData()
                                                                                  .getSerializable(
                                                                                          "wordWithRecordTimes");
         ListWordsAdapter wordsAdapter = (ListWordsAdapter) listViewWords.getAdapter();
@@ -224,7 +282,24 @@ public class ListFragment extends BaseFragment
 
                 listViewWords.setAdapter(wordsAdapter);
                 break;
-        }
+        }*/
     }
 
+    //***********************
+
+    private void showList(WordRecordDto[] wordRecordDtos) {
+        ListWordsAdapter wordsAdapter = (ListWordsAdapter) listViewWords.getAdapter();
+        if (wordsAdapter == null) {
+            wordsAdapter = new ListWordsAdapter(getContext(), wordRecordDtos);
+        }
+        else {
+            wordsAdapter.setWordWithRecordTimes(wordRecordDtos);
+            wordsAdapter.notifyDataSetChanged();
+        }
+
+        timedCloseTextView.invisible();
+        textViewWordsTotality.setText(wordRecordDtos.length + "");
+        listViewWords.setAdapter(wordsAdapter);
+        ViewUtil.enableRadioGroup(radioGroup);
+    }
 }

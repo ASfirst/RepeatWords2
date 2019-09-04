@@ -40,7 +40,7 @@ public class MarkWordTeacher extends BaseTeacher {
                         WordCondition.MARKED).getWordIdsForRandom1(
                         super.myAppSetting.getPerLearningCount());
 
-        return getWordDtosById(needLearnedWordIds);
+        return getWordDtosBywordId(needLearnedWordIds);
     }
 
     @Override

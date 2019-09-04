@@ -1,5 +1,7 @@
 package com.jeramtough.repeatwords2.component.learning.school.teacher;
 
+import com.jeramtough.repeatwords2.bean.word.WordCondition;
+import com.jeramtough.repeatwords2.dao.dto.record.WordRecordDto;
 import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 
 /**
@@ -10,6 +12,7 @@ public interface Teacher1 {
 
     WordDto[] getRandomNeedLearningWords();
 
+    WordRecordDto[] getWordRecordDtosByWordCondition(WordCondition wordCondition);
 
     /**
      * 添加单词到单词记录列表里边
@@ -21,6 +24,10 @@ public interface Teacher1 {
      */
     void removeWordFromRecordList(WordDto wordDto);
 
+    void removeWordFromRecordList(WordRecordDto wordRecordDto);
+
+
+    void removeWordFromHaveLearnedTodayRecordList(Long wordId);
 
     /**
      * 不再学习该单词
@@ -40,6 +47,7 @@ public interface Teacher1 {
     /**
      * 恢复单词从放弃学习的单词记录列表里面
      */
-    void recoverWordFromDesertedRecordList(WordDto wordDto);
+    void removeWordFromDesertedRecordList(WordRecordDto wordRecordDto);
+
 
 }

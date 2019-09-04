@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.R;
-import com.jeramtough.repeatwords2.bean.word.WordWithRecordTime;
+import com.jeramtough.repeatwords2.dao.dto.record.WordRecordDto;
 
 /**
  * @author 11718
@@ -16,21 +16,21 @@ import com.jeramtough.repeatwords2.bean.word.WordWithRecordTime;
  */
 public class ListWordsAdapter extends BaseAdapter {
     private Context context;
-    private WordWithRecordTime[] wordWithRecordTimes;
+    private WordRecordDto[] wordRecordDtos;
 
-    public ListWordsAdapter(Context context, WordWithRecordTime[] wordWithRecordTimes) {
+    public ListWordsAdapter(Context context, WordRecordDto[] wordRecordDtos) {
         this.context = context;
-        this.wordWithRecordTimes = wordWithRecordTimes;
+        this.wordRecordDtos = wordRecordDtos;
     }
 
     @Override
     public int getCount() {
-        return wordWithRecordTimes.length;
+        return wordRecordDtos.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return wordWithRecordTimes[position];
+        return wordRecordDtos[position];
     }
 
     @Override
@@ -45,39 +45,48 @@ public class ListWordsAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.items_list_word, null);
 
             viewHolder = new ViewHolder();
-            viewHolder.textViewWordId = (TextView) convertView.findViewById(R.id.textView_word_id);
-            viewHolder.textViewWordEn = (TextView) convertView.findViewById(R.id.textView_word_en);
-            viewHolder.textViewWordCh = (TextView) convertView.findViewById(R.id.textView_word_ch);
-            viewHolder.textViewWordPhonetic = (TextView) convertView.findViewById(R.id.textView_word_phonetic);
+            viewHolder.textViewWordId = (TextView) convertView.findViewById(
+                    R.id.textView_word_id);
+            viewHolder.textViewWordEn = (TextView) convertView.findViewById(
+                    R.id.textView_word_en);
+            viewHolder.textViewWordCh = (TextView) convertView.findViewById(
+                    R.id.textView_word_ch);
+            viewHolder.textViewWordPhonetic = (TextView) convertView.findViewById(
+                    R.id.textView_word_phonetic);
+            viewHolder.textViewWordLevel =
+                    (TextView) convertView.findViewById(R.id.textView_word_level);
             viewHolder.textViewTime = (TextView) convertView.findViewById(R.id.textView_time);
 
             convertView.setTag(viewHolder);
-        } else {
+        }
+        else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        WordWithRecordTime wordWithRecordTime = wordWithRecordTimes[position];
-        if (wordWithRecordTime != null) {
-            viewHolder.textViewWordId.setText(wordWithRecordTime.getId() + "");
-            viewHolder.textViewWordEn.setText(wordWithRecordTime.getEn());
-            viewHolder.textViewWordCh.setText(wordWithRecordTime.getCh());
-            viewHolder.textViewWordPhonetic.setText(wordWithRecordTime.getPhonetic());
-            viewHolder.textViewTime.setText(wordWithRecordTime.getTime());
+        WordRecordDto wordRecordDto = wordRecordDtos[position];
+        if (wordRecordDto != null) {
+            viewHolder.textViewWordId.setText(wordRecordDto.getFdId() + "");
+            viewHolder.textViewWordEn.setText(wordRecordDto.getWord());
+            viewHolder.textViewWordCh.setText(wordRecordDto.getMiniChExplain());
+            viewHolder.textViewWordPhonetic.setText(wordRecordDto.getPhonetic());
+            viewHolder.textViewWordLevel.setText(wordRecordDto.getLevel()+"");
+            viewHolder.textViewTime.setText(wordRecordDto.getTime());
         }
         return convertView;
     }
-    
-    public void setWordWithRecordTimes(WordWithRecordTime[] wordWithRecordTimes)
-    {
-        this.wordWithRecordTimes = wordWithRecordTimes;
+
+    public void setWordWithRecordTimes(WordRecordDto[] wordRecordDtos) {
+        this.wordRecordDtos = wordRecordDtos;
     }
-    
+
     //{{{{{{{}}}}}}}}
+
     private class ViewHolder {
         TextView textViewWordId;
         TextView textViewWordEn;
         TextView textViewWordCh;
         TextView textViewWordPhonetic;
+        TextView textViewWordLevel;
         TextView textViewTime;
     }
 }

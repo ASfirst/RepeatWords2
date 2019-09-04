@@ -58,7 +58,7 @@ public class ReviewWordTeacher extends BaseTeacher {
         List<Long> needReviewedWordIds = new ArrayList<>();
         needReviewedWordIds.addAll(haveLearnedAtLeastTwiceIdsToday);
         needReviewedWordIds.addAll(haveGraspedWordIds);
-        return getWordDtosById(needReviewedWordIds);
+        return getWordDtosBywordId(needReviewedWordIds);
     }
 
     /**

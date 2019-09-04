@@ -72,7 +72,7 @@ public class NewWordTeacher extends BaseTeacher {
             }
         }
 
-        return getWordDtosById(shallLearningIds);
+        return getWordDtosBywordId(shallLearningIds);
     }
 
     /**
