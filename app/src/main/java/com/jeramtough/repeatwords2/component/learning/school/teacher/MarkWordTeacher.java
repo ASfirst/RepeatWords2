@@ -47,7 +47,7 @@ public class MarkWordTeacher extends BaseTeacher {
     public void addWordToRecordList(WordDto wordDto) {
         WordRecord wordRecord = WordUtil.wordDtoToWordRecord(wordDto);
         super.operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
-                WordCondition.SHALL_LEARNING)
+                WordCondition.MARKED)
                                              .addWordRecord(wordRecord);
     }
 

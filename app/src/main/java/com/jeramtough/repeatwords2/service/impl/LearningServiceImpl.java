@@ -25,7 +25,8 @@ public class LearningServiceImpl implements LearningService {
 
     @IocAutowire
     public LearningServiceImpl(
-            @InjectComponent(impl = DefaultSchool.class) School school) {
+            @InjectComponent(impl = DefaultSchool.class)
+                    School school) {
         this.school = school;
     }
 
@@ -41,32 +42,41 @@ public class LearningServiceImpl implements LearningService {
     }
 
     @Override
-    public FutureTaskResponse graspOrRemoveWord(WordDto wordDto, TaskCallbackInMain taskCallback) {
-        return ResponseFactory.asyncDoing(taskCallback.get(), new CallbackRunner() {
-            @Override
-            public boolean doTask(PreTaskResult preTaskResult,
-                                  RunningTaskCallback runningTaskCallback) {
-
-
-                return true;
-            }
-        });
+    public FutureTaskResponse graspOrRemoveWord(WordDto wordDto,
+                                                TaskCallbackInMain taskCallback) {
+        return ResponseFactory.asyncDoing(taskCallback.get(),
+                (preTaskResult, runningTaskCallback) -> {
+                    school.getCurrentTeacher().removeWordFromRecordList(wordDto);
+                    return true;
+                });
     }
 
     @Override
     public FutureTaskResponse desertWord(WordDto wordDto, TaskCallbackInMain taskCallback) {
-        return null;
+        return ResponseFactory.asyncDoing(taskCallback.get(),
+                (preTaskResult, runningTaskCallback) -> {
+                    return school.getCurrentTeacher().addWordToDesertedRecordList(wordDto);
+                });
     }
 
     @Override
     public FutureTaskResponse markWord(WordDto wordDto, TaskCallbackInMain taskCallback) {
-        return null;
+        return ResponseFactory.asyncDoing(taskCallback.get(), new CallbackRunner() {
+            @Override
+            public boolean doTask(PreTaskResult preTaskResult,
+                                  RunningTaskCallback runningTaskCallback) {
+                return school.getCurrentTeacher().addWordToMarkedRecordList(wordDto);
+            }
+        });
     }
 
 
     @Override
     public FutureTaskResponse learnedWordInToday(WordDto wordDto) {
-        return null;
+        return ResponseFactory.asyncDoing(preTaskResult -> {
+            school.getCurrentTeacher().addWordToHaveLearnedTodayRecordList(wordDto);
+            return true;
+        });
     }
 
 

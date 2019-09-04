@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.service;
+package com.jeramtough.repeatwords2.service.impl;
 
 import android.Manifest;
 import android.app.Activity;
@@ -37,6 +37,7 @@ import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
 import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordRecordMapperProvider;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordRecordMapperProvider;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
+import com.jeramtough.repeatwords2.service.LaunchService;
 import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 import java.util.Arrays;

@@ -46,20 +46,54 @@ abstract class BaseTeacher implements Teacher1 {
      * 抛弃不戳想学的单词，三个模式处理方式都一样
      */
     @Override
-    public void addWordToDesertedRecordList(WordDto wordDto) {
-        operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
-                WordCondition.SHALL_LEARNING)
-                                       .removeWordRecordByWordId(wordDto.getFdId());
-        operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
-                WordCondition.GRASPED)
-                                       .removeWordRecordByWordId(wordDto.getFdId());
-        operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
-                WordCondition.MARKED)
-                                       .removeWordRecordByWordId(wordDto.getFdId());
+    public boolean addWordToDesertedRecordList(WordDto wordDto) {
 
+        WordRecord wordRecord = operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                WordCondition.DESERTED).getWordRecordByWordId(wordDto.getFdId());
+        if (wordRecord == null) {
+            operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                    WordCondition.SHALL_LEARNING)
+                                           .removeWordRecordByWordId(wordDto.getFdId());
+            operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                    WordCondition.GRASPED)
+                                           .removeWordRecordByWordId(wordDto.getFdId());
+            operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                    WordCondition.MARKED)
+                                           .removeWordRecordByWordId(wordDto.getFdId());
+
+            wordRecord = WordUtil.wordDtoToWordRecord(wordDto);
+            operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                    WordCondition.DESERTED)
+                                           .addWordRecord(wordRecord);
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    @Override
+    public boolean addWordToMarkedRecordList(WordDto wordDto) {
+        WordRecord wordRecord = operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                WordCondition.MARKED).getWordRecordByWordId(wordDto.getFdId());
+        if (wordRecord == null) {
+            wordRecord = WordUtil.wordDtoToWordRecord(wordDto);
+            operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                    WordCondition.MARKED).addWordRecord(wordRecord);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public void addWordToHaveLearnedTodayRecordList(WordDto wordDto) {
         WordRecord wordRecord = WordUtil.wordDtoToWordRecord(wordDto);
-        operateWordRecordMapperProvider.getCurrentOperateWordsMapper(WordCondition.DESERTED)
-                                       .addWordRecord(wordRecord);
+        operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
+                WordCondition.LEARNED_TODAY).addWordRecord(wordRecord);
+
     }
 
     @Override

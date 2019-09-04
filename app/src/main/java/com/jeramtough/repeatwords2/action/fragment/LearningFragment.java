@@ -208,25 +208,13 @@ public class LearningFragment extends BaseFragment
                 removePager(wordDto);
             }
         });
-       /* switch (learningMode) {
-            case NEW:
-                *//*learningService.graspOrRemoveWord(wordDto,
-                        new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_GRASP_WORD));*//*
-                break;
-            case MARKED:
-            case REVIME:
-*//*
-                learningService.removeWord(wordDto,
-                        new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_REMOVE_WORD));
-*//*
-                break;
-        }*/
-
     }
 
     @Override
     public void atLearningArea(WordDto wordDto, TextView textView) {
+        learningService.learnedWordInToday(wordDto);
         removePager(wordDto);
+
     }
 
     @Override
@@ -270,9 +258,17 @@ public class LearningFragment extends BaseFragment
         learningService.desertWord(wordDto, new TaskCallbackInMain() {
             @Override
             protected void onTaskCompleted(TaskResult taskResult) {
-                timedCloseTextView.setErrorMessage("OK");
+
+                if (taskResult.isSuccessful()) {
+                    timedCloseTextView.setPrimaryMessage("OK");
+                }
+                else {
+                    timedCloseTextView.setErrorMessage("have deserted");
+                }
+
                 timedCloseTextView.visible();
                 timedCloseTextView.closeDelayed(3000);
+
                 removePager(wordDto);
             }
         });
@@ -386,6 +382,7 @@ public class LearningFragment extends BaseFragment
         surplusLearningCount--;
         updateWordsCondition();
         updatePreviousWordContent(wordDto);
+
         learnCurrentWord();
     }
 

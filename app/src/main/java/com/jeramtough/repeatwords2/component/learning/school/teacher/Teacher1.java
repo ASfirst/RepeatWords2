@@ -25,7 +25,17 @@ public interface Teacher1 {
     /**
      * 不再学习该单词
      */
-    void addWordToDesertedRecordList(WordDto wordDto);
+    boolean addWordToDesertedRecordList(WordDto wordDto);
+
+    /**
+     * 收藏该单词
+     */
+    boolean addWordToMarkedRecordList(WordDto wordDto);
+
+    /**
+     * 添加单词到今日已学记录
+     */
+    void addWordToHaveLearnedTodayRecordList(WordDto wordDto);
 
     /**
      * 恢复单词从放弃学习的单词记录列表里面
