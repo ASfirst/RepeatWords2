@@ -41,15 +41,12 @@ public enum TeacherType {
         return tag;
     }
 
-    public static TeacherType getLearningMode(int learningModeId) {
-        switch (learningModeId) {
-            case 0:
-                return LISTENING_TEACHER;
-            case 1:
-                return SPEAKING_TEACHER;
-            case 2:
-                return WRITING_TEACHER;
+    public static TeacherType getTeacherType(int teacherTypeId) {
+        for (TeacherType teacherType : TeacherType.values()) {
+            if (teacherType.teacherTypeId == teacherTypeId) {
+                return teacherType;
+            }
         }
-        return LISTENING_TEACHER;
+        return TeacherType.LISTENING_TEACHER;
     }
 }

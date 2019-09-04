@@ -7,4 +7,13 @@
     <string name="listening_teacher">Listening\nteacher</string>
     <string name="speaking_teacher">Speaking\nteacher</string>
     <string name="writing_teacher">Writing\nteacher</string>
+    <string name="reading_teacher">Reading\nteacher</string>
+
+    <string-array name="teachers">
+        <item>Listening teacher</item>
+        <item>Speaking teacher</item>
+        <item>Writing teacher</item>
+        <item>Reading teacher</item>
+    </string-array>
+
 </resources>

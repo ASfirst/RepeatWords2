@@ -1,6 +1,7 @@
 package com.jeramtough.repeatwords2.component.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.jeramtough.jtandroid.function.AppSetting;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
@@ -25,8 +26,9 @@ public class MyAppSetting extends AppSetting {
     }
 
     public void setPerLearningCount(int perLearningCount) {
-        getEditor().putInt("perLearningCount", perLearningCount);
-        getEditor().apply();
+        SharedPreferences.Editor editor = getEditor();
+        editor.putInt("perLearningCount", perLearningCount);
+        editor.apply();
     }
 
     public void setLearningMode(int learningMode) {
@@ -40,12 +42,13 @@ public class MyAppSetting extends AppSetting {
     public TeacherType getTeacherType() {
         int teacherTypeId = getSharedPreferences()
                 .getInt("teacherType", TeacherType.LISTENING_TEACHER.getTeacherTypeId());
-        return TeacherType.getLearningMode(teacherTypeId);
+        return TeacherType.getTeacherType(teacherTypeId);
     }
 
     public void setTeacherType(TeacherType teacherType) {
-        getEditor().putInt("teacherType", teacherType.getTeacherTypeId());
-        getEditor().apply();
+        SharedPreferences.Editor editor = getEditor();
+        editor.putInt("teacherType", teacherType.getTeacherTypeId());
+        editor.commit();
     }
 
     public String getDateForLastOpenedApp() {
@@ -53,8 +56,9 @@ public class MyAppSetting extends AppSetting {
     }
 
     public void setDateForLastOpenedApp(String date) {
-        getEditor().putString("lastOpenedAppDate", date);
-        getEditor().apply();
+        SharedPreferences.Editor editor = getEditor();
+        editor.putString("lastOpenedAppDate", date);
+        editor.apply();
     }
 
 }

@@ -20,6 +20,7 @@ public class BlackBoardProvider {
     private BlackboardOfLearningTeacher blackboardOfLearningTeacher;
     private BlackboardOfSpeakingTeacher blackboardOfSpeakingTeacher;
     private BlackboardOfWritingTeacher blackboardOfWritingTeacher;
+    private BlackboardOfReadingTeacher blackboardOfReadingTeacher;
 
 
     @IocAutowire
@@ -30,8 +31,7 @@ public class BlackBoardProvider {
     }
 
     public Blackboard get() {
-        TeacherType currentTeacherType = TeacherType.getLearningMode(
-                myAppSetting.getLearningMode());
+        TeacherType currentTeacherType = myAppSetting.getTeacherType();
 
         switch (currentTeacherType) {
             case LISTENING_TEACHER:
@@ -45,12 +45,15 @@ public class BlackBoardProvider {
                 }
                 return blackboardOfSpeakingTeacher;
             case WRITING_TEACHER:
-                if (blackboardOfSpeakingTeacher == null) {
+                if (blackboardOfWritingTeacher == null) {
                     blackboardOfWritingTeacher = new BlackboardOfWritingTeacher(reader);
                 }
                 return blackboardOfWritingTeacher;
             case READING_TEACHER:
-                break;
+                if (blackboardOfReadingTeacher == null) {
+                    blackboardOfReadingTeacher = new BlackboardOfReadingTeacher(reader);
+                }
+                return blackboardOfReadingTeacher;
             default:
         }
         return null;

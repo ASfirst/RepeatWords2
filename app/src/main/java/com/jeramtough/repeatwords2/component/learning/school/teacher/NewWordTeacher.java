@@ -14,7 +14,7 @@ import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordRecordM
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordRecordMapperProvider;
 import com.jeramtough.repeatwords2.util.WordUtil;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,28 +44,34 @@ public class NewWordTeacher extends BaseTeacher {
                 super.operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
                         WordCondition.SHALL_LEARNING);
 
-        //找出具体需要学习的wordId，用户设置超过就用剩下的
-        List<Long> shallLearningIds =
+        //找出具体需要学习的wordId，拿出用户设置的1.5倍的单词
+        List<Long> tempShallLearningIds =
                 shallLearningOperateWordRecordMapper.getWordIdsForRandomOrderByLevel(
-                        super.myAppSetting.getPerLearningCount());
+                        (int) (super.myAppSetting.getPerLearningCount() * 1.5));
 
+        //真正用来装用户设置需要的单词
+        List<Long> shallLearningIds = new ArrayList<>(
+                super.myAppSetting.getPerLearningCount());
 
         // filtrate words while have learned twice in today
         List<Long> haveLearnedAtLeastTwiceWordIds = getHaveLearnedAtLeastTwiceIdsToday();
-        Iterator<Long> iterator = shallLearningIds.iterator();
-        while (iterator.hasNext()) {
-            Long shallLearningId = iterator.next();
+        for (Long tempShallLearningId : tempShallLearningIds) {
             boolean isFiltrated = false;
             for (Long haveLearnedAtLeastTwiceWordId : haveLearnedAtLeastTwiceWordIds) {
-                if (shallLearningId.equals(haveLearnedAtLeastTwiceWordId)) {
+                if (tempShallLearningId.equals(haveLearnedAtLeastTwiceWordId)) {
                     isFiltrated = true;
                     break;
                 }
             }
-            if (isFiltrated) {
-                iterator.remove();
+
+            if (!isFiltrated) {
+                shallLearningIds.add(tempShallLearningId);
+            }
+            if (shallLearningIds.size() == super.myAppSetting.getPerLearningCount()) {
+                break;
             }
         }
+
         return getWordDtosById(shallLearningIds);
     }
 
@@ -93,7 +99,6 @@ public class NewWordTeacher extends BaseTeacher {
                 WordCondition.GRASPED)
                                              .addWordRecord(wordRecord);
     }
-
 
 
     //************************

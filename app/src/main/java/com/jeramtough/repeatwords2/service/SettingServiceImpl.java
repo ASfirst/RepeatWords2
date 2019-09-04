@@ -241,7 +241,7 @@ import java.util.concurrent.Executor;
 
     @Override
     public void setTeacherType(int teacherTypeId) {
-        myAppSetting.setTeacherType(TeacherType.getLearningMode(teacherTypeId));
+        myAppSetting.setTeacherType(TeacherType.getTeacherType(teacherTypeId));
     }
 
     @Override

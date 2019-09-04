@@ -1,6 +1,5 @@
 package com.jeramtough.repeatwords2.component.ui.blackboard;
 
-import android.view.View;
 import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.component.baidu.Reader;
@@ -20,7 +19,6 @@ public class BlackboardOfLearningTeacher extends BaseBlackboardOfTeacher {
         super.whileLearning(wordDto, textView, textViewBigBlackboard);
 
         textView.setText("(^ O ^)");
-        textViewBigBlackboard.setVisibility(View.INVISIBLE);
         getReader().speech(wordDto.getWord());
     }
 
@@ -28,10 +26,7 @@ public class BlackboardOfLearningTeacher extends BaseBlackboardOfTeacher {
     public void whileExposing(WordDto wordDto, TextView textView,
                               TextView textViewBigBlackboard) {
         super.whileExposing(wordDto, textView, textViewBigBlackboard);
-        String content = wordDto.getFdId() + "-" + wordDto.getWord() + "-" + wordDto.getPhonetic() +
-                "\n" + wordDto.getChExplain();
         textView.setText(wordDto.getWord());
-        textViewBigBlackboard.setVisibility(View.VISIBLE);
         textViewBigBlackboard.setText(WordUtil.formatWordDto(wordDto));
         getReader().speech(
                 wordDto.getChExplain() + "," + wordDto.getWord());

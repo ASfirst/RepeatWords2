@@ -1,6 +1,7 @@
 package com.jeramtough.repeatwords2.component.ui.blackboard;
 
 import android.graphics.Color;
+import android.view.View;
 import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.R;
@@ -25,6 +26,7 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     @Override
     public void whileLearning(WordDto wordDto, TextView textView,
                               TextView textViewBigBlackboard) {
+        textViewBigBlackboard.setVisibility(View.INVISIBLE);
         textView.setBackgroundResource(R.drawable.blackboard_background);
         if (wordDto.isLearnedAtLeastTwiceToday()) {
             textView.setTextColor(Color.BLUE);
@@ -38,6 +40,7 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     @Override
     public void whileExposing(WordDto wordDto, TextView textView,
                               TextView textViewBigBlackboard) {
+        textViewBigBlackboard.setVisibility(View.VISIBLE);
         textView.setBackgroundResource(R.color.transparent);
         textView.setTextColor(Color.BLACK);
         reader.stop();

@@ -9,9 +9,9 @@ import com.jeramtough.repeatwords2.util.WordUtil;
 /**
  * @author 11718
  */
-public class BlackboardOfSpeakingTeacher extends BaseBlackboardOfTeacher {
+public class BlackboardOfReadingTeacher extends BaseBlackboardOfTeacher {
 
-    public BlackboardOfSpeakingTeacher(Reader reader) {
+    public BlackboardOfReadingTeacher(Reader reader) {
         super(reader);
     }
 
@@ -22,16 +22,13 @@ public class BlackboardOfSpeakingTeacher extends BaseBlackboardOfTeacher {
         super.whileLearning(wordDto, textView, textViewBigBlackboard);
 
         textView.setText(wordDto.getWord());
-        getReader().speech(wordDto.getChExplain());
     }
 
     @Override
     public void whileExposing(WordDto wordDto, TextView textView,
                               TextView textViewBigBlackboard) {
         super.whileExposing(wordDto, textView, textViewBigBlackboard);
-
-        textView.setText(wordDto.getPhonetic());
+        textView.setText(WordUtil.abbreviateChinese(wordDto.getChExplain()));
         textViewBigBlackboard.setText(WordUtil.formatWordDto(wordDto));
-        getReader().speech(wordDto.getWord());
     }
 }

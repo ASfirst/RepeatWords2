@@ -38,6 +38,5 @@ public class BlackboardOfWritingTeacher extends BaseBlackboardOfTeacher {
                 wordDto.getFdId() + "-" + wordDto.getWord() + "-" + wordDto.getPhonetic() +
                         "\n" + wordDto.getChExplain();
         textView.setText(content);
-        getReader().speech(wordDto.getWord());
     }
 }
