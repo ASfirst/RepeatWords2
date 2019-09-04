@@ -1,6 +1,6 @@
 package com.jeramtough.repeatwords2.dao.mapper.factory;
 
-import com.jeramtough.repeatwords2.dao.mapper.OperateWordsMapper;
+import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
 
 /**
  * @author 11718
@@ -8,6 +8,6 @@ import com.jeramtough.repeatwords2.dao.mapper.OperateWordsMapper;
  */
 public interface OperateWordsMapperFactory1 {
 
-    OperateWordsMapper getHaveGraspedMapper();
+    OperateWordRecordMapper getHaveGraspedMapper();
 
 }

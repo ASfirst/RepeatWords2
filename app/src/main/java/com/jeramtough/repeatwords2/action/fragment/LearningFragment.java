@@ -21,24 +21,20 @@ import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtViewPager;
 import com.jeramtough.jtandroid.ui.TimedCloseTextView;
+import com.jeramtough.jtcomponent.task.bean.TaskResult;
 import com.jeramtough.repeatwords2.R;
-import com.jeramtough.repeatwords2.bean.word.Word;
-import com.jeramtough.repeatwords2.bean.word.WordWithIsLearnedAtLeastTwiceToday;
-import com.jeramtough.repeatwords2.service.LearningService;
-import com.jeramtough.repeatwords2.component.adapter.MarkedWordCardsPagerAdapter;
-import com.jeramtough.repeatwords2.component.adapter.NewWordCardsPagerAdapter;
-import com.jeramtough.repeatwords2.component.adapter.ReviewWordCardsPagerAdapter;
-import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
-import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
-import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
-import com.jeramtough.repeatwords2.component.teacher.TeacherType;
-import com.jeramtough.repeatwords2.component.ui.blackboard.BaseBlackboardOfTeacher;
-import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfLearningTeacher;
-import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfSpeakingTeacher;
-import com.jeramtough.repeatwords2.component.ui.blackboard.BlackboardOfWritingTeacher;
-import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
 import com.jeramtough.repeatwords2.action.activity.MainActivity;
 import com.jeramtough.repeatwords2.action.dialog.WriteFromMemoryDialog;
+import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
+import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapterProvider;
+import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
+import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
+import com.jeramtough.repeatwords2.component.ui.blackboard.BlackBoardProvider;
+import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
+import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
+import com.jeramtough.repeatwords2.service.LearningService;
+import com.jeramtough.repeatwords2.service.impl.LearningServiceImpl;
 
 import java.util.Objects;
 
@@ -64,13 +60,17 @@ public class LearningFragment extends BaseFragment
     private ProgressBar progressBar;
     private Button buttonStartLearning;
 
-    @InjectService
+    @InjectService(impl = LearningServiceImpl.class)
     private LearningService learningService;
 
     @InjectComponent
     private BaiduVoiceReader reader;
 
-    private BaseBlackboardOfTeacher baseBlackboardOfTeacher;
+    @InjectComponent
+    private BlackBoardProvider blackBoardProvider;
+
+    @InjectComponent
+    private WordCardsPagerAdapterProvider wordCardsPagerAdapterProvider;
 
     private int shallLearningCount;
     private int surplusLearningCount;
@@ -110,7 +110,6 @@ public class LearningFragment extends BaseFragment
 
     @Override
     protected void initResources() {
-        initBlackboardOfTeacher();
     }
 
     @Nullable
@@ -133,7 +132,7 @@ public class LearningFragment extends BaseFragment
             WordCardView wordCardView =
                     jtViewPager.findViewWithTag(jtViewPager.getCurrentItem());
             if (wordCardView != null) {
-                baseBlackboardOfTeacher.whileDismiss(wordCardView.getTextViewContent());
+                blackBoardProvider.get().whileDismiss(wordCardView.getTextViewContent());
             }
         }
     }
@@ -143,16 +142,14 @@ public class LearningFragment extends BaseFragment
         switch (viewId) {
             case R.id.button_start_learning:
             case R.id.button_again_learn:
-                buttonStartLearning.setClickable(false);
-                progressBar.setVisibility(View.VISIBLE);
-                learningService.initTeacher(
-                        new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_INIT_TEACHER));
+                startToLearning();
                 break;
+
             case R.id.button_refresh:
                 WordCardView wordCardView =
                         jtViewPager.findViewWithTag(jtViewPager.getCurrentItem());
                 if (wordCardView != null) {
-                    updatePreviousWordContent(wordCardView.getWord());
+                    updatePreviousWordContent(wordCardView.getWordDto());
                 }
 
                 WordCardsPagerAdapter adapter =
@@ -175,13 +172,14 @@ public class LearningFragment extends BaseFragment
         }
     }
 
+
     public class MySimpleOnPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
         @Override
         public void onPageSelected(int position) {
             learnCurrentWord();
             WordCardView wordCardView = jtViewPager.findViewWithTag(previousPosition);
             if (wordCardView != null) {
-                updatePreviousWordContent(wordCardView.getWord());
+                updatePreviousWordContent(wordCardView.getWordDto());
                 updateWordsCondition();
             }
             previousPosition = position;
@@ -189,110 +187,107 @@ public class LearningFragment extends BaseFragment
     }
 
     @Override
-    public void inExposingArea(Word word, TextView textView) {
-        baseBlackboardOfTeacher.whileExposing(word, textView);
+    public void inExposingArea(WordDto wordDto, TextView textView) {
+        blackBoardProvider.get().whileExposing(wordDto, textView);
     }
 
     @Override
-    public void outExposingArea(Word word, TextView textView) {
-        baseBlackboardOfTeacher.whileLearning(word, textView);
+    public void outExposingArea(WordDto wordDto, TextView textView) {
+        blackBoardProvider.get().whileLearning(wordDto, textView);
     }
 
     @Override
-    public void atGraspingArea(Word word, TextView textView) {
-        LearningMode learningMode = learningService.getLearningMode();
+    public void atGraspingArea(WordDto wordDto, TextView textView) {
         textView.setBackgroundColor(Color.BLUE);
-        switch (learningMode) {
+        learningService.graspOrRemoveWord(wordDto, new TaskCallbackInMain() {
+            @Override
+            protected void onTaskCompleted(TaskResult taskResult) {
+                timedCloseTextView.setNiceMessage("OK");
+                timedCloseTextView.visible();
+                timedCloseTextView.closeDelayed(2000);
+                removePager(wordDto);
+            }
+        });
+       /* switch (learningMode) {
             case NEW:
-                learningService.graspWord(word,
-                        new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_GRASP_WORD));
+                *//*learningService.graspOrRemoveWord(wordDto,
+                        new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_GRASP_WORD));*//*
                 break;
             case MARKED:
             case REVIME:
-                learningService.removeWord(word,
+*//*
+                learningService.removeWord(wordDto,
                         new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_REMOVE_WORD));
+*//*
                 break;
-        }
+        }*/
 
     }
 
     @Override
-    public void atLearningArea(Word word, TextView textView) {
-        learningService.learnedWordInToday(word);
-        removePager(word);
+    public void atLearningArea(WordDto wordDto, TextView textView) {
+        removePager(wordDto);
     }
 
     @Override
-    public void onSingleClickWord(Word word, TextView textView) {
+    public void onSingleClickWord(WordDto wordDto, TextView textView) {
         if (!reader.isReading()) {
-            baseBlackboardOfTeacher.whileLearning(word, textView);
+            blackBoardProvider.get().whileLearning(wordDto, textView);
         }
         else {
-            baseBlackboardOfTeacher.whileDismiss(textView);
+            blackBoardProvider.get().whileDismiss(textView);
         }
     }
 
     @Override
-    public void onLongClickWord(Word word, TextView textView) {
-        if (learningService.getTeacherType() == TeacherType.WRITING_TEACHER) {
-            new WriteFromMemoryDialog(Objects.requireNonNull(getContext()), word).show();
+    public void onLongClickWord(WordDto wordDto, TextView textView) {
+        if (blackBoardProvider.getTeacherType() == TeacherType.WRITING_TEACHER) {
+            new WriteFromMemoryDialog(Objects.requireNonNull(getContext()), wordDto).show();
         }
     }
 
     @Override
-    public void onClickMarkButton(Word word, TextView textView) {
-        learningService.markWord(word,
-                new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_MARK_WORD));
+    public void onClickMarkButton(WordDto wordDto, TextView textView) {
+        learningService.markWord(wordDto, new TaskCallbackInMain() {
+            @Override
+            protected void onTaskCompleted(TaskResult taskResult) {
+                if (taskResult.isSuccessful()) {
+                    timedCloseTextView.setPrimaryMessage("OK");
+                }
+                else {
+                    timedCloseTextView.setErrorMessage("have marked");
+                }
+
+                timedCloseTextView.visible();
+                timedCloseTextView.closeDelayed(3000);
+            }
+        });
     }
 
     @Override
-    public void onClickDesertButton(Word word, TextView textView) {
-        learningService.desertWord(word,
-                new BusinessCaller(getFragmentHandler(), BUSINESS_CODE_DESERT_WORD));
-        removePager(word);
+    public void onClickDesertButton(WordDto wordDto, TextView textView) {
+
+        learningService.desertWord(wordDto, new TaskCallbackInMain() {
+            @Override
+            protected void onTaskCompleted(TaskResult taskResult) {
+                timedCloseTextView.setErrorMessage("OK");
+                timedCloseTextView.visible();
+                timedCloseTextView.closeDelayed(3000);
+                removePager(wordDto);
+            }
+        });
     }
 
     @Override
     public void handleFragmentMessage(Message message) {
         switch (message.what) {
             case BUSINESS_CODE_INIT_TEACHER:
-                shallLearningCount = message.getData().getInt("shallLearningSize");
 
-                if (shallLearningCount > 0) {
-                    /*Word[] words =
-                            (Word[]) message.getData().getSerializable("shallLearningWords");*/
-                    WordWithIsLearnedAtLeastTwiceToday[]
-                            wordWithIsLearnedAtLeastTwiceTodays =
-                            (WordWithIsLearnedAtLeastTwiceToday[])
-                                    message.getData()
-                                           .getSerializable(
-                                                   "wordWithIsLearnedAtLeastTwiceTodays");
-
-
-                    surplusLearningCount = Objects.requireNonNull(wordWithIsLearnedAtLeastTwiceTodays).length;
-
-                    WordCardsPagerAdapter wordCardsPagerAdapter =
-                            this.processingWordCardsPagerAdapter(wordWithIsLearnedAtLeastTwiceTodays);
-
-                    jtViewPager.setAdapter(wordCardsPagerAdapter);
-                    jtViewPager.setInitFinishedCaller(() -> {
-                        layoutGate.setVisibility(View.GONE);
-                        progressBar.setVisibility(View.INVISIBLE);
-                        buttonStartLearning.setClickable(true);
-                        learnCurrentWord();
-                        updateWordsCondition();
-                    });
-                }
-                else {
-                    Toast.makeText(getContext(), "empty", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.INVISIBLE);
-                    buttonStartLearning.setClickable(true);
-                }
                 break;
             case BUSINESS_CODE_GRASP_WORD:
             case BUSINESS_CODE_REMOVE_WORD:
-                Word word = (Word) message.getData().getSerializable("word");
-                removePager(word);
+               /* Word word = (Word) message.getData().getSerializable("word");
+                removePager();*/
                 timedCloseTextView.setNiceMessage("OK");
                 timedCloseTextView.visible();
                 timedCloseTextView.closeDelayed(3000);
@@ -318,10 +313,47 @@ public class LearningFragment extends BaseFragment
     }
 
     //*****************************
-    private void updatePreviousWordContent(Word word) {
-        if (word != null) {
+
+    private void startToLearning() {
+        buttonStartLearning.setClickable(false);
+        progressBar.setVisibility(View.VISIBLE);
+        learningService.initTeacher(new TaskCallbackInMain() {
+            @Override
+            protected void onTaskCompleted(TaskResult taskResult) {
+                WordDto[] wordDtos = (WordDto[]) taskResult.getSerializablePayload(
+                        "wordDtos");
+                shallLearningCount = wordDtos.length;
+
+                if (shallLearningCount > 0) {
+
+                    WordCardsPagerAdapter wordCardsPagerAdapter =
+                            wordCardsPagerAdapterProvider
+                                    .get(wordDtos, LearningFragment.this);
+
+                    jtViewPager.setAdapter(wordCardsPagerAdapter);
+                    jtViewPager.setInitFinishedCaller(() -> {
+                        layoutGate.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        buttonStartLearning.setClickable(true);
+                        learnCurrentWord();
+                        updateWordsCondition();
+                    });
+                }
+                else {
+                    Toast.makeText(getContext(), "empty", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                    buttonStartLearning.setClickable(true);
+                }
+            }
+        });
+    }
+
+
+    private void updatePreviousWordContent(WordDto wordDto) {
+        if (wordDto != null) {
             textViewPreviousContent
-                    .setText(word.getId() + ":" + word.getEn() + "-" + word.getCh());
+                    .setText(
+                            wordDto.getFdId() + ":" + wordDto.getWord() + "-" + wordDto.getChExplain());
         }
     }
 
@@ -338,30 +370,14 @@ public class LearningFragment extends BaseFragment
                 currentPosition + "-" + surplusLearningCount + "-" + shallLearningCount);
     }
 
-    private void initBlackboardOfTeacher() {
-        TeacherType currentTeacherType = learningService.getTeacherType();
-
-        switch (currentTeacherType) {
-            case LISTENING_TEACHER:
-                baseBlackboardOfTeacher = new BlackboardOfLearningTeacher(reader);
-                break;
-            case SPEAKING_TEACHER:
-                baseBlackboardOfTeacher = new BlackboardOfSpeakingTeacher(reader);
-                break;
-            case WRITING_TEACHER:
-                baseBlackboardOfTeacher = new BlackboardOfWritingTeacher(reader);
-                break;
-        }
-    }
-
-    private void removePager(Word word) {
+    private void removePager(WordDto wordDto) {
         int lastPosition = jtViewPager.getCurrentItem();
         WordCardsPagerAdapter adapter = (WordCardsPagerAdapter) jtViewPager.getAdapter();
         if (adapter != null) {
-            adapter.removeWord(word);
+            adapter.removeWord(wordDto);
         }
 
-        //learningService.learnedWordInToday(word);
+        learningService.learnedWordInToday(wordDto);
 
         if (lastPosition < jtViewPager.getAdapter().getCount()) {
             jtViewPager.setCurrentItem(lastPosition, true);
@@ -369,44 +385,19 @@ public class LearningFragment extends BaseFragment
 
         surplusLearningCount--;
         updateWordsCondition();
-        updatePreviousWordContent(word);
+        updatePreviousWordContent(wordDto);
         learnCurrentWord();
     }
 
     private void learnCurrentWord() {
         WordCardView wordCardView = jtViewPager.findViewWithTag(jtViewPager.getCurrentItem());
         if (wordCardView != null) {
-            baseBlackboardOfTeacher
-                    .whileLearning(wordCardView.getWord(), wordCardView.getTextViewContent());
+            blackBoardProvider.get()
+                              .whileLearning(wordCardView.getWordDto(),
+                                      wordCardView.getTextViewContent());
         }
         else {
             reader.stop();
         }
-    }
-
-    private WordCardsPagerAdapter processingWordCardsPagerAdapter(Word[] words) {
-        WordCardsPagerAdapter wordCardsPagerAdapter = null;
-        LearningMode learningMode = learningService.getLearningMode();
-        switch (learningMode) {
-            case NEW:
-                wordCardsPagerAdapter =
-                        new NewWordCardsPagerAdapter(getContext(), words,
-                                LearningFragment
-                                        .this);
-                break;
-            case MARKED:
-                wordCardsPagerAdapter =
-                        new MarkedWordCardsPagerAdapter(getContext(), words,
-                                LearningFragment
-                                        .this);
-                break;
-            case REVIME:
-                wordCardsPagerAdapter =
-                        new ReviewWordCardsPagerAdapter(getContext(), words,
-                                LearningFragment
-                                        .this);
-                break;
-        }
-        return wordCardsPagerAdapter;
     }
 }

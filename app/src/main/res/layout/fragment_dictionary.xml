@@ -16,7 +16,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="words totality:  " />
+                android:text="wordDtoList totality:  " />
 
             <TextView
                 android:id="@+id/textView_words_totality"

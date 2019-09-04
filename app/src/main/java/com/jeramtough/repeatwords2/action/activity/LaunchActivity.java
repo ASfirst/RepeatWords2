@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtandroid.util.IntentUtil;
 import com.jeramtough.jtcomponent.task.bean.PreTaskResult;
 import com.jeramtough.jtcomponent.task.bean.TaskResult;
 import com.jeramtough.repeatwords2.R;
@@ -79,9 +80,9 @@ public class LaunchActivity extends BasicActivity {
 
                     @Override
                     protected void onTaskCompleted(TaskResult taskResult) {
-                        /*IntentUtil.toTheOtherActivity(LaunchActivity.this,
+                        IntentUtil.toTheOtherActivity(LaunchActivity.this,
                                 MainActivity.class);
-                        LaunchActivity.this.finish();*/
+                        LaunchActivity.this.finish();
                     }
                 });
     }

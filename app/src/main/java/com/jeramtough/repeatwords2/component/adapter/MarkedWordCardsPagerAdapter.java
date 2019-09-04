@@ -3,8 +3,8 @@ package com.jeramtough.repeatwords2.component.adapter;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
+import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 
 /**
  * Created on 2018-11-27 22:21
@@ -12,9 +12,9 @@ import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
  */
 public class MarkedWordCardsPagerAdapter extends WordCardsPagerAdapter {
     public MarkedWordCardsPagerAdapter(Context context,
-                                       Word[] words,
+                                       WordDto[] wordDtos,
                                        WordCardView.WordActionsListener wordActionsListener) {
-        super(context, words, wordActionsListener);
+        super(context, wordDtos, wordActionsListener);
     }
 
     @Override

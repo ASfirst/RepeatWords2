@@ -71,7 +71,7 @@ public class ListFragment extends BaseFragment
 
         radioGroup.setOnCheckedChangeListener(this);
         listViewWords.setOnItemLongClickListener(this);
-        initResources();
+       // initResources();
     }
 
     @Override

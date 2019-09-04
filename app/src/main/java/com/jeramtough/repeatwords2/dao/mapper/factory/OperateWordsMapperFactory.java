@@ -1,23 +1,23 @@
 package com.jeramtough.repeatwords2.dao.mapper.factory;
 
-import com.jeramtough.repeatwords2.dao.mapper.DesertedLearningMapper;
-import com.jeramtough.repeatwords2.dao.mapper.HaveGraspedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.HaveLearnedTodayMapper;
-import com.jeramtough.repeatwords2.dao.mapper.MarkedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.ShallLearningMapper;
+import com.jeramtough.repeatwords2.dao.mapper.DesertedLearningMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.HaveGraspedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.HaveLearnedTodayMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.MarkedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.ShallLearningMapperWord;
 
 /**
  * @author 11718
  * on 2018  May 08 Tuesday 00:52.
  */
 public interface OperateWordsMapperFactory {
-    HaveGraspedMapper getHaveGraspedMapper();
+    HaveGraspedMapperWord getHaveGraspedMapper();
 
-    ShallLearningMapper getShallLearningMapper();
+    ShallLearningMapperWord getShallLearningMapper();
 
-    MarkedMapper getMarkedMapper();
+    MarkedMapperWord getMarkedMapper();
 
-    DesertedLearningMapper getDesertedLearningMapper();
+    DesertedLearningMapperWord getDesertedLearningMapper();
 
-    HaveLearnedTodayMapper getHaveLearnedTodayMapper();
+    HaveLearnedTodayMapperWord getHaveLearnedTodayMapper();
 }

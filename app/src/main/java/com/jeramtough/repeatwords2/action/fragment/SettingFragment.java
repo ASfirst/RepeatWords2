@@ -17,9 +17,9 @@ import android.widget.Toast;
 import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.repeatwords2.R;
-import com.jeramtough.repeatwords2.service.SettingService;
 import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
-import com.jeramtough.repeatwords2.component.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.service.SettingService;
 
 /**
  * @author 11718
@@ -82,7 +82,7 @@ public class SettingFragment extends BaseFragment
         radioGroupSelectLearningMode.setOnCheckedChangeListener(this);
         radioGroupSelectTeacher.setOnCheckedChangeListener(this);
 
-        this.initResources();
+        //  this.initResources();
     }
 
     @Override

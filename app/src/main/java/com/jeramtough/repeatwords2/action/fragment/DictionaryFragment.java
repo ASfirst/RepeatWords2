@@ -78,7 +78,7 @@ public class DictionaryFragment extends BaseFragment
         buttonGoBottom.setOnClickListener(this);
         buttonGoTop.setOnClickListener(this);
 
-        this.initResources();
+       // this.initResources();
     }
 
     @Override

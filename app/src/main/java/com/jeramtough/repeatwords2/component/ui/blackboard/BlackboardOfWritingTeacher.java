@@ -2,8 +2,8 @@ package com.jeramtough.repeatwords2.component.ui.blackboard;
 
 import android.widget.TextView;
 
-import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.baidu.Reader;
+import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 
 /**
  * @author 11718
@@ -16,23 +16,26 @@ public class BlackboardOfWritingTeacher extends BaseBlackboardOfTeacher {
 
 
     @Override
-    public void whileLearning(Word word, TextView textView) {
-        super.whileLearning(word, textView);
-        if (word.getCh().length() > 6) {
-            String ch1 = word.getCh().substring(0, 5);
-            String ch2 = word.getCh().substring(5, word.getCh().length() );
+    public void whileLearning(WordDto wordDto, TextView textView) {
+        super.whileLearning(wordDto, textView);
+        if (wordDto.getChExplain().length() > 6) {
+            String ch1 = wordDto.getChExplain().substring(0, 5);
+            String ch2 = wordDto.getChExplain().substring(5, wordDto.getChExplain().length());
             textView.setText(ch1 + "\n" + ch2);
-        } else {
-            textView.setText(word.getCh());
+        }
+        else {
+            textView.setText(wordDto.getChExplain());
         }
     }
 
     @Override
-    public void whileExposing(Word word, TextView textView) {
-        super.whileExposing(word, textView);
+    public void whileExposing(WordDto wordDto, TextView textView) {
+        super.whileExposing(wordDto, textView);
 
-        String content = word.getId() + "-" + word.getEn() + "-" + word.getPhonetic() + "\n" + word.getCh();
+        String content =
+                wordDto.getFdId() + "-" + wordDto.getWord() + "-" + wordDto.getPhonetic() +
+                        "\n" + wordDto.getChExplain();
         textView.setText(content);
-        getReader().speech(word.getEn());
+        getReader().speech(wordDto.getWord());
     }
 }

@@ -4,7 +4,7 @@ import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
-import com.jeramtough.repeatwords2.component.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
 
 /**
  * @author 11718
@@ -25,7 +25,7 @@ public class WordsOperateProvider {
         this.myAppSetting = myAppSetting;
         this.newModeWordsOperator = newModeWordsOperator;
         this.reviewModeWordsOperator = reviewModeWordsOperator;
-        this.markModeWordsOperator = markModeWordsOperator;
+//        this.markModeWordsOperator = markModeWordsOperator;
     }
 
 

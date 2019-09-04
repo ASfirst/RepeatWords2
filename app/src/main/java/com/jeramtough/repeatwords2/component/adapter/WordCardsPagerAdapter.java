@@ -6,8 +6,8 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
+import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,28 +19,28 @@ import java.util.List;
  */
 public class WordCardsPagerAdapter extends PagerAdapter {
     private Context context;
-    private List<Word> words;
+    private List<WordDto> wordDtoList;
     private WordCardView.WordActionsListener wordActionsListener;
 
-    public WordCardsPagerAdapter(Context context, List<Word> words,
+    public WordCardsPagerAdapter(Context context, List<WordDto> wordDtoList,
                                  WordCardView.WordActionsListener wordActionsListener) {
         this.context = context;
-        this.words = words;
+        this.wordDtoList = wordDtoList;
         this.wordActionsListener = wordActionsListener;
     }
 
-    public WordCardsPagerAdapter(Context context, Word[] words,
+    public WordCardsPagerAdapter(Context context, WordDto[] wordDtoList,
                                  WordCardView.WordActionsListener wordActionsListener) {
         this.context = context;
-        this.words = new ArrayList<>();
-        this.words.addAll(Arrays.asList(words));
+        this.wordDtoList = new ArrayList<>();
+        this.wordDtoList.addAll(Arrays.asList(wordDtoList));
         this.wordActionsListener = wordActionsListener;
     }
 
 
     @Override
     public int getCount() {
-        return words.size();
+        return wordDtoList.size();
     }
 
 
@@ -52,8 +52,8 @@ public class WordCardsPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        Word word = words.get(position);
-        WordCardView wordCardView = new WordCardView(context, word);
+        WordDto wordDto = wordDtoList.get(position);
+        WordCardView wordCardView = new WordCardView(context, wordDto);
         setWordCardView(position, wordCardView);
         container.addView(wordCardView);
         return wordCardView;
@@ -71,13 +71,13 @@ public class WordCardsPagerAdapter extends PagerAdapter {
         return POSITION_NONE;
     }
 
-    public void removeWord(Word word) {
-        words.remove(word);
+    public void removeWord(WordDto wordDto) {
+        wordDtoList.remove(wordDto);
         notifyDataSetChanged();
     }
 
     public void resortWords() {
-        Collections.shuffle(words);
+        Collections.shuffle(wordDtoList);
     }
 
     public void setWordCardView(int position, WordCardView wordCardView) {

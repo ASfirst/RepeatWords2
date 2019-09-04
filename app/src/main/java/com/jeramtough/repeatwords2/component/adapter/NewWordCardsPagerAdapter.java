@@ -2,8 +2,8 @@ package com.jeramtough.repeatwords2.component.adapter;
 
 import android.content.Context;
 
-import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
+import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 
 /**
  * Created on 2018-11-27 22:19
@@ -11,9 +11,9 @@ import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
  */
 public class NewWordCardsPagerAdapter extends WordCardsPagerAdapter {
     public NewWordCardsPagerAdapter(Context context,
-                                    Word[] words,
+                                    WordDto[] wordDtos,
                                     WordCardView.WordActionsListener wordActionsListener) {
-        super(context, words, wordActionsListener);
+        super(context, wordDtos, wordActionsListener);
     }
 
     @Override

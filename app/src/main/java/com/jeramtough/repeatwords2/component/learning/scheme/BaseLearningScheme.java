@@ -1,7 +1,7 @@
 package com.jeramtough.repeatwords2.component.learning.scheme;
 
 import com.jeramtough.oedslib.mapper.DictionaryMapper;
-import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperProvider;
+import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordRecordMapperProvider;
 
 /**
  * Created on 2019-09-01 14:17
@@ -10,14 +10,13 @@ import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperProvide
 abstract class BaseLearningScheme implements LearningScheme {
 
     DictionaryMapper dictionaryMapper;
-    OperateWordsMapperProvider operateWordsMapperProvider;
+    OperateWordRecordMapperProvider operateWordRecordMapperProvider;
 
     public BaseLearningScheme(DictionaryMapper dictionaryMapper,
-                              OperateWordsMapperProvider operateWordsMapperProvider) {
+                              OperateWordRecordMapperProvider operateWordRecordMapperProvider) {
         this.dictionaryMapper = dictionaryMapper;
-        this.operateWordsMapperProvider = operateWordsMapperProvider;
+        this.operateWordRecordMapperProvider = operateWordRecordMapperProvider;
     }
-
 
 
 }

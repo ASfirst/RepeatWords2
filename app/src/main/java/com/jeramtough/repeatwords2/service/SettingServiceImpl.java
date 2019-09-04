@@ -10,7 +10,7 @@ import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
 import com.jeramtough.repeatwords2.component.dictionary.DictionaryManager;
 import com.jeramtough.repeatwords2.component.record.LearningRecordManager;
-import com.jeramtough.repeatwords2.component.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
 import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper1;
 import com.jeramtough.repeatwords2.dao.mapper.factory.ListeningTeacherOperateWordsMapperFactory;
 import com.jeramtough.repeatwords2.dao.mapper.factory.SpeakingTeacherOperateWordsMapperFactory;

@@ -28,15 +28,15 @@ import com.jeramtough.repeatwords2.component.learning.scheme.ListeningLearningSc
 import com.jeramtough.repeatwords2.component.learning.scheme.ReadingLearningScheme;
 import com.jeramtough.repeatwords2.component.learning.scheme.SpeakingLearningScheme;
 import com.jeramtough.repeatwords2.component.learning.scheme.WritingLearningScheme;
+import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
-import com.jeramtough.repeatwords2.component.teacher.TeacherType;
 import com.jeramtough.repeatwords2.dao.MyDatabaseHelper;
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper1;
-import com.jeramtough.repeatwords2.dao.mapper.OperateWordsMapper;
-import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordsMapperProvider;
+import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
+import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordRecordMapperProvider;
+import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordRecordMapperProvider;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
-import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperProvider;
 import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 import java.util.Arrays;
@@ -55,7 +55,7 @@ class LaunchServiceImpl implements LaunchService {
     private BaiduVoiceReader baiduVoiceReader;
     private MyAppSetting myAppSetting;
     private FirstBoot firstBoot;
-    private OperateWordsMapperProvider operateWordsMapperProvider;
+    private OperateWordRecordMapperProvider operateWordRecordMapperProvider;
     private MyDatabaseHelper myDatabaseHelper;
 
     @IocAutowire
@@ -66,8 +66,8 @@ class LaunchServiceImpl implements LaunchService {
                               DictionaryManager dictionaryManager,
                               BaiduVoiceReader baiduVoiceReader, MyAppSetting myAppSetting,
                               FirstBoot firstBoot,
-                              @InjectComponent(impl = DefaultOperateWordsMapperProvider.class)
-                                      OperateWordsMapperProvider operateWordsMapperProvider,
+                              @InjectComponent(impl = DefaultOperateWordRecordMapperProvider.class)
+                                      OperateWordRecordMapperProvider operateWordRecordMapperProvider,
                               MyDatabaseHelper myDatabaseHelper) {
         this.context = context;
         this.permissionManager = permissionManager;
@@ -77,7 +77,7 @@ class LaunchServiceImpl implements LaunchService {
         this.baiduVoiceReader = baiduVoiceReader;
         this.myAppSetting = myAppSetting;
         this.firstBoot = firstBoot;
-        this.operateWordsMapperProvider = operateWordsMapperProvider;
+        this.operateWordRecordMapperProvider = operateWordRecordMapperProvider;
         this.myDatabaseHelper = myDatabaseHelper;
     }
 
@@ -162,7 +162,7 @@ class LaunchServiceImpl implements LaunchService {
                         preparingLearningScheme(preTaskResult, runningTaskCallback,
                                 readingLearningScheme, denominator);
 
-
+                        firstBoot.firstBootOver();
                     }
 
                     //clear learning recodes if today is new day
@@ -171,26 +171,27 @@ class LaunchServiceImpl implements LaunchService {
                     runningTaskCallback.onTaskRunning(preTaskResult, 3, 4);
                     if (!DateTimeUtil.getDate().equals(
                             myAppSetting.getDateForLastOpenedApp())) {
-                        operateWordsMapperProvider.getOperateWordsMapper(
+                        operateWordRecordMapperProvider.getOperateWordsMapper(
                                 TeacherType.LISTENING_TEACHER,
                                 WordCondition.LEARNED_TODAY).clearAll();
-                        operateWordsMapperProvider.getOperateWordsMapper(
+                        operateWordRecordMapperProvider.getOperateWordsMapper(
                                 TeacherType.SPEAKING_TEACHER,
                                 WordCondition.LEARNED_TODAY).clearAll();
-                        operateWordsMapperProvider.getOperateWordsMapper(
+                        operateWordRecordMapperProvider.getOperateWordsMapper(
                                 TeacherType.WRITING_TEACHER,
                                 WordCondition.LEARNED_TODAY).clearAll();
-                        operateWordsMapperProvider.getOperateWordsMapper(
+                        operateWordRecordMapperProvider.getOperateWordsMapper(
                                 TeacherType.READING_TEACHER,
                                 WordCondition.LEARNED_TODAY).clearAll();
 
                         myAppSetting.setDateForLastOpenedApp(DateTimeUtil.getDate());
                     }
 
-                    preTaskResult.setMessage("Init the BaiduVoiceReader");
-                    runningTaskCallback.onTaskRunning(preTaskResult, 4, denominator);
+                    preTaskResult.setMessage("Init some beans");
                     //init the BaiduVoiceReader
+                    runningTaskCallback.onTaskRunning(preTaskResult, 4, denominator);
                     baiduVoiceReader.initSpeechSynthesizer();
+
                     return true;
                 });
     }
@@ -224,12 +225,12 @@ class LaunchServiceImpl implements LaunchService {
         runningTaskCallback.onTaskRunning(preTaskResult, 2, denominator);
         largeWords = dictionaryMapper.selectListByTag(WordTag.NCE);
         Arrays.sort(largeWords, new TagPositionComparator(WordTag.NCE));
-        OperateWordsMapper listenOperateWordsMapper =
-                operateWordsMapperProvider.getOperateWordsMapper(
+        OperateWordRecordMapper listenOperateWordRecordMapper =
+                operateWordRecordMapperProvider.getOperateWordsMapper(
                         TeacherType.LISTENING_TEACHER,
                         WordCondition.SHALL_LEARNING);
-        OperateWordsMapper speakOperateWordsMapper =
-                operateWordsMapperProvider.getOperateWordsMapper(
+        OperateWordRecordMapper speakOperateWordRecordMapper =
+                operateWordRecordMapperProvider.getOperateWordsMapper(
                         TeacherType.SPEAKING_TEACHER,
                         WordCondition.SHALL_LEARNING);
         for (int i = 0; i < largeWords.length; i++) {
@@ -242,8 +243,8 @@ class LaunchServiceImpl implements LaunchService {
                     "Speaking " +
                     "\n word[%s]", i, largeWord.getWord()));
             runningTaskCallback.onTaskRunning(preTaskResult, 2, denominator);
-            listenOperateWordsMapper.addWordRecord(wordRecord);
-            speakOperateWordsMapper.addWordRecord(wordRecord);
+            listenOperateWordRecordMapper.addWordRecord(wordRecord);
+            speakOperateWordRecordMapper.addWordRecord(wordRecord);
         }
     }
 
@@ -256,8 +257,8 @@ class LaunchServiceImpl implements LaunchService {
                 "dictionary...");
         runningTaskCallback.onTaskRunning(preTaskResult, 2, denominator);
         largeWords = dictionaryMapper.selectListByWordTagOrderByFrq(WordTag.ZK);
-        OperateWordsMapper writeOperateWordsMapper =
-                operateWordsMapperProvider.getOperateWordsMapper(
+        OperateWordRecordMapper writeOperateWordRecordMapper =
+                operateWordRecordMapperProvider.getOperateWordsMapper(
                         TeacherType.WRITING_TEACHER,
                         WordCondition.SHALL_LEARNING);
         for (int i = 0; i < largeWords.length; i++) {
@@ -269,7 +270,7 @@ class LaunchServiceImpl implements LaunchService {
             preTaskResult.setMessage(
                     String.format("\n[%d]Writing word[%s]", i, largeWord.getWord()));
             runningTaskCallback.onTaskRunning(preTaskResult, 2, denominator);
-            writeOperateWordsMapper.addWordRecord(wordRecord);
+            writeOperateWordRecordMapper.addWordRecord(wordRecord);
         }
     }
 
@@ -282,8 +283,8 @@ class LaunchServiceImpl implements LaunchService {
                 "dictionary...");
         runningTaskCallback.onTaskRunning(preTaskResult, 2, denominator);
         largeWords = dictionaryMapper.selectListByWordTagOrderByFrq(WordTag.CET4);
-        OperateWordsMapper readOperateWordsMapper =
-                operateWordsMapperProvider.getOperateWordsMapper(
+        OperateWordRecordMapper readOperateWordRecordMapper =
+                operateWordRecordMapperProvider.getOperateWordsMapper(
                         TeacherType.READING_TEACHER,
                         WordCondition.SHALL_LEARNING);
         for (int i = 0; i < largeWords.length; i++) {
@@ -295,7 +296,7 @@ class LaunchServiceImpl implements LaunchService {
             preTaskResult.setMessage(
                     String.format("\n[%d]Reading word[%s]", i, largeWord.getWord()));
             runningTaskCallback.onTaskRunning(preTaskResult, 2, denominator);
-            readOperateWordsMapper.addWordRecord(wordRecord);
+            readOperateWordRecordMapper.addWordRecord(wordRecord);
         }
     }
 }

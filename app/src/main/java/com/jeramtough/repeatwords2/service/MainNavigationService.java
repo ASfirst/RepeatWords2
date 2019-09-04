@@ -1,7 +1,7 @@
 package com.jeramtough.repeatwords2.service;
 
 import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
-import com.jeramtough.repeatwords2.component.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
 
 /**
  * @author 11718

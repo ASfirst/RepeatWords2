@@ -4,9 +4,8 @@ import android.graphics.Color;
 import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.R;
-import com.jeramtough.repeatwords2.bean.word.Word;
-import com.jeramtough.repeatwords2.bean.word.WordWithIsLearnedAtLeastTwiceToday;
 import com.jeramtough.repeatwords2.component.baidu.Reader;
+import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 
 /**
  * @author 11718
@@ -24,10 +23,9 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     }
 
     @Override
-    public void whileLearning(Word word, TextView textView) {
+    public void whileLearning(WordDto wordDto, TextView textView) {
         textView.setBackgroundResource(R.drawable.blackboard_background);
-        WordWithIsLearnedAtLeastTwiceToday wordWithIsLearnedAtLeastTwiceToday = (WordWithIsLearnedAtLeastTwiceToday) word;
-        if (wordWithIsLearnedAtLeastTwiceToday.isLearnedAtLeastTwiceToday()) {
+        if (wordDto.isLearnedAtLeastTwiceToday()) {
             textView.setTextColor(Color.BLUE);
         }
         else {
@@ -37,7 +35,7 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     }
 
     @Override
-    public void whileExposing(Word word, TextView textView) {
+    public void whileExposing(WordDto wordDto, TextView textView) {
         textView.setBackgroundResource(R.color.transparent);
         textView.setTextColor(Color.BLACK);
         reader.stop();

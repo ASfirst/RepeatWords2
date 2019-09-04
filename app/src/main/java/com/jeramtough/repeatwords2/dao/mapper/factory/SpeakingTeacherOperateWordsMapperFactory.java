@@ -11,17 +11,17 @@ import com.jeramtough.repeatwords2.dao.mapper.*;
 @JtComponent
 public class SpeakingTeacherOperateWordsMapperFactory implements OperateWordsMapperFactory
 {
-    private SpeakMarkedMapper speakMarkedMapper;
-    private SpeakDesertedLearningMapper speakDesertedLearningMapper;
-    private SpeakHaveGraspedMapper speakHaveGraspedMapper;
-    private SpeakShallLearningMapper speakShallLearningMapper;
-    private SpeakHaveLearnedTodayMapper speakHaveLearnedTodayMapper;
+    private SpeakMarkedMapperWord speakMarkedMapper;
+    private SpeakDesertedLearningMapperWord speakDesertedLearningMapper;
+    private SpeakHaveGraspedMapperWord speakHaveGraspedMapper;
+    private SpeakShallLearningMapperWord speakShallLearningMapper;
+    private SpeakHaveLearnedTodayMapperWord speakHaveLearnedTodayMapper;
     
     @IocAutowire
-    public SpeakingTeacherOperateWordsMapperFactory(SpeakMarkedMapper speakMarkedMapper,
-                                                    SpeakDesertedLearningMapper speakDesertedLearningMapper,
-                                                    SpeakHaveGraspedMapper speakHaveGraspedMapper,
-                                                    SpeakShallLearningMapper speakShallLearningMapper, SpeakHaveLearnedTodayMapper speakHaveLearnedTodayMapper)
+    public SpeakingTeacherOperateWordsMapperFactory(SpeakMarkedMapperWord speakMarkedMapper,
+                                                    SpeakDesertedLearningMapperWord speakDesertedLearningMapper,
+                                                    SpeakHaveGraspedMapperWord speakHaveGraspedMapper,
+                                                    SpeakShallLearningMapperWord speakShallLearningMapper, SpeakHaveLearnedTodayMapperWord speakHaveLearnedTodayMapper)
     {
         this.speakMarkedMapper = speakMarkedMapper;
         this.speakDesertedLearningMapper = speakDesertedLearningMapper;
@@ -31,31 +31,31 @@ public class SpeakingTeacherOperateWordsMapperFactory implements OperateWordsMap
     }
     
     @Override
-    public HaveGraspedMapper getHaveGraspedMapper()
+    public HaveGraspedMapperWord getHaveGraspedMapper()
     {
         return speakHaveGraspedMapper;
     }
     
     @Override
-    public ShallLearningMapper getShallLearningMapper()
+    public ShallLearningMapperWord getShallLearningMapper()
     {
         return speakShallLearningMapper;
     }
     
     @Override
-    public MarkedMapper getMarkedMapper()
+    public MarkedMapperWord getMarkedMapper()
     {
         return speakMarkedMapper;
     }
     
     @Override
-    public DesertedLearningMapper getDesertedLearningMapper()
+    public DesertedLearningMapperWord getDesertedLearningMapper()
     {
         return speakDesertedLearningMapper;
     }
 
     @Override
-    public HaveLearnedTodayMapper getHaveLearnedTodayMapper() {
+    public HaveLearnedTodayMapperWord getHaveLearnedTodayMapper() {
         return speakHaveLearnedTodayMapper;
     }
 }

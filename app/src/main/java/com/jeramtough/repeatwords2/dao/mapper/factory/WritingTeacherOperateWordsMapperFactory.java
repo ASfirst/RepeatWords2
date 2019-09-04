@@ -2,16 +2,16 @@ package com.jeramtough.repeatwords2.dao.mapper.factory;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.repeatwords2.dao.mapper.DesertedLearningMapper;
-import com.jeramtough.repeatwords2.dao.mapper.HaveGraspedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.HaveLearnedTodayMapper;
-import com.jeramtough.repeatwords2.dao.mapper.MarkedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.ShallLearningMapper;
-import com.jeramtough.repeatwords2.dao.mapper.WriteDesertedLearningMapper;
-import com.jeramtough.repeatwords2.dao.mapper.WriteHaveGraspedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.WriteHaveLearnedTodayMapper;
-import com.jeramtough.repeatwords2.dao.mapper.WriteMarkedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.WriteShallLearningMapper;
+import com.jeramtough.repeatwords2.dao.mapper.DesertedLearningMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.HaveGraspedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.HaveLearnedTodayMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.MarkedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.ShallLearningMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.WriteDesertedLearningMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.WriteHaveGraspedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.WriteHaveLearnedTodayMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.WriteMarkedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.WriteShallLearningMapperWord;
 
 /**
  * @author 11718
@@ -19,14 +19,15 @@ import com.jeramtough.repeatwords2.dao.mapper.WriteShallLearningMapper;
  */
 @JtComponent
 public class WritingTeacherOperateWordsMapperFactory implements OperateWordsMapperFactory {
-    private WriteHaveGraspedMapper writeHaveGraspedMapper;
-    private WriteDesertedLearningMapper writeDesertedLearningMapper;
-    private WriteMarkedMapper writeMarkedMapper;
-    private WriteShallLearningMapper writeShallLearningMapper;
-    private WriteHaveLearnedTodayMapper writeHaveLearnedTodayMapper;
+    private WriteHaveGraspedMapperWord writeHaveGraspedMapper;
+    private WriteDesertedLearningMapperWord writeDesertedLearningMapper;
+    private WriteMarkedMapperWord writeMarkedMapper;
+    private WriteShallLearningMapperWord writeShallLearningMapper;
+    private WriteHaveLearnedTodayMapperWord writeHaveLearnedTodayMapper;
 
     @IocAutowire
-    public WritingTeacherOperateWordsMapperFactory(WriteHaveGraspedMapper writeHaveGraspedMapper, WriteDesertedLearningMapper writeDesertedLearningMapper, WriteMarkedMapper writeMarkedMapper, WriteShallLearningMapper writeShallLearningMapper, WriteHaveLearnedTodayMapper writeHaveLearnedTodayMapper) {
+    public WritingTeacherOperateWordsMapperFactory(
+            WriteHaveGraspedMapperWord writeHaveGraspedMapper, WriteDesertedLearningMapperWord writeDesertedLearningMapper, WriteMarkedMapperWord writeMarkedMapper, WriteShallLearningMapperWord writeShallLearningMapper, WriteHaveLearnedTodayMapperWord writeHaveLearnedTodayMapper) {
         this.writeHaveGraspedMapper = writeHaveGraspedMapper;
         this.writeDesertedLearningMapper = writeDesertedLearningMapper;
         this.writeMarkedMapper = writeMarkedMapper;
@@ -36,27 +37,27 @@ public class WritingTeacherOperateWordsMapperFactory implements OperateWordsMapp
 
 
     @Override
-    public HaveGraspedMapper getHaveGraspedMapper() {
+    public HaveGraspedMapperWord getHaveGraspedMapper() {
         return writeHaveGraspedMapper;
     }
 
     @Override
-    public ShallLearningMapper getShallLearningMapper() {
+    public ShallLearningMapperWord getShallLearningMapper() {
         return writeShallLearningMapper;
     }
 
     @Override
-    public MarkedMapper getMarkedMapper() {
+    public MarkedMapperWord getMarkedMapper() {
         return writeMarkedMapper;
     }
 
     @Override
-    public DesertedLearningMapper getDesertedLearningMapper() {
+    public DesertedLearningMapperWord getDesertedLearningMapper() {
         return writeDesertedLearningMapper;
     }
 
     @Override
-    public HaveLearnedTodayMapper getHaveLearnedTodayMapper() {
+    public HaveLearnedTodayMapperWord getHaveLearnedTodayMapper() {
         return writeHaveLearnedTodayMapper;
     }
 }

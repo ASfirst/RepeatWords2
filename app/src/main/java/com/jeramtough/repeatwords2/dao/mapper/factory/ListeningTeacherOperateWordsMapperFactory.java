@@ -2,16 +2,16 @@ package com.jeramtough.repeatwords2.dao.mapper.factory;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
-import com.jeramtough.repeatwords2.dao.mapper.DesertedLearningMapper;
-import com.jeramtough.repeatwords2.dao.mapper.HaveGraspedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.HaveLearnedTodayMapper;
-import com.jeramtough.repeatwords2.dao.mapper.ListenDesertedLearningMapper;
-import com.jeramtough.repeatwords2.dao.mapper.ListenHaveGraspedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.ListenHaveLearnedTodayMapper;
-import com.jeramtough.repeatwords2.dao.mapper.ListenMarkedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.ListenShallLearningMapper;
-import com.jeramtough.repeatwords2.dao.mapper.MarkedMapper;
-import com.jeramtough.repeatwords2.dao.mapper.ShallLearningMapper;
+import com.jeramtough.repeatwords2.dao.mapper.DesertedLearningMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.HaveGraspedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.HaveLearnedTodayMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.ListenDesertedLearningMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.ListenHaveGraspedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.ListenHaveLearnedTodayMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.ListenMarkedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.ListenShallLearningMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.MarkedMapperWord;
+import com.jeramtough.repeatwords2.dao.mapper.ShallLearningMapperWord;
 
 /**
  * @author 11718
@@ -20,18 +20,18 @@ import com.jeramtough.repeatwords2.dao.mapper.ShallLearningMapper;
 @JtComponent
 public class ListeningTeacherOperateWordsMapperFactory implements OperateWordsMapperFactory
 {
-	private ListenShallLearningMapper listenShallLearningMapper;
-	private ListenHaveGraspedMapper listenHaveGraspedMapper;
-	private ListenMarkedMapper listenMarkedMapper;
-	private ListenDesertedLearningMapper listenDesertedLearningMapper;
-	private ListenHaveLearnedTodayMapper listenHaveLearnedTodayMapper;
+	private ListenShallLearningMapperWord listenShallLearningMapper;
+	private ListenHaveGraspedMapperWord listenHaveGraspedMapper;
+	private ListenMarkedMapperWord listenMarkedMapper;
+	private ListenDesertedLearningMapperWord listenDesertedLearningMapper;
+	private ListenHaveLearnedTodayMapperWord listenHaveLearnedTodayMapper;
 	
 	@IocAutowire
 	public ListeningTeacherOperateWordsMapperFactory(
-			ListenShallLearningMapper listenShallLearningMapper,
-			ListenHaveGraspedMapper listenHaveGraspedMapper,
-			ListenMarkedMapper listenMarkedMapper,
-			ListenDesertedLearningMapper listenDesertedLearningMapper, ListenHaveLearnedTodayMapper listenHaveLearnedTodayMapper)
+            ListenShallLearningMapperWord listenShallLearningMapper,
+            ListenHaveGraspedMapperWord listenHaveGraspedMapper,
+            ListenMarkedMapperWord listenMarkedMapper,
+            ListenDesertedLearningMapperWord listenDesertedLearningMapper, ListenHaveLearnedTodayMapperWord listenHaveLearnedTodayMapper)
 	{
 		this.listenShallLearningMapper = listenShallLearningMapper;
 		this.listenHaveGraspedMapper = listenHaveGraspedMapper;
@@ -41,31 +41,31 @@ public class ListeningTeacherOperateWordsMapperFactory implements OperateWordsMa
 	}
 	
 	@Override
-	public HaveGraspedMapper getHaveGraspedMapper()
+	public HaveGraspedMapperWord getHaveGraspedMapper()
 	{
 		return listenHaveGraspedMapper;
 	}
 	
 	@Override
-	public ShallLearningMapper getShallLearningMapper()
+	public ShallLearningMapperWord getShallLearningMapper()
 	{
 		return listenShallLearningMapper;
 	}
 	
 	@Override
-	public MarkedMapper getMarkedMapper()
+	public MarkedMapperWord getMarkedMapper()
 	{
 		return listenMarkedMapper;
 	}
 	
 	@Override
-	public DesertedLearningMapper getDesertedLearningMapper()
+	public DesertedLearningMapperWord getDesertedLearningMapper()
 	{
 		return listenDesertedLearningMapper;
 	}
 
     @Override
-    public HaveLearnedTodayMapper getHaveLearnedTodayMapper() {
+    public HaveLearnedTodayMapperWord getHaveLearnedTodayMapper() {
         return listenHaveLearnedTodayMapper;
     }
 }
