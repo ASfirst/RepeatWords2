@@ -29,6 +29,5 @@ public class BlackboardOfReadingTeacher extends BaseBlackboardOfTeacher {
                               TextView textViewBigBlackboard) {
         super.whileExposing(wordDto, textView, textViewBigBlackboard);
         textView.setText(WordUtil.abbreviateChinese(wordDto.getChExplain()));
-        textViewBigBlackboard.setText(WordUtil.formatWordDto(wordDto));
     }
 }

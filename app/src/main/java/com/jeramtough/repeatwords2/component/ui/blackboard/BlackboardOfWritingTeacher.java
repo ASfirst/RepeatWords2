@@ -4,6 +4,7 @@ import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.component.baidu.Reader;
 import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
+import com.jeramtough.repeatwords2.util.WordUtil;
 
 /**
  * @author 11718
@@ -34,9 +35,6 @@ public class BlackboardOfWritingTeacher extends BaseBlackboardOfTeacher {
                               TextView textViewBigBlackboard) {
         super.whileExposing(wordDto, textView, textViewBigBlackboard);
 
-        String content =
-                wordDto.getFdId() + "-" + wordDto.getWord() + "-" + wordDto.getPhonetic() +
-                        "\n" + wordDto.getChExplain();
-        textView.setText(content);
+        textView.setText(wordDto.getWord());
     }
 }

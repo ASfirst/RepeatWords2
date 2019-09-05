@@ -1,7 +1,7 @@
 package com.jeramtough.repeatwords2.dao.mapper.provider;
 
 import com.jeramtough.repeatwords2.bean.word.WordCondition;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
 
 /**

@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.learning.school.teacher;
+package com.jeramtough.repeatwords2.component.learning.teacher;
 
 import com.jeramtough.repeatwords2.bean.word.Word;
 import com.jeramtough.repeatwords2.bean.word.WordWithIsLearnedAtLeastTwiceToday;

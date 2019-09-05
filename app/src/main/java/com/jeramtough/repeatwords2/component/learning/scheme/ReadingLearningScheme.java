@@ -9,7 +9,7 @@ import com.jeramtough.oedslib.entity.LargeWord;
 import com.jeramtough.oedslib.mapper.DictionaryMapper;
 import com.jeramtough.oedslib.tag.WordTag;
 import com.jeramtough.repeatwords2.bean.word.WordCondition;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
 import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordRecordMapperProvider;
@@ -34,12 +34,17 @@ public class ReadingLearningScheme extends BaseLearningScheme implements Learnin
     }
 
     @Override
+    TeacherType loadTeacherType() {
+        return TeacherType.READING_TEACHER;
+    }
+
+    @Override
     public void initScheme(CommonCallback<LargeWord> callback) {
         LargeWord[] largeWords;
         largeWords = super.dictionaryMapper.selectListByWordTagOrderByFrq(WordTag.CET4);
         OperateWordRecordMapper operateWordRecordMapper =
                 super.operateWordRecordMapperProvider.getOperateWordsMapper(
-                        TeacherType.READING_TEACHER,
+                        super.teacherType,
                         WordCondition.SHALL_LEARNING);
         for (LargeWord largeWord : largeWords) {
             WordRecord wordRecord = new WordRecord();
@@ -49,5 +54,11 @@ public class ReadingLearningScheme extends BaseLearningScheme implements Learnin
             callback.callback(largeWord);
             operateWordRecordMapper.addWordRecord(wordRecord);
         }
+    }
+
+    @Override
+    public void clearAllWordRecord() {
+        operateWordRecordMapperProvider.getOperateWordsMapper(teacherType,
+                WordCondition.SHALL_LEARNING).clearAll();
     }
 }

@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.learning.school.teacher;
+package com.jeramtough.repeatwords2.component.learning.keeper;
 
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
@@ -20,10 +20,10 @@ import java.util.List;
  * by @author JeramTough
  */
 @JtComponent
-public class MarkWordTeacher extends BaseTeacher {
+public class MarkWordRecordKeeper extends BaseRecordKeeper {
 
     @IocAutowire
-    public MarkWordTeacher(
+    public MarkWordRecordKeeper(
             @InjectComponent(impl = DefaultOperateWordRecordMapperProvider.class)
                     OperateWordRecordMapperProvider operateWordRecordMapperProvider,
             MyAppSetting myAppSetting,

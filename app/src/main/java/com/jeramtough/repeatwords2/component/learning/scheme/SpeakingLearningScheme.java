@@ -10,7 +10,7 @@ import com.jeramtough.oedslib.entity.LargeWord;
 import com.jeramtough.oedslib.mapper.DictionaryMapper;
 import com.jeramtough.oedslib.tag.WordTag;
 import com.jeramtough.repeatwords2.bean.word.WordCondition;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
 import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordRecordMapperProvider;
@@ -26,6 +26,7 @@ import java.util.Arrays;
 @JtComponent(pattern = JtBeanPattern.Prototype)
 public class SpeakingLearningScheme extends BaseLearningScheme implements LearningScheme {
 
+
     @IocAutowire
     public SpeakingLearningScheme(
             DictionaryMapper dictionaryMapper,
@@ -37,13 +38,18 @@ public class SpeakingLearningScheme extends BaseLearningScheme implements Learni
     }
 
     @Override
+    TeacherType loadTeacherType() {
+        return TeacherType.SPEAKING_TEACHER;
+    }
+
+    @Override
     public void initScheme(CommonCallback<LargeWord> callback) {
         LargeWord[] largeWords;
         largeWords = super.dictionaryMapper.selectListByTag(WordTag.NCE);
         Arrays.sort(largeWords, new TagPositionComparator(WordTag.NCE));
         OperateWordRecordMapper operateWordRecordMapper =
                 super.operateWordRecordMapperProvider.getOperateWordsMapper(
-                        TeacherType.SPEAKING_TEACHER,
+                        super.teacherType,
                         WordCondition.SHALL_LEARNING);
         for (LargeWord largeWord : largeWords) {
             WordRecord wordRecord = new WordRecord();
@@ -53,5 +59,11 @@ public class SpeakingLearningScheme extends BaseLearningScheme implements Learni
             callback.callback(largeWord);
             operateWordRecordMapper.addWordRecord(wordRecord);
         }
+    }
+
+    @Override
+    public void clearAllWordRecord() {
+        operateWordRecordMapperProvider.getOperateWordsMapper(teacherType,
+                WordCondition.SHALL_LEARNING).clearAll();
     }
 }

@@ -10,7 +10,7 @@ import com.jeramtough.oedslib.entity.LargeWord;
 import com.jeramtough.oedslib.mapper.DictionaryMapper;
 import com.jeramtough.oedslib.tag.WordTag;
 import com.jeramtough.repeatwords2.bean.word.WordCondition;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
 import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordRecordMapperProvider;
@@ -37,13 +37,18 @@ public class ListeningLearningScheme extends BaseLearningScheme implements Learn
     }
 
     @Override
+    TeacherType loadTeacherType() {
+        return TeacherType.LISTENING_TEACHER;
+    }
+
+    @Override
     public void initScheme(CommonCallback<LargeWord> callback) {
         LargeWord[] largeWords;
         largeWords = super.dictionaryMapper.selectListByTag(WordTag.NCE);
         Arrays.sort(largeWords, new TagPositionComparator(WordTag.NCE));
         OperateWordRecordMapper operateWordRecordMapper =
                 super.operateWordRecordMapperProvider.getOperateWordsMapper(
-                        TeacherType.LISTENING_TEACHER,
+                        super.teacherType,
                         WordCondition.SHALL_LEARNING);
         for (LargeWord largeWord : largeWords) {
             WordRecord wordRecord = new WordRecord();
@@ -54,4 +59,6 @@ public class ListeningLearningScheme extends BaseLearningScheme implements Learn
             operateWordRecordMapper.addWordRecord(wordRecord);
         }
     }
+
+
 }

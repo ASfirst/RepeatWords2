@@ -8,6 +8,7 @@ import com.jeramtough.jtcomponent.utils.CompressorUtil;
 import com.jeramtough.jtlog.with.WithLogger;
 import com.jeramtough.repeatwords2.bean.record.LearningRecord;
 import com.jeramtough.repeatwords2.component.app.AppConstants;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 
 import org.apache.commons.io.IOUtils;
 
@@ -32,16 +33,18 @@ public class LearningRecordManager implements WithLogger {
     private String learningRecordFileName = "leaning_record.json";
     private String speakingRecordFileName = "speaking_record.json";
     private String writingRecordFileName = "writing_record.json";
+    private String readingRecordFileName = "reading_record.json";
     private String recordJsonBackupFileName = "RecordJsonBackupFiles.zip";
     private File recordFile1;
     private File recordFile2;
     private File recordFile3;
+    private File recordFile4;
     private File recordBackupZipFile;
 
     @IocAutowire
     public LearningRecordManager() {
         backupDirectory = new Directory(
-                AppConstants.APP_DIRECTORY_PATH + File.separator + "RepeatWords");
+                AppConstants.APP_DIRECTORY_PATH + File.separator + "RepeatWords" + File.separator + "backup");
         if (!backupDirectory.exists()) {
             backupDirectory.mkdirs();
         }
@@ -55,6 +58,9 @@ public class LearningRecordManager implements WithLogger {
         recordFile3 =
                 new File(
                         backupDirectory.getAbsoluteFile() + File.separator + writingRecordFileName);
+        recordFile4 =
+                new File(
+                        backupDirectory.getAbsoluteFile() + File.separator + readingRecordFileName);
 
         recordBackupZipFile = new File(
                 backupDirectory.getAbsoluteFile() + File.separator +
@@ -77,7 +83,10 @@ public class LearningRecordManager implements WithLogger {
             if (recordFile3.exists()) {
                 recodeFiles.add(recordFile3);
             }
-            CompressorUtil.compress(recodeFiles.toArray(new File[recodeFiles.size()]),
+            if (recordFile4.exists()) {
+                recodeFiles.add(recordFile4);
+            }
+            CompressorUtil.compress(recodeFiles.toArray(new File[0]),
                     recordBackupZipFile.getAbsolutePath());
 
             for (String recordKey : learningRecords.keySet()) {
@@ -91,6 +100,9 @@ public class LearningRecordManager implements WithLogger {
                 }
                 else if (recordKey.equals(writingRecordFileName)) {
                     recordFile = recordFile3;
+                }
+                else if (recordKey.equals(readingRecordFileName)) {
+                    recordFile = recordFile4;
                 }
 
                 try {
@@ -112,19 +124,23 @@ public class LearningRecordManager implements WithLogger {
         }
     }
 
-    public Map<String, LearningRecord> recover() {
-        HashMap<String, LearningRecord> learningRecords = new LinkedHashMap<>();
+
+    public Map<TeacherType, LearningRecord> recover() {
+        HashMap<TeacherType, LearningRecord> learningRecords = new LinkedHashMap<>();
         if (recordFile1.exists()) {
             try {
                 String jsonStr1 = IOUtils.toString(new FileInputStream(recordFile1), "UTF-8");
                 String jsonStr2 = IOUtils.toString(new FileInputStream(recordFile2), "UTF-8");
                 String jsonStr3 = IOUtils.toString(new FileInputStream(recordFile3), "UTF-8");
-                learningRecords.put(learningRecordFileName,
+                String jsonStr4 = IOUtils.toString(new FileInputStream(recordFile4), "UTF-8");
+                learningRecords.put(TeacherType.LISTENING_TEACHER,
                         JSON.parseObject(jsonStr1, LearningRecord.class));
-                learningRecords.put(speakingRecordFileName,
+                learningRecords.put(TeacherType.SPEAKING_TEACHER,
                         JSON.parseObject(jsonStr2, LearningRecord.class));
-                learningRecords.put(writingRecordFileName,
+                learningRecords.put(TeacherType.WRITING_TEACHER,
                         JSON.parseObject(jsonStr3, LearningRecord.class));
+                learningRecords.put(TeacherType.READING_TEACHER,
+                        JSON.parseObject(jsonStr4, LearningRecord.class));
                 return learningRecords;
             }
             catch (IOException e) {
@@ -134,28 +150,23 @@ public class LearningRecordManager implements WithLogger {
         return null;
     }
 
-
     public String getLearningRecordFileName() {
         return learningRecordFileName;
-    }
-
-    public void setLearningRecordFileName(String learningRecordFileName) {
-        this.learningRecordFileName = learningRecordFileName;
     }
 
     public String getSpeakingRecordFileName() {
         return speakingRecordFileName;
     }
 
-    public void setSpeakingRecordFileName(String speakingRecordFileName) {
-        this.speakingRecordFileName = speakingRecordFileName;
-    }
-
     public String getWritingRecordFileName() {
         return writingRecordFileName;
     }
 
-    public void setWritingRecordFileName(String writingRecordFileName) {
-        this.writingRecordFileName = writingRecordFileName;
+    public String getReadingRecordFileName() {
+        return readingRecordFileName;
     }
+
+    //**********************
+
+
 }

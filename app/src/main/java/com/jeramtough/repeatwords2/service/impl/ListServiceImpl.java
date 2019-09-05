@@ -6,8 +6,8 @@ import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
 import com.jeramtough.jtcomponent.task.response.ResponseFactory;
 import com.jeramtough.repeatwords2.bean.word.WordCondition;
-import com.jeramtough.repeatwords2.component.learning.school.DefaultSchool;
-import com.jeramtough.repeatwords2.component.learning.school.School;
+import com.jeramtough.repeatwords2.component.learning.keeper.DefaultKeeperMaster;
+import com.jeramtough.repeatwords2.component.learning.keeper.KeeperMaster;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 import com.jeramtough.repeatwords2.dao.dto.record.WordRecordDto;
 import com.jeramtough.repeatwords2.service.ListService;
@@ -19,12 +19,12 @@ import com.jeramtough.repeatwords2.service.ListService;
 @JtServiceImpl
 public class ListServiceImpl implements ListService {
 
-    private School school;
+    private KeeperMaster keeperMaster;
 
     @IocAutowire
     public ListServiceImpl(
-            @InjectComponent(impl = DefaultSchool.class) School school) {
-        this.school = school;
+            @InjectComponent(impl = DefaultKeeperMaster.class) KeeperMaster keeperMaster) {
+        this.keeperMaster = keeperMaster;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ListServiceImpl implements ListService {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     WordRecordDto[] wordRecordDtos =
-                            school.getCurrentTeacher().getWordRecordDtosByWordCondition(
+                            keeperMaster.getCurrentRecordKeeper().getWordRecordDtosByWordCondition(
                                     WordCondition.GRASPED);
                     preTaskResult.putPayload("wordRecordDtos", wordRecordDtos);
                     return true;
@@ -44,7 +44,7 @@ public class ListServiceImpl implements ListService {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     WordRecordDto[] wordRecordDtos =
-                            school.getCurrentTeacher().getWordRecordDtosByWordCondition(
+                            keeperMaster.getCurrentRecordKeeper().getWordRecordDtosByWordCondition(
                                     WordCondition.SHALL_LEARNING);
                     preTaskResult.putPayload("wordRecordDtos", wordRecordDtos);
                     return true;
@@ -56,7 +56,7 @@ public class ListServiceImpl implements ListService {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     WordRecordDto[] wordRecordDtos =
-                            school.getCurrentTeacher().getWordRecordDtosByWordCondition(
+                            keeperMaster.getCurrentRecordKeeper().getWordRecordDtosByWordCondition(
                                     WordCondition.MARKED);
                     preTaskResult.putPayload("wordRecordDtos", wordRecordDtos);
                     return true;
@@ -68,7 +68,7 @@ public class ListServiceImpl implements ListService {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     WordRecordDto[] wordRecordDtos =
-                            school.getCurrentTeacher().getWordRecordDtosByWordCondition(
+                            keeperMaster.getCurrentRecordKeeper().getWordRecordDtosByWordCondition(
                                     WordCondition.DESERTED);
                     preTaskResult.putPayload("wordRecordDtos", wordRecordDtos);
                     return true;
@@ -81,7 +81,7 @@ public class ListServiceImpl implements ListService {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     WordRecordDto[] wordRecordDtos =
-                            school.getCurrentTeacher().getWordRecordDtosByWordCondition(
+                            keeperMaster.getCurrentRecordKeeper().getWordRecordDtosByWordCondition(
                                     WordCondition.LEARNED_TODAY);
                     preTaskResult.putPayload("wordRecordDtos", wordRecordDtos);
                     return true;
@@ -93,7 +93,7 @@ public class ListServiceImpl implements ListService {
                                                                  TaskCallbackInMain taskCallbackInMain) {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
-                    school.getCurrentTeacher().removeWordFromHaveLearnedTodayRecordList(
+                    keeperMaster.getCurrentRecordKeeper().removeWordFromHaveLearnedTodayRecordList(
                             wordRecordDto.getWordId());
                     return true;
                 });
@@ -105,7 +105,7 @@ public class ListServiceImpl implements ListService {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     //在复习模式下移除已掌握单词，会添加到新学单词里边
-                    school.getReviewWordTeacher().removeWordFromRecordList(wordRecordDto);
+                    keeperMaster.getReviewWordRecordKeeper().removeWordFromRecordList(wordRecordDto);
                     return true;
                 });
     }
@@ -116,7 +116,7 @@ public class ListServiceImpl implements ListService {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     //在新学模式下移除单词，会添加到已掌握单词里边
-                    school.getNewWordTeacher().removeWordFromRecordList(wordRecordDto);
+                    keeperMaster.getNewWordRecordKeeper().removeWordFromRecordList(wordRecordDto);
                     return true;
                 });
     }
@@ -126,7 +126,7 @@ public class ListServiceImpl implements ListService {
                                                        TaskCallbackInMain taskCallbackInMain) {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
-                    school.getMarkWordTeacher().removeWordFromRecordList(wordRecordDto);
+                    keeperMaster.getMarkWordRecordKeeper().removeWordFromRecordList(wordRecordDto);
                     return true;
                 });
     }
@@ -136,7 +136,7 @@ public class ListServiceImpl implements ListService {
                                                          TaskCallbackInMain taskCallbackInMain) {
         return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
-                    school.getCurrentTeacher().removeWordFromDesertedRecordList(wordRecordDto);
+                    keeperMaster.getCurrentRecordKeeper().removeWordFromDesertedRecordList(wordRecordDto);
                     return true;
                 });
     }

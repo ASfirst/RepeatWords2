@@ -1,25 +1,25 @@
 package com.jeramtough.repeatwords2.service;
 
-import com.jeramtough.jtandroid.business.BusinessCaller;
-import com.jeramtough.jtandroid.function.JtExecutors;
+import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
+import com.jeramtough.jtandroid.ioc.container.JtBeanContainer;
+import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
+import com.jeramtough.jtcomponent.task.response.ResponseFactory;
 import com.jeramtough.repeatwords2.bean.record.LearningRecord;
-import com.jeramtough.repeatwords2.component.dictionary.Dictionary;
+import com.jeramtough.repeatwords2.bean.record.LearningRecordFactory;
+import com.jeramtough.repeatwords2.bean.word.WordCondition;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
-import com.jeramtough.repeatwords2.component.dictionary.DictionaryManager;
+import com.jeramtough.repeatwords2.component.learning.keeper.DefaultKeeperMaster;
+import com.jeramtough.repeatwords2.component.learning.keeper.KeeperMaster;
+import com.jeramtough.repeatwords2.component.learning.scheme.LearningSchemeProvider;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.record.LearningRecordManager;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
-import com.jeramtough.repeatwords2.dao.mapper.DictionaryMapper1;
-import com.jeramtough.repeatwords2.dao.mapper.factory.ListeningTeacherOperateWordsMapperFactory;
-import com.jeramtough.repeatwords2.dao.mapper.factory.SpeakingTeacherOperateWordsMapperFactory;
-import com.jeramtough.repeatwords2.dao.mapper.factory.WritingTeacherOperateWordsMapperFactory;
-import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
+import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 /**
  * @author 11718
@@ -29,40 +29,24 @@ import java.util.concurrent.Executor;
 
     private MyAppSetting myAppSetting;
     private BaiduVoiceReader baiduVoiceReader;
-    private DictionaryMapper1 dictionaryMapper1;
-
-    private OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider;
-    private ListeningTeacherOperateWordsMapperFactory listeningTeacherOperateWordsMapperFactory;
-    private SpeakingTeacherOperateWordsMapperFactory speakingTeacherOperateWordsMapperFactory;
-    private WritingTeacherOperateWordsMapperFactory writingTeacherOperateWordsMapperFactory;
-
     private LearningRecordManager learningRecordManager;
-    private DictionaryManager dictionaryManager;
-
-    private Executor executor;
+    private KeeperMaster keeperMaster;
+    private LearningSchemeProvider learningSchemeProvider;
 
     @IocAutowire
-    private SettingServiceImpl(MyAppSetting myAppSetting, BaiduVoiceReader baiduVoiceReader,
-                               DictionaryMapper1 dictionaryMapper1,
-                               OperateWordsMapperFactoryProvider operateWordsMapperFactoryProvider,
-                               ListeningTeacherOperateWordsMapperFactory listeningTeacherOperateWordsMapperFactory,
-                               SpeakingTeacherOperateWordsMapperFactory speakingTeacherOperateWordsMapperFactory,
-                               WritingTeacherOperateWordsMapperFactory writingTeacherOperateWordsMapperFactory,
-                               LearningRecordManager learningRecordManager,
-                               DictionaryManager dictionaryManager) {
+    public SettingServiceImpl(MyAppSetting myAppSetting,
+                              BaiduVoiceReader baiduVoiceReader,
+                              LearningRecordManager learningRecordManager,
+                              @InjectComponent(impl = DefaultKeeperMaster.class)
+                                      KeeperMaster keeperMaster,
+                              LearningSchemeProvider learningSchemeProvider) {
         this.myAppSetting = myAppSetting;
         this.baiduVoiceReader = baiduVoiceReader;
-        this.dictionaryMapper1 = dictionaryMapper1;
-        this.operateWordsMapperFactoryProvider = operateWordsMapperFactoryProvider;
-        this.listeningTeacherOperateWordsMapperFactory = listeningTeacherOperateWordsMapperFactory;
-        this.speakingTeacherOperateWordsMapperFactory = speakingTeacherOperateWordsMapperFactory;
-        this.writingTeacherOperateWordsMapperFactory = writingTeacherOperateWordsMapperFactory;
         this.learningRecordManager = learningRecordManager;
-        this.dictionaryManager = dictionaryManager;
-
-
-        executor = JtExecutors.newSingleThreadExecutor();
+        this.keeperMaster = keeperMaster;
+        this.learningSchemeProvider = learningSchemeProvider;
     }
+
 
     @Override
     public void setPerLearningCount(int count) {
@@ -95,141 +79,6 @@ import java.util.concurrent.Executor;
     }
 
     @Override
-    public void backupTheLearningRecord(BusinessCaller businessCaller) {
-        executor.execute(() -> {
-            Dictionary dictionary = new Dictionary();
-            dictionary.setWords(dictionaryMapper1.getAllWordsOrderByEn());
-
-            HashMap<String, LearningRecord> learningRecords = new HashMap<>();
-            LearningRecord listenLearningRecord = new LearningRecord();
-            LearningRecord speakLearningRecord = new LearningRecord();
-            LearningRecord writeLearningRecord = new LearningRecord();
-
-            listenLearningRecord.setHaveGraspedWordRecords(
-                    listeningTeacherOperateWordsMapperFactory.getHaveGraspedMapper().getWordRecordsOrderById());
-            listenLearningRecord.setShallLearningWordRecords(
-                    listeningTeacherOperateWordsMapperFactory.getShallLearningMapper().getWordRecordsOrderById());
-            listenLearningRecord.setMarkedWordRecords(
-                    listeningTeacherOperateWordsMapperFactory.getMarkedMapper().getWordRecordsOrderById());
-            listenLearningRecord.setDesertedLearningWordRecords(
-                    listeningTeacherOperateWordsMapperFactory.getDesertedLearningMapper().getWordRecordsOrderById());
-
-            speakLearningRecord.setHaveGraspedWordRecords(
-                    speakingTeacherOperateWordsMapperFactory.getHaveGraspedMapper().getWordRecordsOrderById());
-            speakLearningRecord.setShallLearningWordRecords(
-                    speakingTeacherOperateWordsMapperFactory.getShallLearningMapper().getWordRecordsOrderById());
-            speakLearningRecord.setMarkedWordRecords(
-                    speakingTeacherOperateWordsMapperFactory.getMarkedMapper().getWordRecordsOrderById());
-            speakLearningRecord.setDesertedLearningWordRecords(
-                    speakingTeacherOperateWordsMapperFactory.getDesertedLearningMapper().getWordRecordsOrderById());
-
-            writeLearningRecord.setHaveGraspedWordRecords(
-                    writingTeacherOperateWordsMapperFactory.getHaveGraspedMapper().getWordRecordsOrderById());
-            writeLearningRecord.setShallLearningWordRecords(
-                    writingTeacherOperateWordsMapperFactory.getShallLearningMapper().getWordRecordsOrderById());
-            writeLearningRecord.setMarkedWordRecords(
-                    writingTeacherOperateWordsMapperFactory.getMarkedMapper().getWordRecordsOrderById());
-            writeLearningRecord.setDesertedLearningWordRecords(
-                    writingTeacherOperateWordsMapperFactory.getDesertedLearningMapper().getWordRecordsOrderById());
-
-            learningRecords.put(learningRecordManager.getLearningRecordFileName(),
-                    listenLearningRecord);
-            learningRecords.put(learningRecordManager.getSpeakingRecordFileName(),
-                    speakLearningRecord);
-            learningRecords.put(learningRecordManager.getWritingRecordFileName(),
-                    writeLearningRecord);
-
-            boolean isSuccessful = learningRecordManager.backup(learningRecords);
-            boolean isSuccessful1 = dictionaryManager.backup(dictionary);
-            businessCaller.setSuccessful(isSuccessful && isSuccessful1);
-            businessCaller.callBusiness();
-        });
-    }
-
-    @Override
-    public void recoverTheLearningRecord(BusinessCaller businessCaller) {
-        executor.execute(() -> {
-            Map<String, LearningRecord> learningRecords = learningRecordManager.recover();
-            Dictionary dictionary = dictionaryManager.recover();
-            if (dictionary != null && learningRecords != null) {
-                dictionaryMapper1.deleteAllWord();
-                dictionaryMapper1.addWords(dictionary.getWords());
-
-                listeningTeacherOperateWordsMapperFactory.getHaveGraspedMapper().clearAll();
-                listeningTeacherOperateWordsMapperFactory.getShallLearningMapper().clearAll();
-                listeningTeacherOperateWordsMapperFactory.getMarkedMapper().clearAll();
-                listeningTeacherOperateWordsMapperFactory.getDesertedLearningMapper().clearAll();
-                speakingTeacherOperateWordsMapperFactory.getHaveGraspedMapper().clearAll();
-                speakingTeacherOperateWordsMapperFactory.getShallLearningMapper().clearAll();
-                speakingTeacherOperateWordsMapperFactory.getMarkedMapper().clearAll();
-                speakingTeacherOperateWordsMapperFactory.getDesertedLearningMapper().clearAll();
-                writingTeacherOperateWordsMapperFactory.getHaveGraspedMapper().clearAll();
-                writingTeacherOperateWordsMapperFactory.getShallLearningMapper().clearAll();
-                writingTeacherOperateWordsMapperFactory.getMarkedMapper().clearAll();
-                writingTeacherOperateWordsMapperFactory.getDesertedLearningMapper().clearAll();
-
-
-                listeningTeacherOperateWordsMapperFactory.getHaveGraspedMapper()
-                                                         .addWordRecords(learningRecords.get(
-                                                                 learningRecordManager.getLearningRecordFileName())
-                                                                                        .getHaveGraspedWordRecords());
-                listeningTeacherOperateWordsMapperFactory.getShallLearningMapper()
-                                                         .addWordRecords(learningRecords.get(
-                                                                 learningRecordManager.getLearningRecordFileName())
-                                                                                        .getShallLearningWordRecords());
-                listeningTeacherOperateWordsMapperFactory.getMarkedMapper()
-                                                         .addWordRecords(learningRecords.get(
-                                                                 learningRecordManager.getLearningRecordFileName())
-                                                                                        .getMarkedWordRecords());
-                listeningTeacherOperateWordsMapperFactory.getDesertedLearningMapper()
-                                                         .addWordRecords(learningRecords.get(
-                                                                 learningRecordManager.getLearningRecordFileName())
-                                                                                        .getDesertedLearningWordRecords());
-
-                speakingTeacherOperateWordsMapperFactory.getHaveGraspedMapper()
-                                                        .addWordRecords(learningRecords.get(
-                                                                learningRecordManager.getSpeakingRecordFileName())
-                                                                                       .getHaveGraspedWordRecords());
-                speakingTeacherOperateWordsMapperFactory.getShallLearningMapper()
-                                                        .addWordRecords(learningRecords.get(
-                                                                learningRecordManager.getSpeakingRecordFileName())
-                                                                                       .getShallLearningWordRecords());
-                speakingTeacherOperateWordsMapperFactory.getMarkedMapper()
-                                                        .addWordRecords(learningRecords.get(
-                                                                learningRecordManager.getSpeakingRecordFileName())
-                                                                                       .getMarkedWordRecords());
-                speakingTeacherOperateWordsMapperFactory.getDesertedLearningMapper()
-                                                        .addWordRecords(learningRecords.get(
-                                                                learningRecordManager.getSpeakingRecordFileName())
-                                                                                       .getDesertedLearningWordRecords());
-
-                writingTeacherOperateWordsMapperFactory.getHaveGraspedMapper()
-                                                       .addWordRecords(learningRecords.get(
-                                                               learningRecordManager.getWritingRecordFileName())
-                                                                                      .getHaveGraspedWordRecords());
-                writingTeacherOperateWordsMapperFactory.getShallLearningMapper()
-                                                       .addWordRecords(learningRecords.get(
-                                                               learningRecordManager.getWritingRecordFileName())
-                                                                                      .getShallLearningWordRecords());
-                writingTeacherOperateWordsMapperFactory.getMarkedMapper()
-                                                       .addWordRecords(learningRecords.get(
-                                                               learningRecordManager.getWritingRecordFileName())
-                                                                                      .getMarkedWordRecords());
-                writingTeacherOperateWordsMapperFactory.getDesertedLearningMapper()
-                                                       .addWordRecords(learningRecords.get(
-                                                               learningRecordManager.getWritingRecordFileName())
-                                                                                      .getDesertedLearningWordRecords());
-
-                businessCaller.setSuccessful(true);
-            }
-            else {
-                businessCaller.setSuccessful(false);
-            }
-            businessCaller.callBusiness();
-        });
-    }
-
-    @Override
     public int getTeacherType() {
         return myAppSetting.getTeacherType().getTeacherTypeId();
     }
@@ -250,14 +99,78 @@ import java.util.concurrent.Executor;
     }
 
     @Override
-    public void clearHavedLearnedWordToday(BusinessCaller businessCaller) {
-        operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory()
-                                         .getHaveLearnedTodayMapper().clearAll();
-        operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory()
-                                         .getHaveLearnedTodayMapper().clearAll();
-        operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory()
-                                         .getHaveLearnedTodayMapper().clearAll();
-        businessCaller.callBusiness();
+    public FutureTaskResponse backupTheLearningRecord(TaskCallbackInMain taskCallbackInMain) {
+        return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
+                (preTaskResult, runningTaskCallback) -> {
+                    HashMap<String, LearningRecord> learningRecords = new HashMap<>();
+                    JtBeanContainer.getInstance().registerBean(LearningRecordFactory.class);
+                    LearningRecordFactory learningRecordFactory =
+                            JtBeanContainer.getInstance().getBean(LearningRecordFactory.class);
+                    LearningRecord listenLearningRecord = learningRecordFactory.getListenLearningRecord();
+                    LearningRecord speakLearningRecord =
+                            learningRecordFactory.getSpeakLearningRecord();
+                    LearningRecord writeLearningRecord = learningRecordFactory.getWriteLearningRecord();
+                    LearningRecord readLearningRecord = learningRecordFactory.getReadLearningRecord();
+
+                    learningRecords.put(learningRecordManager.getLearningRecordFileName(),
+                            listenLearningRecord);
+                    learningRecords.put(learningRecordManager.getSpeakingRecordFileName(),
+                            speakLearningRecord);
+                    learningRecords.put(learningRecordManager.getWritingRecordFileName(),
+                            writeLearningRecord);
+                    learningRecords.put(learningRecordManager.getReadingRecordFileName(),
+                            readLearningRecord);
+
+                    return learningRecordManager.backup(learningRecords);
+                });
     }
+
+    @Override
+    public FutureTaskResponse recoverTheLearningRecord(TaskCallbackInMain taskCallbackInMain) {
+        return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
+                (preTaskResult, runningTaskCallback) -> {
+                    int denominator = 3;
+                    preTaskResult.setMessage("Reading data from the json files");
+                    runningTaskCallback.onTaskRunning(preTaskResult, 1, denominator);
+                    Map<TeacherType, LearningRecord> learningRecordMap = learningRecordManager.recover();
+
+                    preTaskResult.setMessage("Clear all word record");
+                    runningTaskCallback.onTaskRunning(preTaskResult, 2, denominator);
+                    for (TeacherType teacherType : TeacherType.values()) {
+                        learningSchemeProvider.getLearningScheme(
+                                teacherType).clearAllWordRecord();
+                    }
+
+                    preTaskResult.setMessage("Start to recover the listening word record");
+                    runningTaskCallback.onTaskRunning(preTaskResult, 3, denominator);
+                    for (TeacherType teacherType : TeacherType.values()) {
+                        learningSchemeProvider.getLearningScheme(
+                                teacherType).addLearningRecord(
+                                learningRecordMap.get(teacherType),
+                                recordStateBean -> {
+                                    preTaskResult.setMessage(String.format("%d-%d [%s]",
+                                            recordStateBean.getIndex(),
+                                            recordStateBean.getSum(),
+                                            recordStateBean.getWordRecord().toString()));
+                                    runningTaskCallback.onTaskRunning(preTaskResult, 3,
+                                            denominator);
+                                });
+                    }
+
+                    return true;
+                });
+    }
+
+    @Override
+    public FutureTaskResponse clearHaveLearnedWordToday(
+            TaskCallbackInMain taskCallbackInMain) {
+        return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
+                (preTaskResult, runningTaskCallback) -> {
+                    learningSchemeProvider.getCurrentLearningScheme().removeWordRecords(
+                            WordCondition.LEARNED_TODAY);
+                    return true;
+                });
+    }
+
 
 }

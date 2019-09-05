@@ -1,13 +1,9 @@
-package com.jeramtough.repeatwords2.component.learning.school;
+package com.jeramtough.repeatwords2.component.learning.keeper;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.MarkWordTeacher;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.NewWordTeacher;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.ReviewWordTeacher;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.Teacher1;
 
 /**
  * 负责提供老师对象
@@ -16,18 +12,18 @@ import com.jeramtough.repeatwords2.component.learning.school.teacher.Teacher1;
  * by @author JeramTough
  */
 @JtComponent
-public class DefaultSchool implements School {
+public class DefaultKeeperMaster implements KeeperMaster {
 
     private MyAppSetting myAppSetting;
-    private NewWordTeacher newWordTeacher;
-    private ReviewWordTeacher reviewWordTeacher;
-    private MarkWordTeacher markWordTeacher;
+    private NewWordRecordKeeper newWordTeacher;
+    private ReviewWordRecordKeeper reviewWordTeacher;
+    private MarkWordRecordKeeper markWordTeacher;
 
     @IocAutowire
-    public DefaultSchool(MyAppSetting myAppSetting,
-                         NewWordTeacher newWordTeacher,
-                         ReviewWordTeacher reviewWordTeacher,
-                         MarkWordTeacher markWordTeacher) {
+    public DefaultKeeperMaster(MyAppSetting myAppSetting,
+                               NewWordRecordKeeper newWordTeacher,
+                               ReviewWordRecordKeeper reviewWordTeacher,
+                               MarkWordRecordKeeper markWordTeacher) {
         this.myAppSetting = myAppSetting;
         this.newWordTeacher = newWordTeacher;
         this.reviewWordTeacher = reviewWordTeacher;
@@ -35,7 +31,7 @@ public class DefaultSchool implements School {
     }
 
     @Override
-    public Teacher1 getCurrentTeacher() {
+    public RecordKeeper getCurrentRecordKeeper() {
         switch (LearningMode.getLearningMode(myAppSetting.getLearningMode())) {
             case NEW:
                 return newWordTeacher;
@@ -49,17 +45,17 @@ public class DefaultSchool implements School {
     }
 
     @Override
-    public Teacher1 getNewWordTeacher() {
+    public RecordKeeper getNewWordRecordKeeper() {
         return newWordTeacher;
     }
 
     @Override
-    public Teacher1 getMarkWordTeacher() {
+    public RecordKeeper getMarkWordRecordKeeper() {
         return markWordTeacher;
     }
 
     @Override
-    public Teacher1 getReviewWordTeacher() {
+    public RecordKeeper getReviewWordRecordKeeper() {
         return reviewWordTeacher;
     }
 }

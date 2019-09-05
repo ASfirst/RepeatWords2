@@ -4,7 +4,6 @@ import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.component.baidu.Reader;
 import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
-import com.jeramtough.repeatwords2.util.WordUtil;
 
 /**
  * @author 11718
@@ -29,9 +28,7 @@ public class BlackboardOfSpeakingTeacher extends BaseBlackboardOfTeacher {
     public void whileExposing(WordDto wordDto, TextView textView,
                               TextView textViewBigBlackboard) {
         super.whileExposing(wordDto, textView, textViewBigBlackboard);
-
         textView.setText(wordDto.getPhonetic());
-        textViewBigBlackboard.setText(WordUtil.formatWordDto(wordDto));
         getReader().speech(wordDto.getWord());
     }
 }

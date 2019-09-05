@@ -8,8 +8,8 @@ import com.jeramtough.jtcomponent.task.callback.RunningTaskCallback;
 import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
 import com.jeramtough.jtcomponent.task.response.ResponseFactory;
 import com.jeramtough.jtcomponent.task.runner.CallbackRunner;
-import com.jeramtough.repeatwords2.component.learning.school.DefaultSchool;
-import com.jeramtough.repeatwords2.component.learning.school.School;
+import com.jeramtough.repeatwords2.component.learning.keeper.DefaultKeeperMaster;
+import com.jeramtough.repeatwords2.component.learning.keeper.KeeperMaster;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 import com.jeramtough.repeatwords2.service.LearningService;
@@ -21,13 +21,13 @@ import com.jeramtough.repeatwords2.service.LearningService;
 @JtServiceImpl
 public class LearningServiceImpl implements LearningService {
 
-    private School school;
+    private KeeperMaster keeperMaster;
 
     @IocAutowire
     public LearningServiceImpl(
-            @InjectComponent(impl = DefaultSchool.class)
-                    School school) {
-        this.school = school;
+            @InjectComponent(impl = DefaultKeeperMaster.class)
+                    KeeperMaster keeperMaster) {
+        this.keeperMaster = keeperMaster;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class LearningServiceImpl implements LearningService {
             TaskCallbackInMain taskCallback) {
         return ResponseFactory.asyncDoing(taskCallback.get(),
                 (preTaskResult, runningTaskCallback) -> {
-                    WordDto[] wordDtos = school.getCurrentTeacher().getRandomNeedLearningWords();
+                    WordDto[] wordDtos = keeperMaster.getCurrentRecordKeeper().getRandomNeedLearningWords();
                     preTaskResult.putPayload("wordDtos", wordDtos);
                     return true;
                 });
@@ -46,7 +46,7 @@ public class LearningServiceImpl implements LearningService {
                                                 TaskCallbackInMain taskCallback) {
         return ResponseFactory.asyncDoing(taskCallback.get(),
                 (preTaskResult, runningTaskCallback) -> {
-                    school.getCurrentTeacher().removeWordFromRecordList(wordDto);
+                    keeperMaster.getCurrentRecordKeeper().removeWordFromRecordList(wordDto);
                     return true;
                 });
     }
@@ -55,7 +55,7 @@ public class LearningServiceImpl implements LearningService {
     public FutureTaskResponse desertWord(WordDto wordDto, TaskCallbackInMain taskCallback) {
         return ResponseFactory.asyncDoing(taskCallback.get(),
                 (preTaskResult, runningTaskCallback) -> {
-                    return school.getCurrentTeacher().addWordToDesertedRecordList(wordDto);
+                    return keeperMaster.getCurrentRecordKeeper().addWordToDesertedRecordList(wordDto);
                 });
     }
 
@@ -65,7 +65,7 @@ public class LearningServiceImpl implements LearningService {
             @Override
             public boolean doTask(PreTaskResult preTaskResult,
                                   RunningTaskCallback runningTaskCallback) {
-                return school.getCurrentTeacher().addWordToMarkedRecordList(wordDto);
+                return keeperMaster.getCurrentRecordKeeper().addWordToMarkedRecordList(wordDto);
             }
         });
     }
@@ -74,7 +74,7 @@ public class LearningServiceImpl implements LearningService {
     @Override
     public FutureTaskResponse learnedWordInToday(WordDto wordDto) {
         return ResponseFactory.asyncDoing(preTaskResult -> {
-            school.getCurrentTeacher().addWordToHaveLearnedTodayRecordList(wordDto);
+            keeperMaster.getCurrentRecordKeeper().addWordToHaveLearnedTodayRecordList(wordDto);
             return true;
         });
     }

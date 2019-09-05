@@ -28,7 +28,7 @@ import com.jeramtough.repeatwords2.component.learning.scheme.ListeningLearningSc
 import com.jeramtough.repeatwords2.component.learning.scheme.ReadingLearningScheme;
 import com.jeramtough.repeatwords2.component.learning.scheme.SpeakingLearningScheme;
 import com.jeramtough.repeatwords2.component.learning.scheme.WritingLearningScheme;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 import com.jeramtough.repeatwords2.dao.MyDatabaseHelper;
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;

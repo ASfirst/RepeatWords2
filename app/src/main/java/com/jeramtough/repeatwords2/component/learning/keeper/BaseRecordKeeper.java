@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.learning.school.teacher;
+package com.jeramtough.repeatwords2.component.learning.keeper;
 
 import com.alibaba.fastjson.JSON;
 import com.jeramtough.oedslib.entity.LargeWord;
@@ -22,7 +22,7 @@ import java.util.Map;
  * Created on 2019-09-02 22:57
  * by @author JeramTough
  */
-abstract class BaseTeacher implements Teacher1 {
+abstract class BaseRecordKeeper implements RecordKeeper {
 
     OperateWordRecordMapperProvider operateWordRecordMapperProvider;
     MyAppSetting myAppSetting;
@@ -30,7 +30,7 @@ abstract class BaseTeacher implements Teacher1 {
     DictionaryMapper dictionaryMapper;
 
 
-    public BaseTeacher(
+    public BaseRecordKeeper(
             OperateWordRecordMapperProvider operateWordRecordMapperProvider,
             MyAppSetting myAppSetting,
             WordsPool wordsPool,
@@ -150,6 +150,9 @@ abstract class BaseTeacher implements Teacher1 {
                 WordCondition.SHALL_LEARNING)
                                        .addWordRecord(wordRecord);
     }
+
+
+    //--------------------------------------------
 
     WordDto getWordDtoByWordId(Long wordId, List<Long> haveLearnedAtLeastTwiceIdsToday) {
         WordDto wordDto = wordsPool.getWordDTO(wordId);

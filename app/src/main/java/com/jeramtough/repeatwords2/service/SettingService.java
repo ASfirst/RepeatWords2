@@ -1,36 +1,37 @@
 package com.jeramtough.repeatwords2.service;
 
-import com.jeramtough.jtandroid.business.BusinessCaller;
+import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
+import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 
 /**
  * @author 11718
  * on 2018  May 05 Saturday 20:35.
  */
-public interface SettingService
-{
-	void setPerLearningCount(int count);
-	
-	int getPerLearningCount();
-	
-	void setReadEnglishSpeed(int degree);
-	
-	int getReadEnglishSpeed();
-	
-	void setRepeatIntervalTime(long time);
-	
-	long getRepeatIntervalTime();
-	
-	void backupTheLearningRecord(BusinessCaller businessCaller);
-	
-	void recoverTheLearningRecord(BusinessCaller businessCaller);
-	
-	int getTeacherType();
-	
-	int getLearningMode();
-	
-	void setTeacherType(int teacherTypeId);
-	
-	void setLearningMode(int learningMode);
+public interface SettingService {
+    void setPerLearningCount(int count);
 
-	void clearHavedLearnedWordToday(BusinessCaller businessCaller);
+    int getPerLearningCount();
+
+    void setReadEnglishSpeed(int degree);
+
+    int getReadEnglishSpeed();
+
+    void setRepeatIntervalTime(long time);
+
+    long getRepeatIntervalTime();
+
+
+    int getTeacherType();
+
+    int getLearningMode();
+
+    void setTeacherType(int teacherTypeId);
+
+    void setLearningMode(int learningMode);
+
+    FutureTaskResponse backupTheLearningRecord(TaskCallbackInMain taskCallbackInMain);
+
+    FutureTaskResponse recoverTheLearningRecord(TaskCallbackInMain taskCallbackInMain);
+
+    FutureTaskResponse clearHaveLearnedWordToday(TaskCallbackInMain taskCallbackInMain);
 }

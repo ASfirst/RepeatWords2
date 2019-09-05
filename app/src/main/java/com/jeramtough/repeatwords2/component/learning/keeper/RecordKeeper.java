@@ -1,13 +1,15 @@
-package com.jeramtough.repeatwords2.component.learning.school.teacher;
+package com.jeramtough.repeatwords2.component.learning.keeper;
 
 import com.jeramtough.repeatwords2.bean.word.WordCondition;
 import com.jeramtough.repeatwords2.dao.dto.record.WordRecordDto;
 import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
 
 /**
+ * 管理所有的单词记录的使用情况
+ *
  * @author 11718
  */
-public interface Teacher1 {
+public interface RecordKeeper {
 
 
     WordDto[] getRandomNeedLearningWords();
@@ -48,6 +50,5 @@ public interface Teacher1 {
      * 恢复单词从放弃学习的单词记录列表里面
      */
     void removeWordFromDesertedRecordList(WordRecordDto wordRecordDto);
-
 
 }

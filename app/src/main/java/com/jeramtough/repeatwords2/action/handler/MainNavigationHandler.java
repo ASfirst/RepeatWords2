@@ -13,7 +13,7 @@ import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.service.MainNavigationService;
 import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.action.fragment.*;
 
 /**

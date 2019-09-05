@@ -14,13 +14,16 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
+import com.jeramtough.jtcomponent.task.bean.PreTaskResult;
+import com.jeramtough.jtcomponent.task.bean.TaskResult;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 import com.jeramtough.repeatwords2.service.SettingService;
 
 /**
@@ -44,6 +47,8 @@ public class SettingFragment extends BaseFragment
     private Button buttonBackup;
     private Button buttonRecover;
     private Button buttonClearToday;
+    private TextView textViewMessage;
+
 
     private ProgressDialog progressDialog;
 
@@ -70,6 +75,7 @@ public class SettingFragment extends BaseFragment
         buttonBackup = findViewById(R.id.button_backup);
         buttonRecover = findViewById(R.id.button_recover);
         buttonClearToday = findViewById(R.id.button_clear_today);
+        textViewMessage = findViewById(R.id.textView_message);
 
         buttonBackup.setOnClickListener(this);
         buttonRecover.setOnClickListener(this);
@@ -177,9 +183,23 @@ public class SettingFragment extends BaseFragment
                     progressDialog = new ProgressDialog(getContext());
                     progressDialog.setCancelable(false);
                     progressDialog.show();
-                    settingService.backupTheLearningRecord(
-                            new BusinessCaller(getFragmentHandler(),
-                                    BUSINESS_CODE_BACKUP_LEARNING_RECORD));
+                    settingService.backupTheLearningRecord(new TaskCallbackInMain() {
+                        @Override
+                        protected void onTaskCompleted(TaskResult taskResult) {
+                            if (taskResult.isSuccessful()) {
+                                Toast.makeText(getContext(), "backup ok",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(getContext(), "backup fail",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (progressDialog.isShowing()) {
+                                progressDialog.cancel();
+                            }
+                        }
+                    });
                 });
                 break;
 
@@ -189,9 +209,30 @@ public class SettingFragment extends BaseFragment
                     progressDialog = new ProgressDialog(getContext());
                     progressDialog.setCancelable(false);
                     progressDialog.show();
-                    settingService.recoverTheLearningRecord(
-                            new BusinessCaller(getFragmentHandler(),
-                                    BUSINESS_CODE_RECOVER_LEARNING_RECORD));
+                    settingService.recoverTheLearningRecord(new TaskCallbackInMain() {
+                        @Override
+                        protected void onTaskRunning(PreTaskResult preTaskResult,
+                                                     int numerator, int denominator) {
+                            progressDialog.setMessage(String.format("[%d/%d]\n", numerator,
+                                    denominator) + preTaskResult.getMessage());
+                        }
+
+                        @Override
+                        protected void onTaskCompleted(TaskResult taskResult) {
+                            if (taskResult.isSuccessful()) {
+                                Toast.makeText(getContext(), "recover ok",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(getContext(), "recover fail",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (progressDialog.isShowing()) {
+                                progressDialog.cancel();
+                            }
+                        }
+                    });
                 });
                 break;
 
@@ -199,9 +240,13 @@ public class SettingFragment extends BaseFragment
                 showIsSureDialog("Do you want to clear today's learned words?", () -> {
                     progressDialog = new ProgressDialog(getContext());
                     progressDialog.setCancelable(false);
-                    settingService.clearHavedLearnedWordToday(new BusinessCaller
-                            (getFragmentHandler(),
-                                    BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY));
+                    settingService.clearHaveLearnedWordToday(new TaskCallbackInMain() {
+                        @Override
+                        protected void onTaskCompleted(TaskResult taskResult) {
+                            Toast.makeText(getContext(), "clear completed",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 });
                 break;
         }
@@ -211,31 +256,12 @@ public class SettingFragment extends BaseFragment
     public void handleFragmentMessage(Message message) {
         switch (message.what) {
             case BUSINESS_CODE_BACKUP_LEARNING_RECORD:
-                if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL)) {
-                    Toast.makeText(getContext(), "backup ok", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(getContext(), "backup fail", Toast.LENGTH_SHORT).show();
-                }
 
-                if (progressDialog.isShowing()) {
-                    progressDialog.cancel();
-                }
                 break;
             case BUSINESS_CODE_RECOVER_LEARNING_RECORD:
-                if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL)) {
-                    Toast.makeText(getContext(), "recover ok", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(getContext(), "recover fail", Toast.LENGTH_SHORT).show();
-                }
 
-                if (progressDialog.isShowing()) {
-                    progressDialog.cancel();
-                }
                 break;
             case BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY:
-                Toast.makeText(getContext(), "clear finishly", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

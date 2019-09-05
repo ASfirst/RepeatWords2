@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.component.learning.school.teacher;
+package com.jeramtough.repeatwords2.component.learning.teacher;
 
 /**
  * @author 11718

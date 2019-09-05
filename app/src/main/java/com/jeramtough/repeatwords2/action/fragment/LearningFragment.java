@@ -28,7 +28,7 @@ import com.jeramtough.repeatwords2.action.dialog.WriteFromMemoryDialog;
 import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapterProvider;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
-import com.jeramtough.repeatwords2.component.learning.school.teacher.TeacherType;
+import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 import com.jeramtough.repeatwords2.component.ui.blackboard.BlackBoardProvider;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;

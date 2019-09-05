@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.component.baidu.Reader;
 import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
+import com.jeramtough.repeatwords2.util.WordUtil;
 
 /**
  * @author 11718
@@ -40,6 +41,7 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     @Override
     public void whileExposing(WordDto wordDto, TextView textView,
                               TextView textViewBigBlackboard) {
+        textViewBigBlackboard.setText(WordUtil.formatWordDto(wordDto));
         textViewBigBlackboard.setVisibility(View.VISIBLE);
         textView.setBackgroundResource(R.color.transparent);
         textView.setTextColor(Color.BLACK);
