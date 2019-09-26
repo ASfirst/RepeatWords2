@@ -1,4 +1,4 @@
-package com.jeramtough.repeatwords2.service;
+package com.jeramtough.repeatwords2.service.impl;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
@@ -14,6 +14,7 @@ import com.jeramtough.repeatwords2.component.learning.scheme.LearningSchemeProvi
 import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.record.LearningRecordManager;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
+import com.jeramtough.repeatwords2.service.SettingService;
 
 import java.util.HashMap;
 import java.util.Map;

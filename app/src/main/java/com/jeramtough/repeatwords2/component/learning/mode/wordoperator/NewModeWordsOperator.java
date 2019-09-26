@@ -2,9 +2,9 @@ package com.jeramtough.repeatwords2.component.learning.mode.wordoperator;
 
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
+import com.jeramtough.jtcomponent.utils.DateTimeUtil;
 import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
-import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +28,7 @@ public class NewModeWordsOperator extends BaseWordsOperator {
 
     @Override
     public void removeWordFromList(int wordId) {
-        WordRecord wordRecord = new WordRecord(null, (long) wordId, DateTimeUtil.getDateTime(),null);
+        WordRecord wordRecord = new WordRecord(null, (long) wordId, DateTimeUtil.getCurrentDateTime(),null);
         operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                          .getShallLearningMapper().removeWordRecordById(
                 wordId);

@@ -1,14 +1,14 @@
 package com.jeramtough.repeatwords2.service;
 
 import com.jeramtough.jtandroid.business.BusinessCaller;
+import com.jeramtough.jtandroid.function.JtExecutors;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.repeatwords2.bean.word.Word;
-import com.jeramtough.repeatwords2.component.youdao.bean.YoudaoQueryResult;
 import com.jeramtough.repeatwords2.component.youdao.YoudaoTranslator;
+import com.jeramtough.repeatwords2.component.youdao.bean.YoudaoQueryResult;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 @JtServiceImpl
 class WordServiceImpl implements WordService {
@@ -19,7 +19,7 @@ class WordServiceImpl implements WordService {
     @IocAutowire
     WordServiceImpl(YoudaoTranslator youdaoTranslator) {
         this.youdaoTranslator = youdaoTranslator;
-        executor = Executors.newCachedThreadPool();
+        executor = JtExecutors.newCachedThreadPool();
     }
 
     @Override

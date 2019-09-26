@@ -15,6 +15,7 @@ import com.jeramtough.jtcomponent.task.bean.PreTaskResult;
 import com.jeramtough.jtcomponent.task.callback.RunningTaskCallback;
 import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
 import com.jeramtough.jtcomponent.task.response.ResponseFactory;
+import com.jeramtough.jtcomponent.utils.DateTimeUtil;
 import com.jeramtough.oedslib.comparator.TagPositionComparator;
 import com.jeramtough.oedslib.entity.LargeWord;
 import com.jeramtough.oedslib.mapper.DictionaryMapper;
@@ -38,7 +39,6 @@ import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordRecordM
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordRecordMapperProvider;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordsMapperFactoryProvider;
 import com.jeramtough.repeatwords2.service.LaunchService;
-import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 import java.util.Arrays;
 
@@ -67,7 +67,8 @@ class LaunchServiceImpl implements LaunchService {
                               DictionaryManager dictionaryManager,
                               BaiduVoiceReader baiduVoiceReader, MyAppSetting myAppSetting,
                               FirstBoot firstBoot,
-                              @InjectComponent(impl = DefaultOperateWordRecordMapperProvider.class)
+                              @InjectComponent(
+                                      impl = DefaultOperateWordRecordMapperProvider.class)
                                       OperateWordRecordMapperProvider operateWordRecordMapperProvider,
                               MyDatabaseHelper myDatabaseHelper) {
         this.context = context;
@@ -170,7 +171,7 @@ class LaunchServiceImpl implements LaunchService {
                     preTaskResult.setMessage(
                             "Clearing the learning recodes if today is new day");
                     runningTaskCallback.onTaskRunning(preTaskResult, 3, 4);
-                    if (!DateTimeUtil.getDate().equals(
+                    if (!DateTimeUtil.getCurrentDate().equals(
                             myAppSetting.getDateForLastOpenedApp())) {
                         operateWordRecordMapperProvider.getOperateWordsMapper(
                                 TeacherType.LISTENING_TEACHER,
@@ -185,7 +186,7 @@ class LaunchServiceImpl implements LaunchService {
                                 TeacherType.READING_TEACHER,
                                 WordCondition.LEARNED_TODAY).clearAll();
 
-                        myAppSetting.setDateForLastOpenedApp(DateTimeUtil.getDate());
+                        myAppSetting.setDateForLastOpenedApp(DateTimeUtil.getCurrentDate());
                     }
 
                     preTaskResult.setMessage("Init some beans");
@@ -237,7 +238,7 @@ class LaunchServiceImpl implements LaunchService {
         for (int i = 0; i < largeWords.length; i++) {
             LargeWord largeWord = largeWords[i];
             WordRecord wordRecord = new WordRecord();
-            wordRecord.setTime(DateTimeUtil.getDateTime());
+            wordRecord.setTime(DateTimeUtil.getCurrentDateTime());
             wordRecord.setLevel(0);
             wordRecord.setWordId(largeWord.getFdId());
             preTaskResult.setMessage(String.format("\n[%d]Listening and " +
@@ -265,7 +266,7 @@ class LaunchServiceImpl implements LaunchService {
         for (int i = 0; i < largeWords.length; i++) {
             LargeWord largeWord = largeWords[i];
             WordRecord wordRecord = new WordRecord();
-            wordRecord.setTime(DateTimeUtil.getDateTime());
+            wordRecord.setTime(DateTimeUtil.getCurrentDateTime());
             wordRecord.setLevel(0);
             wordRecord.setWordId(largeWord.getFdId());
             preTaskResult.setMessage(
@@ -291,7 +292,7 @@ class LaunchServiceImpl implements LaunchService {
         for (int i = 0; i < largeWords.length; i++) {
             LargeWord largeWord = largeWords[i];
             WordRecord wordRecord = new WordRecord();
-            wordRecord.setTime(DateTimeUtil.getDateTime());
+            wordRecord.setTime(DateTimeUtil.getCurrentDateTime());
             wordRecord.setLevel(0);
             wordRecord.setWordId(largeWord.getFdId());
             preTaskResult.setMessage(

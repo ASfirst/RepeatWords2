@@ -33,7 +33,7 @@ public class ReviewModeWordsOperator extends BaseWordsOperator {
         if (has) {
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory().getHaveGraspedMapper()
                                              .removeWordRecordById(wordId);
-//            WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getDateTime());
+//            WordRecord wordRecord = new WordRecord(wordId, DateTimeUtil.getCurrentDateTime());
             operateWordsMapperFactoryProvider.getOperateWordsMapperFactory()
                                              .getShallLearningMapper().addWordRecord(
                     null);

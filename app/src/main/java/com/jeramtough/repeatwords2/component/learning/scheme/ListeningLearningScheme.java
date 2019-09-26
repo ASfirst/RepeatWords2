@@ -5,6 +5,7 @@ import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtBeanPattern;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtcomponent.callback.CommonCallback;
+import com.jeramtough.jtcomponent.utils.DateTimeUtil;
 import com.jeramtough.oedslib.comparator.TagPositionComparator;
 import com.jeramtough.oedslib.entity.LargeWord;
 import com.jeramtough.oedslib.mapper.DictionaryMapper;
@@ -15,7 +16,6 @@ import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
 import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordRecordMapperProvider;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordRecordMapperProvider;
-import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 import java.util.Arrays;
 
@@ -52,7 +52,7 @@ public class ListeningLearningScheme extends BaseLearningScheme implements Learn
                         WordCondition.SHALL_LEARNING);
         for (LargeWord largeWord : largeWords) {
             WordRecord wordRecord = new WordRecord();
-            wordRecord.setTime(DateTimeUtil.getDateTime());
+            wordRecord.setTime(DateTimeUtil.getCurrentDateTime());
             wordRecord.setLevel(null);
             wordRecord.setWordId(largeWord.getFdId());
             callback.callback(largeWord);

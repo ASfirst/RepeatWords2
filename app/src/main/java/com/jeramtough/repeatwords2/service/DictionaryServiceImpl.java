@@ -87,11 +87,11 @@ public class DictionaryServiceImpl implements DictionaryService {
                 //n ew word just have the id
                 Word newWord = dictionaryMapper1.getWordByEn(word.getEn());
                 /*operateWordsMapperFactoryProvider.getListeningTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                        new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+                        new WordRecord(newWord.getId(), DateTimeUtil.getCurrentDateTime()));
                 operateWordsMapperFactoryProvider.getSpeakingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                        new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));
+                        new WordRecord(newWord.getId(), DateTimeUtil.getCurrentDateTime()));
                 operateWordsMapperFactoryProvider.getWritingTeacherOperateWordsMapperFactory().getShallLearningMapper().addWordRecord(
-                        new WordRecord(newWord.getId(), DateTimeUtil.getDateTime()));*/
+                        new WordRecord(newWord.getId(), DateTimeUtil.getCurrentDateTime()));*/
 
                 businessCaller.getData().putSerializable("newWord", word);
                 getDictionaryWords(businessCaller);

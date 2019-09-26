@@ -5,6 +5,7 @@ import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtBeanPattern;
 import com.jeramtough.jtandroid.ioc.annotation.JtComponent;
 import com.jeramtough.jtcomponent.callback.CommonCallback;
+import com.jeramtough.jtcomponent.utils.DateTimeUtil;
 import com.jeramtough.oedslib.entity.LargeWord;
 import com.jeramtough.oedslib.mapper.DictionaryMapper;
 import com.jeramtough.oedslib.tag.WordTag;
@@ -14,7 +15,6 @@ import com.jeramtough.repeatwords2.dao.entity.WordRecord;
 import com.jeramtough.repeatwords2.dao.mapper.OperateWordRecordMapper;
 import com.jeramtough.repeatwords2.dao.mapper.provider.DefaultOperateWordRecordMapperProvider;
 import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordRecordMapperProvider;
-import com.jeramtough.repeatwords2.util.DateTimeUtil;
 
 /**
  * Created on 2019-08-31 22:20
@@ -49,7 +49,7 @@ public class WritingLearningScheme extends BaseLearningScheme implements Learnin
         for (int i = 0; i < largeWords.length; i++) {
             LargeWord largeWord = largeWords[i];
             WordRecord wordRecord = new WordRecord();
-            wordRecord.setTime(DateTimeUtil.getDateTime());
+            wordRecord.setTime(DateTimeUtil.getCurrentDateTime());
             wordRecord.setLevel(null);
             wordRecord.setWordId(largeWord.getFdId());
             callback.callback(largeWord);
