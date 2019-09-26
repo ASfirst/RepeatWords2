@@ -1,10 +1,7 @@
 package com.jeramtough.repeatwords2.component.ui.blackboard;
 
-import android.widget.TextView;
-
 import com.jeramtough.repeatwords2.component.baidu.Reader;
-import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
-import com.jeramtough.repeatwords2.util.WordUtil;
+import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
 
 /**
  * @author 11718
@@ -17,24 +14,24 @@ public class BlackboardOfWritingTeacher extends BaseBlackboardOfTeacher {
 
 
     @Override
-    public void whileLearning(WordDto wordDto, TextView textView,
-                              TextView textViewBigBlackboard) {
-        super.whileLearning(wordDto, textView, textViewBigBlackboard);
-        if (wordDto.getChExplain().length() > 6) {
-            String ch1 = wordDto.getChExplain().substring(0, 5);
-            String ch2 = wordDto.getChExplain().substring(5, wordDto.getChExplain().length());
-            textView.setText(ch1 + "\n" + ch2);
+    public void whileLearning(WordCardView wordCardView) {
+        super.whileLearning(wordCardView);
+        if (wordCardView.getWordDto().getChExplain().length() > 6) {
+            String ch1 = wordCardView.getWordDto().getChExplain().substring(0, 5);
+            String ch2 = wordCardView.getWordDto().getChExplain().substring(5,
+                    wordCardView.getWordDto().getChExplain().length());
+            wordCardView.getTextViewContent().setText(ch1 + "\n" + ch2);
         }
         else {
-            textView.setText(wordDto.getChExplain());
+            wordCardView.getTextViewContent().setText(
+                    wordCardView.getWordDto().getChExplain());
         }
     }
 
     @Override
-    public void whileExposing(WordDto wordDto, TextView textView,
-                              TextView textViewBigBlackboard) {
-        super.whileExposing(wordDto, textView, textViewBigBlackboard);
+    public void whileExposing(WordCardView wordCardView) {
+        super.whileExposing(wordCardView);
 
-        textView.setText(wordDto.getWord());
+        wordCardView.getTextViewContent().setText(wordCardView.getWordDto().getWord());
     }
 }

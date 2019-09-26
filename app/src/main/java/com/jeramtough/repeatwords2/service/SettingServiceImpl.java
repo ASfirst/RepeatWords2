@@ -1,6 +1,5 @@
 package com.jeramtough.repeatwords2.service;
 
-import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.jtandroid.ioc.container.JtBeanContainer;
@@ -11,8 +10,6 @@ import com.jeramtough.repeatwords2.bean.record.LearningRecordFactory;
 import com.jeramtough.repeatwords2.bean.word.WordCondition;
 import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
-import com.jeramtough.repeatwords2.component.learning.keeper.DefaultKeeperMaster;
-import com.jeramtough.repeatwords2.component.learning.keeper.KeeperMaster;
 import com.jeramtough.repeatwords2.component.learning.scheme.LearningSchemeProvider;
 import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.record.LearningRecordManager;
@@ -25,25 +22,22 @@ import java.util.Map;
  * @author 11718
  * on 2018  May 05 Saturday 20:35.
  */
-@JtServiceImpl class SettingServiceImpl implements SettingService {
+@JtServiceImpl
+public class SettingServiceImpl implements SettingService {
 
     private MyAppSetting myAppSetting;
     private BaiduVoiceReader baiduVoiceReader;
     private LearningRecordManager learningRecordManager;
-    private KeeperMaster keeperMaster;
     private LearningSchemeProvider learningSchemeProvider;
 
     @IocAutowire
     public SettingServiceImpl(MyAppSetting myAppSetting,
                               BaiduVoiceReader baiduVoiceReader,
                               LearningRecordManager learningRecordManager,
-                              @InjectComponent(impl = DefaultKeeperMaster.class)
-                                      KeeperMaster keeperMaster,
                               LearningSchemeProvider learningSchemeProvider) {
         this.myAppSetting = myAppSetting;
         this.baiduVoiceReader = baiduVoiceReader;
         this.learningRecordManager = learningRecordManager;
-        this.keeperMaster = keeperMaster;
         this.learningSchemeProvider = learningSchemeProvider;
     }
 

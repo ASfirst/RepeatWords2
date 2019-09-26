@@ -189,14 +189,14 @@ public class LearningFragment extends BaseFragment
 
     @Override
     public void inExposingArea(WordDto wordDto, TextView textView,
-                               TextView textViewBigBlackboard) {
-        blackBoardProvider.get().whileExposing(wordDto, textView, textViewBigBlackboard);
+                               WordCardView wordCardView) {
+        blackBoardProvider.get().whileExposing(wordCardView);
     }
 
     @Override
     public void outExposingArea(WordDto wordDto, TextView textView,
-                                TextView textViewBigBlackboard) {
-        blackBoardProvider.get().whileLearning(wordDto, textView, textViewBigBlackboard);
+                                WordCardView wordCardView) {
+        blackBoardProvider.get().whileLearning(wordCardView);
     }
 
     @Override
@@ -222,9 +222,9 @@ public class LearningFragment extends BaseFragment
 
     @Override
     public void onSingleClickWord(WordDto wordDto, TextView textView,
-                                  TextView textViewBigBlackboard) {
+                                  WordCardView wordCardView) {
         if (!reader.isReading()) {
-            blackBoardProvider.get().whileLearning(wordDto, textView, textViewBigBlackboard);
+            blackBoardProvider.get().whileLearning(wordCardView);
         }
         else {
             blackBoardProvider.get().whileDismiss(textView);
@@ -233,7 +233,7 @@ public class LearningFragment extends BaseFragment
 
     @Override
     public void onLongClickWord(WordDto wordDto, TextView textView,
-                                TextView textViewBigBlackboard) {
+                                WordCardView wordCardView) {
         if (blackBoardProvider.getTeacherType() == TeacherType.WRITING_TEACHER) {
             new WriteFromMemoryDialog(Objects.requireNonNull(getContext()), wordDto).show();
         }
@@ -277,6 +277,11 @@ public class LearningFragment extends BaseFragment
                 removePager(wordDto);
             }
         });
+    }
+
+    @Override
+    public void onClickPronounceButton(WordDto wordDto) {
+        reader.speechOnce(wordDto.getWord());
     }
 
     @Override
@@ -396,9 +401,8 @@ public class LearningFragment extends BaseFragment
         WordCardView wordCardView = jtViewPager.findViewWithTag(jtViewPager.getCurrentItem());
         if (wordCardView != null) {
             blackBoardProvider.get()
-                              .whileLearning(wordCardView.getWordDto(),
-                                      wordCardView.getTextViewContent(),
-                                      wordCardView.getTextViewBigBlackboard());
+                              .whileLearning(
+                                      wordCardView);
         }
         else {
             reader.stop();

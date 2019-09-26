@@ -8,7 +8,9 @@ package com.jeramtough.repeatwords2.component.baidu;
 public interface Reader
 {
 	void speech(String text);
-	
+
+	void speechOnce(String text);
+
 	void pause();
 	
 	void resume();

@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.component.baidu.Reader;
-import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
+import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
 import com.jeramtough.repeatwords2.util.WordUtil;
 
 /**
@@ -25,26 +25,24 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     }
 
     @Override
-    public void whileLearning(WordDto wordDto, TextView textView,
-                              TextView textViewBigBlackboard) {
-        textViewBigBlackboard.setVisibility(View.INVISIBLE);
-        textView.setBackgroundResource(R.drawable.blackboard_background);
-        if (wordDto.isLearnedAtLeastTwiceToday()) {
-            textView.setTextColor(Color.BLUE);
+    public void whileLearning(WordCardView wordCardView) {
+        wordCardView.getLayoutBlackboard().setVisibility(View.INVISIBLE);
+        wordCardView.getTextViewContent().setBackgroundResource(R.drawable.blackboard_background);
+        if (wordCardView.getWordDto().isLearnedAtLeastTwiceToday()) {
+            wordCardView.getTextViewContent().setTextColor(Color.BLUE);
         }
         else {
-            textView.setTextColor(Color.WHITE);
+            wordCardView.getTextViewContent().setTextColor(Color.WHITE);
         }
         reader.stop();
     }
 
     @Override
-    public void whileExposing(WordDto wordDto, TextView textView,
-                              TextView textViewBigBlackboard) {
-        textViewBigBlackboard.setText(WordUtil.formatWordDto(wordDto));
-        textViewBigBlackboard.setVisibility(View.VISIBLE);
-        textView.setBackgroundResource(R.color.transparent);
-        textView.setTextColor(Color.BLACK);
+    public void whileExposing(WordCardView wordCardView) {
+        wordCardView.getTextViewBigBlackboard().setText(WordUtil.formatWordDto(wordCardView.getWordDto()));
+        wordCardView.getLayoutBlackboard().setVisibility(View.VISIBLE);
+        wordCardView.getTextViewContent().setBackgroundResource(R.color.transparent);
+        wordCardView.getTextViewContent().setTextColor(Color.BLACK);
         reader.stop();
     }
 

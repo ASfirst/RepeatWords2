@@ -39,6 +39,8 @@ public class WordCardView extends FrameLayout
     private LinearLayout layoutContent;
     private TextView textViewContent;
     private TextView textViewBigBlackboard;
+    private ViewGroup layoutBlackboard;
+    private Button buttonPronounce;
     private AppCompatImageView imageViewVernier;
     private WordActionsListener wordActionsListener;
     private TextView textViewGrasped;
@@ -73,16 +75,19 @@ public class WordCardView extends FrameLayout
         layoutContent = findViewById(R.id.layout_content);
         textViewContent = findViewById(R.id.textView_content);
         textViewBigBlackboard = findViewById(R.id.textView_bigBlackboard);
+        layoutBlackboard = findViewById(R.id.layout_big_blackboard);
         imageViewVernier = findViewById(R.id.imageView_vernier);
         textViewGrasped = findViewById(R.id.textView_grasped);
         textViewLearning = findViewById(R.id.textView_learning);
         textViewExposing = findViewById(R.id.textView_exposing);
+        buttonPronounce = findViewById(R.id.button_pronounce);
 
         textViewContent.setText(wordDto.getWord());
 
         layout.setOnDragListener(this);
         buttonDesert.setOnClickListener(this);
         buttonMark.setOnClickListener(this);
+        buttonPronounce.setOnClickListener(this);
 
         imageViewVernier.setOnTouchListener(new OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -112,7 +117,7 @@ public class WordCardView extends FrameLayout
             @Override
             public boolean onLongClick(View v) {
                 wordActionsListener.onLongClickWord(wordDto, textViewContent,
-                        textViewBigBlackboard);
+                        WordCardView.this);
                 return true;
             }
         });
@@ -121,7 +126,7 @@ public class WordCardView extends FrameLayout
             @Override
             public void onClick(View v) {
                 wordActionsListener.onSingleClickWord(wordDto, textViewContent,
-                        textViewBigBlackboard);
+                        WordCardView.this);
             }
         });
 
@@ -135,6 +140,9 @@ public class WordCardView extends FrameLayout
                 break;
             case R.id.button_mark:
                 wordActionsListener.onClickMarkButton(wordDto, textViewContent);
+                break;
+            case R.id.button_pronounce:
+                wordActionsListener.onClickPronounceButton(wordDto);
                 break;
         }
     }
@@ -158,13 +166,13 @@ public class WordCardView extends FrameLayout
                 if (x < exposingAreaLimitX && y > exposingAreaLimitY && !isInExposingArea) {
                     isInExposingArea = true;
                     wordActionsListener.inExposingArea(wordDto, textViewContent,
-                            textViewBigBlackboard);
+                            this);
 
                 }
                 else if (x < exposingAreaLimitX && y < exposingAreaLimitY && isInExposingArea) {
                     isInExposingArea = false;
                     wordActionsListener.outExposingArea(wordDto, textViewContent,
-                            textViewBigBlackboard);
+                            this);
                 }
 
                 int graspingAreaLimitX =
@@ -203,6 +211,10 @@ public class WordCardView extends FrameLayout
         return textViewBigBlackboard;
     }
 
+    public ViewGroup getLayoutBlackboard() {
+        return layoutBlackboard;
+    }
+
     public void setWordActionsListener(WordActionsListener wordActionsListener) {
         this.wordActionsListener = wordActionsListener;
     }
@@ -229,39 +241,42 @@ public class WordCardView extends FrameLayout
     }
 
     //{{{{}}}}}}}}}
+
     public interface WordActionsListener {
         void inExposingArea(WordDto wordDto, TextView textView,
-                            TextView textViewBigBlackboard);
+                            WordCardView wordCardView);
 
         void outExposingArea(WordDto wordDto, TextView textView,
-                             TextView textViewBigBlackboard);
+                             WordCardView wordCardView);
 
         void atGraspingArea(WordDto wordDto, TextView textView);
 
         void atLearningArea(WordDto wordDto, TextView textView);
 
         void onSingleClickWord(WordDto wordDto, TextView textView,
-                               TextView textViewBigBlackboard);
+                               WordCardView wordCardView);
 
         void onLongClickWord(WordDto wordDto, TextView textView,
-                             TextView textViewBigBlackboard);
+                             WordCardView wordCardView);
 
         void onClickMarkButton(WordDto wordDto, TextView textView);
 
         void onClickDesertButton(WordDto wordDto, TextView textView);
+
+        void onClickPronounceButton(WordDto wordDto);
 
     }
 
     public class SimpleWordActionsListener implements WordActionsListener {
         @Override
         public void inExposingArea(WordDto wordDto, TextView textView,
-                                   TextView textViewBigBlackboard) {
+                                   WordCardView wordCardView) {
 
         }
 
         @Override
         public void outExposingArea(WordDto wordDto, TextView textView,
-                                    TextView textViewBigBlackboard) {
+                                    WordCardView wordCardView) {
 
         }
 
@@ -277,13 +292,13 @@ public class WordCardView extends FrameLayout
 
         @Override
         public void onSingleClickWord(WordDto wordDto, TextView textView,
-                                      TextView textViewBigBlackboard) {
+                                      WordCardView wordCardView) {
 
         }
 
         @Override
         public void onLongClickWord(WordDto wordDto, TextView textView,
-                                    TextView textViewBigBlackboard) {
+                                    WordCardView wordCardView) {
 
         }
 
@@ -295,6 +310,11 @@ public class WordCardView extends FrameLayout
 
         @Override
         public void onClickDesertButton(WordDto wordDto, TextView textView) {
+
+        }
+
+        @Override
+        public void onClickPronounceButton(WordDto wordDto) {
 
         }
 

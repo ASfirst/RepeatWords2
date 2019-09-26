@@ -145,10 +145,21 @@ public class BaiduVoiceReader implements Reader, WithLogger {
         this.currentReadText = text;
 
         //stop the last state
-        stop();
+        if (isReading){
+            stop();
+        }
 
         currentReadThread = new ReadThread(text);
         executorService.execute(currentReadThread);
+    }
+
+    @Override
+    public void speechOnce(String text) {
+        //stop the last state
+        if (isReading){
+            stop();
+        }
+        speechSynthesizer.speak(text);
     }
 
     @Override
@@ -186,6 +197,7 @@ public class BaiduVoiceReader implements Reader, WithLogger {
     }
 
     //*******************************
+
     private void changeToEnglishModel(String gender) {
         //		gender="male";
         changeSpeed(baiduVoiceSetting.getReadEnglishSpeed());

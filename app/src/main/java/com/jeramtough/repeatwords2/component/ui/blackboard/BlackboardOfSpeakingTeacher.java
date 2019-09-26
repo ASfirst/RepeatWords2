@@ -1,9 +1,7 @@
 package com.jeramtough.repeatwords2.component.ui.blackboard;
 
-import android.widget.TextView;
-
 import com.jeramtough.repeatwords2.component.baidu.Reader;
-import com.jeramtough.repeatwords2.dao.dto.word.WordDto;
+import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
 
 /**
  * @author 11718
@@ -16,19 +14,17 @@ public class BlackboardOfSpeakingTeacher extends BaseBlackboardOfTeacher {
 
 
     @Override
-    public void whileLearning(WordDto wordDto, TextView textView,
-                              TextView textViewBigBlackboard) {
-        super.whileLearning(wordDto, textView, textViewBigBlackboard);
+    public void whileLearning(WordCardView wordCardView) {
+        super.whileLearning(wordCardView);
 
-        textView.setText(wordDto.getWord());
-        getReader().speech(wordDto.getChExplain());
+        wordCardView.getTextViewContent().setText(wordCardView.getWordDto().getWord());
+        getReader().speech(wordCardView.getWordDto().getChExplain());
     }
 
     @Override
-    public void whileExposing(WordDto wordDto, TextView textView,
-                              TextView textViewBigBlackboard) {
-        super.whileExposing(wordDto, textView, textViewBigBlackboard);
-        textView.setText(wordDto.getPhonetic());
-        getReader().speech(wordDto.getWord());
+    public void whileExposing(WordCardView wordCardView) {
+        super.whileExposing(wordCardView);
+        wordCardView.getTextViewContent().setText(wordCardView.getWordDto().getPhonetic());
+        getReader().speech(wordCardView.getWordDto().getWord());
     }
 }
