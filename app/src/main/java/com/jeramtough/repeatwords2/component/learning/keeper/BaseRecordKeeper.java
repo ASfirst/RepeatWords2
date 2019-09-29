@@ -166,7 +166,7 @@ abstract class BaseRecordKeeper implements RecordKeeper {
             else {
                 wordDto.setLearnedAtLeastTwiceToday(false);
             }
-            wordDto.setChExplain(WordUtil.processChExplain(wordDto.getChExplain()));
+            wordDto.setChExplain(wordDto.getChExplain());
         }
         return wordDto;
     }

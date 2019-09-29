@@ -286,4 +286,18 @@ public class OperateWordRecordMapper extends DaoMapper {
         cursor.close();
         return wordRecord;
     }
+
+    public List<Long> getAllWordIdsOrderByLevel() {
+        ArrayList<Long> list = new ArrayList<>();
+
+        String sql =
+                "SELECT word_id FROM " + getTableName() + " ORDER BY level DESC";
+        Cursor cursor = getSqLiteDatabase().rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            long wordId = cursor.getLong(cursor.getColumnIndex("word_id"));
+            list.add(wordId);
+        }
+        cursor.close();
+        return list;
+    }
 }

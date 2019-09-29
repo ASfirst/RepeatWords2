@@ -2,7 +2,6 @@ package com.jeramtough.repeatwords2.action.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -16,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jeramtough.jtandroid.business.BusinessCaller;
 import com.jeramtough.jtandroid.ioc.annotation.InjectComponent;
 import com.jeramtough.jtandroid.ioc.annotation.InjectService;
 import com.jeramtough.jtandroid.ui.JtViewPager;
@@ -284,39 +282,6 @@ public class LearningFragment extends BaseFragment
         reader.speechOnce(wordDto.getWord());
     }
 
-    @Override
-    public void handleFragmentMessage(Message message) {
-        switch (message.what) {
-            case BUSINESS_CODE_INIT_TEACHER:
-
-                break;
-            case BUSINESS_CODE_GRASP_WORD:
-            case BUSINESS_CODE_REMOVE_WORD:
-               /* Word word = (Word) message.getData().getSerializable("word");
-                removePager();*/
-                timedCloseTextView.setNiceMessage("OK");
-                timedCloseTextView.visible();
-                timedCloseTextView.closeDelayed(3000);
-                break;
-            case BUSINESS_CODE_MARK_WORD:
-                if (message.getData().getBoolean(BusinessCaller.IS_SUCCESSFUL)) {
-                    timedCloseTextView.setPrimaryMessage("OK");
-                }
-                else {
-                    timedCloseTextView.setErrorMessage("have marked");
-                }
-
-                timedCloseTextView.visible();
-                timedCloseTextView.closeDelayed(3000);
-                break;
-            case BUSINESS_CODE_DESERT_WORD:
-                timedCloseTextView.setErrorMessage("OK");
-                timedCloseTextView.visible();
-                timedCloseTextView.closeDelayed(3000);
-                break;
-            default:
-        }
-    }
 
     //*****************************
 
@@ -329,6 +294,7 @@ public class LearningFragment extends BaseFragment
                 WordDto[] wordDtos = (WordDto[]) taskResult.getSerializablePayload(
                         "wordDtos");
                 shallLearningCount = wordDtos.length;
+                surplusLearningCount=wordDtos.length;
 
                 if (shallLearningCount > 0) {
 

@@ -15,6 +15,7 @@ import com.jeramtough.repeatwords2.dao.mapper.provider.OperateWordRecordMapperPr
 import com.jeramtough.repeatwords2.util.WordUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -44,33 +45,28 @@ public class NewWordRecordKeeper extends BaseRecordKeeper {
                 super.operateWordRecordMapperProvider.getCurrentOperateWordsMapper(
                         WordCondition.SHALL_LEARNING);
 
-        //找出具体需要学习的wordId，拿出用户设置的1.5倍的单词
-        List<Long> tempShallLearningIds =
-                shallLearningOperateWordRecordMapper.getWordIdsForRandomOrderByLevel(
-                        (int) (super.myAppSetting.getPerLearningCount() * 1.5));
+        //找出所有需要学习的wordId
+        List<Long> tempShallLearningIds = shallLearningOperateWordRecordMapper.getAllWordIdsOrderByLevel();
+
+        // filtrate words while have learned twice in today
+        List<Long> haveLearnedAtLeastTwiceWordIds = getHaveLearnedAtLeastTwiceIdsToday();
+        for (Long haveLearnedAtLeastTwiceWordId : haveLearnedAtLeastTwiceWordIds) {
+            tempShallLearningIds.remove(haveLearnedAtLeastTwiceWordId);
+        }
 
         //真正用来装用户设置需要的单词
         List<Long> shallLearningIds = new ArrayList<>(
                 super.myAppSetting.getPerLearningCount());
 
-        // filtrate words while have learned twice in today
-        List<Long> haveLearnedAtLeastTwiceWordIds = getHaveLearnedAtLeastTwiceIdsToday();
         for (Long tempShallLearningId : tempShallLearningIds) {
-            boolean isFiltrated = false;
-            for (Long haveLearnedAtLeastTwiceWordId : haveLearnedAtLeastTwiceWordIds) {
-                if (tempShallLearningId.equals(haveLearnedAtLeastTwiceWordId)) {
-                    isFiltrated = true;
-                    break;
-                }
-            }
-
-            if (!isFiltrated) {
-                shallLearningIds.add(tempShallLearningId);
-            }
+            shallLearningIds.add(tempShallLearningId);
             if (shallLearningIds.size() == super.myAppSetting.getPerLearningCount()) {
                 break;
             }
         }
+
+        // random sort
+        Collections.shuffle(shallLearningIds);
 
         return getWordDtosBywordId(shallLearningIds);
     }
