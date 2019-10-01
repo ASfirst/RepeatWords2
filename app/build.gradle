@@ -6,7 +6,7 @@ android {
         applicationId "com.jeramtough.repeatwords2"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 35
+        versionCode 36
         versionName "2019.10.01"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

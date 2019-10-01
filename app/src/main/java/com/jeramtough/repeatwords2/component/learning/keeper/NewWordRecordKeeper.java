@@ -60,13 +60,18 @@ public class NewWordRecordKeeper extends BaseRecordKeeper {
 
         for (Long tempShallLearningId : tempShallLearningIds) {
             shallLearningIds.add(tempShallLearningId);
-            if (shallLearningIds.size() == super.myAppSetting.getPerLearningCount()) {
+            //拿出1.5倍的单词
+            if (shallLearningIds.size() == super.myAppSetting.getPerLearningCount() * 1.5) {
                 break;
             }
         }
 
         // random sort
         Collections.shuffle(shallLearningIds);
+
+        //截取出真正设置的长度
+        shallLearningIds = shallLearningIds.subList(0,
+                super.myAppSetting.getPerLearningCount());
 
         return getWordDtosBywordId(shallLearningIds);
     }

@@ -294,7 +294,7 @@ public class LearningFragment extends BaseFragment
                 WordDto[] wordDtos = (WordDto[]) taskResult.getSerializablePayload(
                         "wordDtos");
                 shallLearningCount = wordDtos.length;
-                surplusLearningCount=wordDtos.length;
+                surplusLearningCount = wordDtos.length;
 
                 if (shallLearningCount > 0) {
 
@@ -307,6 +307,7 @@ public class LearningFragment extends BaseFragment
                         layoutGate.setVisibility(View.GONE);
                         progressBar.setVisibility(View.INVISIBLE);
                         buttonStartLearning.setClickable(true);
+                        jtViewPager.setCurrentItem(0, false);
                         learnCurrentWord();
                         updateWordsCondition();
                     });
