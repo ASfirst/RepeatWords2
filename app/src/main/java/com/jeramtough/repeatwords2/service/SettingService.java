@@ -1,6 +1,5 @@
 package com.jeramtough.repeatwords2.service;
 
-import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 
 /**
@@ -29,9 +28,9 @@ public interface SettingService {
 
     void setLearningMode(int learningMode);
 
-    FutureTaskResponse backupTheLearningRecord(TaskCallbackInMain taskCallbackInMain);
+    void backupTheLearningRecord(TaskCallbackInMain taskCallbackInMain);
 
-    FutureTaskResponse recoverTheLearningRecord(TaskCallbackInMain taskCallbackInMain);
+    void recoverTheLearningRecord(TaskCallbackInMain taskCallbackInMain);
 
-    FutureTaskResponse clearHaveLearnedWordToday(TaskCallbackInMain taskCallbackInMain);
+    void clearHaveLearnedWordToday(TaskCallbackInMain taskCallbackInMain);
 }

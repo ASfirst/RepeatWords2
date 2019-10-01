@@ -6,8 +6,8 @@ android {
         applicationId "com.jeramtough.repeatwords2"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 34
-        versionName "2019.01.01"
+        versionCode 35
+        versionName "2019.10.01"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
@@ -63,7 +63,7 @@ dependencies {
 
     implementation group: 'com.jeramtough', name: 'jtlog', version: '1.7.3-LOCAL'
     implementation group: 'com.jeramtough', name: 'jtcomponent', version: '1.2.7-LOCAL'
-    implementation group: 'com.jeramtough', name: 'oeds_lib', version: '1.1.2'
+    implementation group: 'com.jeramtough', name: 'oeds_lib', version: '1.1.0'
     implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.47'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'commons-io:commons-io:2.5'

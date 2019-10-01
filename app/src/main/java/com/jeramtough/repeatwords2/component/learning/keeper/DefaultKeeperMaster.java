@@ -6,7 +6,7 @@ import com.jeramtough.repeatwords2.component.app.MyAppSetting;
 import com.jeramtough.repeatwords2.component.learning.mode.LearningMode;
 
 /**
- * 负责提供老师对象
+ *
  * <p>
  * Created on 2019-09-03 18:34
  * by @author JeramTough

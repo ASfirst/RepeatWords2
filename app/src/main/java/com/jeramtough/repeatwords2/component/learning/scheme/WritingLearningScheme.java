@@ -57,9 +57,4 @@ public class WritingLearningScheme extends BaseLearningScheme implements Learnin
         }
     }
 
-    @Override
-    public void clearAllWordRecord() {
-        operateWordRecordMapperProvider.getOperateWordsMapper(teacherType,
-                WordCondition.SHALL_LEARNING).clearAll();
-    }
 }

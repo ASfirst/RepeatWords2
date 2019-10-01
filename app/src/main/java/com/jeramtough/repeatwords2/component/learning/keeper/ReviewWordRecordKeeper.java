@@ -46,7 +46,7 @@ public class ReviewWordRecordKeeper extends BaseRecordKeeper {
             sizeFromHaveLearnedAtLeastTwiceToday = haveLearnedAtLeastTwiceIdsToday.size();
         }
         haveLearnedAtLeastTwiceIdsToday = haveLearnedAtLeastTwiceIdsToday.subList(0,
-                sizeFromHaveLearnedAtLeastTwiceToday - 1);
+                sizeFromHaveLearnedAtLeastTwiceToday);
 
         //从已掌握的单词里边拿出剩下的3/4或则更多
         List<Long> haveGraspedWordIds =

@@ -3,7 +3,6 @@ package com.jeramtough.repeatwords2.service.impl;
 import com.jeramtough.jtandroid.ioc.annotation.IocAutowire;
 import com.jeramtough.jtandroid.ioc.annotation.JtServiceImpl;
 import com.jeramtough.jtandroid.ioc.container.JtBeanContainer;
-import com.jeramtough.jtcomponent.task.response.FutureTaskResponse;
 import com.jeramtough.jtcomponent.task.response.ResponseFactory;
 import com.jeramtough.repeatwords2.bean.record.LearningRecord;
 import com.jeramtough.repeatwords2.bean.record.LearningRecordFactory;
@@ -94,8 +93,8 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    public FutureTaskResponse backupTheLearningRecord(TaskCallbackInMain taskCallbackInMain) {
-        return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
+    public void backupTheLearningRecord(TaskCallbackInMain taskCallbackInMain) {
+        ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     HashMap<String, LearningRecord> learningRecords = new HashMap<>();
                     JtBeanContainer.getInstance().registerBean(LearningRecordFactory.class);
@@ -121,8 +120,8 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    public FutureTaskResponse recoverTheLearningRecord(TaskCallbackInMain taskCallbackInMain) {
-        return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
+    public void recoverTheLearningRecord(TaskCallbackInMain taskCallbackInMain) {
+        ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     int denominator = 3;
                     preTaskResult.setMessage("Reading data from the json files");
@@ -157,9 +156,9 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    public FutureTaskResponse clearHaveLearnedWordToday(
+    public void clearHaveLearnedWordToday(
             TaskCallbackInMain taskCallbackInMain) {
-        return ResponseFactory.asyncDoing(taskCallbackInMain.get(),
+        ResponseFactory.asyncDoing(taskCallbackInMain.get(),
                 (preTaskResult, runningTaskCallback) -> {
                     learningSchemeProvider.getCurrentLearningScheme().removeWordRecords(
                             WordCondition.LEARNED_TODAY);

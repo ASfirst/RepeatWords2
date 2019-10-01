@@ -61,9 +61,4 @@ public class SpeakingLearningScheme extends BaseLearningScheme implements Learni
         }
     }
 
-    @Override
-    public void clearAllWordRecord() {
-        operateWordRecordMapperProvider.getOperateWordsMapper(teacherType,
-                WordCondition.SHALL_LEARNING).clearAll();
-    }
 }
