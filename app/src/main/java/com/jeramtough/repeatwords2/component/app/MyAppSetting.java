@@ -52,7 +52,7 @@ public class MyAppSetting extends AppSetting {
     }
 
     public String getDateForLastOpenedApp() {
-        return getSharedPreferences().getString("lastOpenedAppDate", null);
+        return getSharedPreferences().getString("lastOpenedAppDate", "");
     }
 
     public void setDateForLastOpenedApp(String date) {
