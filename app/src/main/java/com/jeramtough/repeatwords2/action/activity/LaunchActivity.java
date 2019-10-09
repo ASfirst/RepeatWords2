@@ -33,7 +33,7 @@ public class LaunchActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
         textViewMessage = this.findViewById(R.id.textView_message);
-        //initResources();
+        initResources();
     }
 
     @Override

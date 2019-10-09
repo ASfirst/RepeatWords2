@@ -1,5 +1,7 @@
 package com.jeramtough.repeatwords2.component.ui.blackboard;
 
+import android.graphics.Color;
+
 import com.jeramtough.repeatwords2.component.baidu.Reader;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
 import com.jeramtough.repeatwords2.util.WordUtil;
@@ -17,7 +19,6 @@ public class BlackboardOfReadingTeacher extends BaseBlackboardOfTeacher {
     @Override
     public void whileLearning(WordCardView wordCardView) {
         super.whileLearning(wordCardView);
-
         wordCardView.getTextViewContent().setText(wordCardView.getWordDto().getWord());
     }
 
@@ -26,5 +27,17 @@ public class BlackboardOfReadingTeacher extends BaseBlackboardOfTeacher {
         super.whileExposing(wordCardView);
         wordCardView.getTextViewContent().setText(
                 WordUtil.abbreviateChinese(wordCardView.getWordDto().getChExplain()));
+    }
+
+    @Override
+    public void onSingleClickWord(WordCardView wordCardView) {
+        if (!getReader().isReading()) {
+            getReader().speech(wordCardView.getWordDto().getWord());
+            wordCardView.getTextViewContent().setBackgroundColor(Color.BLUE);
+        }
+        else {
+            getReader().stop();
+            wordCardView.getTextViewContent().setBackgroundColor(Color.BLACK);
+        }
     }
 }

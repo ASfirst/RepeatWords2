@@ -1,8 +1,8 @@
 package com.jeramtough.repeatwords2.component.ui.blackboard;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
-import android.widget.TextView;
 
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.component.baidu.Reader;
@@ -27,7 +27,8 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     @Override
     public void whileLearning(WordCardView wordCardView) {
         wordCardView.getLayoutBlackboard().setVisibility(View.INVISIBLE);
-        wordCardView.getTextViewContent().setBackgroundResource(R.drawable.blackboard_background);
+        wordCardView.getTextViewContent().setBackgroundResource(
+                R.drawable.blackboard_background);
         if (wordCardView.getWordDto().isLearnedAtLeastTwiceToday()) {
             wordCardView.getTextViewContent().setTextColor(Color.BLUE);
         }
@@ -39,7 +40,8 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
 
     @Override
     public void whileExposing(WordCardView wordCardView) {
-        wordCardView.getTextViewBigBlackboard().setText(WordUtil.formatWordDto(wordCardView.getWordDto()));
+        wordCardView.getTextViewBigBlackboard().setText(
+                WordUtil.formatWordDto(wordCardView.getWordDto()));
         wordCardView.getLayoutBlackboard().setVisibility(View.VISIBLE);
         wordCardView.getTextViewContent().setBackgroundResource(R.color.transparent);
         wordCardView.getTextViewContent().setTextColor(Color.BLACK);
@@ -47,8 +49,16 @@ public abstract class BaseBlackboardOfTeacher implements Blackboard {
     }
 
     @Override
-    public void whileDismiss(TextView textView) {
+    public void whileDismiss(WordCardView wordCardView) {
         reader.stop();
-        textView.setTextColor(Color.RED);
+        wordCardView.getTextViewContent().setBackgroundColor(Color.BLACK);
+    }
+
+    @Override
+    public void onSingleClickWord(WordCardView wordCardView) {
+    }
+
+    @Override
+    public void onLongClickWord(WordCardView wordCardView, Activity activity) {
     }
 }

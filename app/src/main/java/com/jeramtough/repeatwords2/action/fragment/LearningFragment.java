@@ -22,11 +22,9 @@ import com.jeramtough.jtandroid.ui.TimedCloseTextView;
 import com.jeramtough.jtcomponent.task.bean.TaskResult;
 import com.jeramtough.repeatwords2.R;
 import com.jeramtough.repeatwords2.action.activity.MainActivity;
-import com.jeramtough.repeatwords2.action.dialog.WriteFromMemoryDialog;
 import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapter;
 import com.jeramtough.repeatwords2.component.adapter.WordCardsPagerAdapterProvider;
 import com.jeramtough.repeatwords2.component.baidu.BaiduVoiceReader;
-import com.jeramtough.repeatwords2.component.learning.teacher.TeacherType;
 import com.jeramtough.repeatwords2.component.task.TaskCallbackInMain;
 import com.jeramtough.repeatwords2.component.ui.blackboard.BlackBoardProvider;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
@@ -131,7 +129,7 @@ public class LearningFragment extends BaseFragment
             WordCardView wordCardView =
                     jtViewPager.findViewWithTag(jtViewPager.getCurrentItem());
             if (wordCardView != null) {
-                blackBoardProvider.get().whileDismiss(wordCardView.getTextViewContent());
+                blackBoardProvider.get().whileDismiss(wordCardView);
             }
         }
     }
@@ -221,20 +219,13 @@ public class LearningFragment extends BaseFragment
     @Override
     public void onSingleClickWord(WordDto wordDto, TextView textView,
                                   WordCardView wordCardView) {
-        if (!reader.isReading()) {
-            blackBoardProvider.get().whileLearning(wordCardView);
-        }
-        else {
-            blackBoardProvider.get().whileDismiss(textView);
-        }
+        blackBoardProvider.get().onSingleClickWord(wordCardView);
     }
 
     @Override
     public void onLongClickWord(WordDto wordDto, TextView textView,
                                 WordCardView wordCardView) {
-        if (blackBoardProvider.getTeacherType() == TeacherType.WRITING_TEACHER) {
-            new WriteFromMemoryDialog(Objects.requireNonNull(getContext()), wordDto).show();
-        }
+        blackBoardProvider.get().onLongClickWord(wordCardView, getActivity());
     }
 
     @Override

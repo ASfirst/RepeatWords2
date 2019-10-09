@@ -1,5 +1,9 @@
 package com.jeramtough.repeatwords2.component.ui.blackboard;
 
+import android.app.Activity;
+import android.graphics.Color;
+
+import com.jeramtough.repeatwords2.action.dialog.WriteFromMemoryDialog;
 import com.jeramtough.repeatwords2.component.baidu.Reader;
 import com.jeramtough.repeatwords2.component.ui.wordcard.WordCardView;
 
@@ -33,5 +37,23 @@ public class BlackboardOfWritingTeacher extends BaseBlackboardOfTeacher {
         super.whileExposing(wordCardView);
 
         wordCardView.getTextViewContent().setText(wordCardView.getWordDto().getWord());
+    }
+
+    @Override
+    public void onLongClickWord(WordCardView wordCardView, Activity activity) {
+        new WriteFromMemoryDialog(activity,
+                wordCardView.getWordDto()).show();
+    }
+
+    @Override
+    public void onSingleClickWord(WordCardView wordCardView) {
+        if (!getReader().isReading()) {
+            getReader().speech(wordCardView.getWordDto().getWord());
+            wordCardView.getTextViewContent().setBackgroundColor(Color.BLUE);
+        }
+        else {
+            getReader().stop();
+            wordCardView.getTextViewContent().setBackgroundColor(Color.BLACK);
+        }
     }
 }
