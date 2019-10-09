@@ -9,14 +9,6 @@ android {
         versionCode 36
         versionName "2019.10.01"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-      /*  ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
-        packagingOptions {
-            exclude "lib/arm64-v8a/libsqlitejdbc.so"
-        }*/
-
     }
 
     buildTypes {
