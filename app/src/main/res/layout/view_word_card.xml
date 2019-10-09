@@ -46,15 +46,22 @@
                 android:id="@+id/button_desert"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn1"
                 android:text="Desert"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/button_mark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/btn1"
                 android:text="Mark"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
 
         </LinearLayout>
@@ -184,13 +191,13 @@
             android:id="@+id/textView_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/black"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingTop="2dp"
             android:paddingRight="10dp"
             android:paddingBottom="2dp"
             android:text="？"
-            android:background="@color/black"
             android:textColor="@color/white"
             android:textSize="25sp" />
 
