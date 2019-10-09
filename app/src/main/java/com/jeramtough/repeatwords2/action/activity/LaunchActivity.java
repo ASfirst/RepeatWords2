@@ -31,9 +31,7 @@ public class LaunchActivity extends BasicActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
-
         textViewMessage = this.findViewById(R.id.textView_message);
-
         initResources();
     }
 
