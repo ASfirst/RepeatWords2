@@ -22,7 +22,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".action.activity.MainActivity"
-            android:label="@string/title_activity_main"></activity>
+            android:label="@string/title_activity_main" />
         <activity
             android:name=".action.activity.LaunchActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">

@@ -102,6 +102,7 @@ public class DictionaryManager {
             }
             catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
             finally {
                 if (tempDictionaryDbFile != null) {
@@ -111,7 +112,13 @@ public class DictionaryManager {
         }
 
         //connect dicionary db
-        mySqlLiteHelper.connectDatabase();
+        try {
+            mySqlLiteHelper.connectDatabase();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
