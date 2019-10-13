@@ -211,7 +211,6 @@ public class LearningFragment extends BaseFragment
 
     @Override
     public void atLearningArea(WordDto wordDto, TextView textView) {
-        learningService.learnedWordInToday(wordDto);
         removePager(wordDto);
 
     }
