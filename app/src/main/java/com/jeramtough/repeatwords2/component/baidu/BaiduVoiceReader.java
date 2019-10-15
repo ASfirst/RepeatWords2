@@ -77,6 +77,8 @@ public class BaiduVoiceReader implements Reader, WithLogger {
         // 设置语音合成声音模型文件
         speechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE,
                 voiceResources.getSpeechFemaleModelFilePath());
+
+
         // 获取语音合成授权信息
         AuthInfo authInfo = speechSynthesizer.auth(TtsMode.MIX);
         if (!authInfo.isSuccess()) {
@@ -145,7 +147,7 @@ public class BaiduVoiceReader implements Reader, WithLogger {
         this.currentReadText = text;
 
         //stop the last state
-        if (isReading){
+        if (isReading) {
             stop();
         }
 
@@ -156,7 +158,7 @@ public class BaiduVoiceReader implements Reader, WithLogger {
     @Override
     public void speechOnce(String text) {
         //stop the last state
-        if (isReading){
+        if (isReading) {
             stop();
         }
         speechSynthesizer.speak(text);
