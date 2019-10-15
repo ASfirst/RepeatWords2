@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -32,9 +31,6 @@ import com.jeramtough.repeatwords2.service.SettingService;
  */
 public class SettingFragment extends BaseFragment
         implements RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
-    private static final int BUSINESS_CODE_BACKUP_LEARNING_RECORD = 0;
-    private static final int BUSINESS_CODE_RECOVER_LEARNING_RECORD = 1;
-    private static final int BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY = 2;
 
     private EditText editTextPerLearnCount;
     private EditText editTextReadEnglishSpeed;
@@ -252,22 +248,10 @@ public class SettingFragment extends BaseFragment
         }
     }
 
-    @Override
-    public void handleFragmentMessage(Message message) {
-        switch (message.what) {
-            case BUSINESS_CODE_BACKUP_LEARNING_RECORD:
-
-                break;
-            case BUSINESS_CODE_RECOVER_LEARNING_RECORD:
-
-                break;
-            case BUSINESS_CODE_CLEAR_HAVED_LEARNED_WORD_TODAY:
-                break;
-        }
-    }
 
 
     //*************
+
     private void saveSetting() {
         if (editTextPerLearnCount.getText().length() > 0) {
             settingService.setPerLearningCount(

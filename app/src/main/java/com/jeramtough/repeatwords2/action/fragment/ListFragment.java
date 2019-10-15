@@ -27,11 +27,6 @@ import com.jeramtough.repeatwords2.service.impl.ListServiceImpl;
 public class ListFragment extends BaseFragment
         implements RadioGroup.OnCheckedChangeListener, View.OnLongClickListener,
         AdapterView.OnItemLongClickListener {
-    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_HAVE_GRASPED_LIST = 11;
-    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_SHALL_LEARNING_LIST = 12;
-    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_MARKED_LIST = 13;
-    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_DESERTED_LIST = 14;
-    private static final int BUSINESS_CODE_REMOVE_WORD_FROM_TODAY_LIST = 15;
 
     private RadioGroup radioGroup;
     private RadioButton radioButtonTodayWords;

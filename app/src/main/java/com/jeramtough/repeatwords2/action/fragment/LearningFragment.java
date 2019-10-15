@@ -40,11 +40,6 @@ import java.util.Objects;
  */
 public class LearningFragment extends BaseFragment
         implements WordCardView.WordActionsListener {
-    private static final int BUSINESS_CODE_INIT_TEACHER = 0;
-    private static final int BUSINESS_CODE_GRASP_WORD = 2;
-    private static final int BUSINESS_CODE_DESERT_WORD = 3;
-    private static final int BUSINESS_CODE_MARK_WORD = 4;
-    private static final int BUSINESS_CODE_REMOVE_WORD = 5;
 
     private Button buttonAgainLearn;
     private TextView textViewPreviousContent;
@@ -357,9 +352,7 @@ public class LearningFragment extends BaseFragment
     private void learnCurrentWord() {
         WordCardView wordCardView = jtViewPager.findViewWithTag(jtViewPager.getCurrentItem());
         if (wordCardView != null) {
-            blackBoardProvider.get()
-                              .whileLearning(
-                                      wordCardView);
+            blackBoardProvider.get().whileLearning(wordCardView);
         }
         else {
             reader.stop();
