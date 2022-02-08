@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/menu_learning"
+            android:title="learning"
+            android:icon="@drawable/ic_home_black_24dp"/>
+
+    <item
+            android:id="@+id/menu_setting"
+            android:title="setting"
+            android:icon="@drawable/ic_menu_settings_holo_light"/>
+
+    <item
+            android:id="@+id/menu_list"
+            android:title="list"
+            android:icon="@drawable/ic_list"/>
+
+    <item
+            android:id="@+id/menu_dictionary"
+            android:title="dictionary"
+            android:icon="@drawable/ic_dashboard_black_24dp"/>
+</menu>

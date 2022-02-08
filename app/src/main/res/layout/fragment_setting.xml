@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="top">
+
+        <TextView
+            android:id="@+id/textView_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="per learn count:" />
+
+        <EditText
+            android:id="@+id/editText_per_learn_count"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:selectAllOnFocus="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="read english speed:" />
+
+        <EditText
+            android:id="@+id/editText_read_english_speed"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:selectAllOnFocus="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="interval time:" />
+
+        <EditText
+            android:id="@+id/editText_interval_time"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:selectAllOnFocus="true" />
+
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/spinner_select_teacher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/teachers"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
+
+    </Spinner>
+
+    <RadioGroup
+        android:id="@+id/radioGroup_select_learning_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButton_new_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="new" />
+
+        <RadioButton
+            android:id="@+id/radioButton_review_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="review" />
+
+        <RadioButton
+            android:id="@+id/radioButton_marked_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="marked" />
+
+    </RadioGroup>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/button_clear_today"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear today"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/button_backup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Backup"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/button_recover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recover"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

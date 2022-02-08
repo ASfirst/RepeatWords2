@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">RepeatWords2</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="listening_teacher">Listening\nteacher</string>
+    <string name="speaking_teacher">Speaking\nteacher</string>
+    <string name="writing_teacher">Writing\nteacher</string>
+    <string name="reading_teacher">Reading\nteacher</string>
+
+    <string-array name="teachers">
+        <item>Listening teacher</item>
+        <item>Speaking teacher</item>
+        <item>Writing teacher</item>
+        <item>Reading teacher</item>
+    </string-array>
+
+</resources>
